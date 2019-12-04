@@ -29,7 +29,7 @@ void clock_init_safe(clock_t *clock);
 
 #ifdef _TEST
 void clock_test_wrapper(const char *name, int (*func)(clock_t *clock));
-#define RUN_TEST(func) clock_test_wrapper(#func, func);
+#define RUN_TEST_CLOCK(func) clock_test_wrapper(#func, func);
 
 void test_clock();
 

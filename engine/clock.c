@@ -55,7 +55,7 @@ static int test_get_delta_time(clock_t *clock)
 
 void test_clock()
 {
-    RUN_TEST(test_cache_now);
-    RUN_TEST(test_get_delta_time);
+    RUN_TEST_CLOCK(test_cache_now);
+    RUN_TEST_CLOCK(test_get_delta_time);
 }
 #endif

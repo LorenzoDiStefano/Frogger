@@ -6,11 +6,14 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "engine/clock.h"
-#include "engine/clock.c"
+#include "engine/draw_manager.h"
 #ifdef _TEST
 
+#include "engine/draw_manager.c"
+#include "engine/clock.c"
 #include "tests/tests.c"
 #include "tests/test_clock.c"
+#include "tests/test_draw_manager.c"
 
 #endif
 #include <string.h>
@@ -41,24 +44,13 @@ int game()
         return 1;
     }
 
-    SDL_Window *window = SDL_CreateWindow("Game",100,100,640,480,SDL_WINDOW_SHOWN);
-
-    if(!window)
-    {
-        return crash();
-    }
-
-    SDL_Renderer *renderer = SDL_CreateRenderer(window,-1,SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_ACCELERATED);
-
-    if(!renderer)
-    {
-        return crash();
-    }
+    draw_manager_t draw_manager;
+    draw_manager_init(&draw_manager);
 
     clock_t game_clock;
     clock_init_safe(&game_clock);
 
-    int fps = 1;
+    int fps = 60;
     double frame_time = (double)1000/fps;
     double accumulator = 0;
 
@@ -87,9 +79,7 @@ int game()
             continue;
         }
 
-        SDL_SetRenderDrawColor(renderer,0,0,0,0);
-        SDL_RenderClear(renderer);
-        SDL_RenderPresent(renderer);
+        draw_manager.draw_scene(&draw_manager);
     }
 }
 

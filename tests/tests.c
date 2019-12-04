@@ -20,6 +20,7 @@ static uint64_t tests_failed = 0;
 int run_tests()
 {
     test_clock();
+    test_draw_manager();
 
     fprintf(stdout, "Tests succeded: %llu failed: %llu\n", tests_succeded, tests_failed);
     return 0;
