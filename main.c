@@ -10,14 +10,17 @@
 #include "engine/vector2.h"
 #include "engine/draw_manager.c"
 #include "engine/clock.c"
+#include "engine/vector2.c"
+#include "engine/game_object.h"
+#include "engine/game_object.c"
 
 #ifdef _TEST
 
-#include "engine/vector2.c"
 #include "tests/tests.c"
 #include "tests/test_clock.c"
 #include "tests/test_draw_manager.c"
 #include "tests/test_vector2.c"
+#include "tests/test_game_object.c"
 
 #endif
 #include <string.h>
