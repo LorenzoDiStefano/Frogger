@@ -15,6 +15,8 @@
 #include "engine/game_object.c"
 #include "engine/rect.h"
 #include "engine/rect.c"
+#include "engine/collision_info.h"
+#include "engine/collision_info.c"
 
 #ifdef _TEST
 
@@ -24,6 +26,7 @@
 #include "tests/test_vector2.c"
 #include "tests/test_game_object.c"
 #include "tests/test_rect.c"
+#include "tests/test_collision_info.c"
 
 #endif
 #include <string.h>
