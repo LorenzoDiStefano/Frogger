@@ -7,13 +7,17 @@
 #include "stb_image.h"
 #include "engine/clock.h"
 #include "engine/draw_manager.h"
-#ifdef _TEST
-
+#include "engine/vector2.h"
 #include "engine/draw_manager.c"
 #include "engine/clock.c"
+
+#ifdef _TEST
+
+#include "engine/vector2.c"
 #include "tests/tests.c"
 #include "tests/test_clock.c"
 #include "tests/test_draw_manager.c"
+#include "tests/test_vector2.c"
 
 #endif
 #include <string.h>
