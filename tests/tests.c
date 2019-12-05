@@ -16,6 +16,7 @@
 #include "tests/test_draw_manager.c"
 #include "tests/test_vector2.c"
 #include "tests/test_game_object.c"
+#include "tests/test_rect.c"
 
 #include <string.h>
 #include <stdint.h>
@@ -32,6 +33,7 @@ int run_tests()
     test_draw_manager();
     test_vector2();
     test_game_object();
+    test_rect();
     fprintf(stdout, "Tests succeded: %llu failed: %llu\n", tests_succeded, tests_failed);
     return 0;
 }

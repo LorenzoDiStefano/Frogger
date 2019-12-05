@@ -6,13 +6,15 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "engine/clock.h"
-#include "engine/draw_manager.h"
-#include "engine/vector2.h"
-#include "engine/draw_manager.c"
 #include "engine/clock.c"
+#include "engine/draw_manager.h"
+#include "engine/draw_manager.c"
+#include "engine/vector2.h"
 #include "engine/vector2.c"
 #include "engine/game_object.h"
 #include "engine/game_object.c"
+#include "engine/rect.h"
+#include "engine/rect.c"
 
 #ifdef _TEST
 
@@ -21,12 +23,14 @@
 #include "tests/test_draw_manager.c"
 #include "tests/test_vector2.c"
 #include "tests/test_game_object.c"
+#include "tests/test_rect.c"
 
 #endif
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
 #endif
 
 int crash()
