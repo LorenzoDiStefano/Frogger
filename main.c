@@ -68,6 +68,15 @@ int game()
     double frame_time = (double)1000/fps;
     double accumulator = 0;
 
+    sprite_t sprite;
+    image_info_t img_inf;
+    load_image(&img_inf,"assets/test.png");
+    //printf("%d\n",img_inf.height);
+    init_sprite(&sprite, img_inf, draw_manager.renderer,2);
+    //printf("%d\n",img_inf.height);
+    draw_manager_add_sprite(&draw_manager, &sprite);
+    //printf("%d",sprite.sprite_rect.w);
+    //getchar();
     for(;;)
     {
         SDL_Event event;
@@ -85,8 +94,8 @@ int game()
         if(accumulator>=frame_time)
         {
             accumulator-=frame_time;
-            printf("rendering new frame\n");
-            printf("fps time: %f\n",frame_time);
+            //printf("rendering new frame\n");
+            //printf("fps time: %f\n",frame_time);
         }
         else
         {
