@@ -97,6 +97,9 @@ typedef struct draw_manager
     void (*draw_scene)(struct draw_manager *draw_manager);
 } draw_manager_t;
 
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
+
 int draw_manager_init(draw_manager_t* draw_manager);
 int load_image(image_info_t *img, const char *path);
 
@@ -117,13 +120,13 @@ typedef struct game_object
     uint8_t collider_type;
 
     void (*on_collision)(struct game_object *game_object, collision_info_t *delta);
+    void (*update)(struct game_object *game_object, double delta_time);
 
 }game_object_t;
 
 void game_object_init(game_object_t *game_object);
 void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity);
 
-void game_object_update(game_object_t *game_object, double delta_time);
 
 void game_object_set_position(game_object_t *game_object, vector2_t new_position);
 void game_object_set_position_x(game_object_t *game_object, float new_position_x);
@@ -161,11 +164,13 @@ void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect
 typedef struct player
 {
     game_object_t game_object;
+    vector2_t spawn_point;
     int score;
 }player_t;
 
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
 void player_read_input(player_t *player);
+void player_die(player_t *player);
 
 typedef struct wall
 {
@@ -174,3 +179,9 @@ typedef struct wall
 
 void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
 
+typedef struct car
+{
+    game_object_t game_object;
+}car_t;
+
+void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager);

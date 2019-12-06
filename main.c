@@ -51,6 +51,8 @@ int game()
     wall2.game_object.position.x=300;
     wall2.game_object.position.y=0;
 
+    car_t car;
+    car_init(&car,&draw_manager,&physics_manager);
 
     for(;;)
     {

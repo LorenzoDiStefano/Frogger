@@ -191,7 +191,6 @@ void rect_set_position_y(rect_t *rect, float new_position_y)
 //TODO:, return collision info instead of int, for now, return -1 on non collision, 1 on collision
 int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info_t *collision)
 {
-
     if(first_rect->position.x < second_rect->position.x + second_rect->width &&
         first_rect->position.x + first_rect->width > second_rect->position.x &&
         first_rect->position.y < second_rect->position.y + second_rect->height &&
@@ -213,6 +212,7 @@ int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info
         else
             x=0;
         vector2_init_safe(&collision->delta,x,y);
+        collision->collider= (void*)second_rect->owner;
         return 1;
     }
 
@@ -364,7 +364,7 @@ void draw_manager_add_sprite(draw_manager_t *draw_manager, sprite_t *sprite)
 
 int draw_manager_init(draw_manager_t* draw_manager)
 {
-    draw_manager->window = SDL_CreateWindow("Game",100,100,640,480,SDL_WINDOW_SHOWN);
+    draw_manager->window = SDL_CreateWindow("Game",100,100,WINDOW_WIDTH,WINDOW_HEIGHT,SDL_WINDOW_SHOWN);
 
     if(!draw_manager->window)
     {
@@ -432,29 +432,6 @@ void game_object_on_collision(game_object_t *game_object, collision_info_t *delt
 
 }
 
-void game_object_init(game_object_t *game_object)
-{
-    //rect_init(&game_object->bounding_box);
-    vector2_init(&(game_object->position));
-    vector2_init(&(game_object->velocity));
-    game_object->is_active = 0;
-    game_object->collider_type = 0;
-}
-
-void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity)
-{
-    vector2_init(&(game_object->position));
-    game_object->position.x = position->x;
-    game_object->position.y = position->y;
-
-    vector2_init(&(game_object->velocity));
-    game_object->velocity.x = velocity->x;
-    game_object->velocity.y = velocity->y;
-
-    game_object->is_active = 0;
-    game_object->sprite = NULL;
-}
-
 void game_object_update(game_object_t *game_object, double delta_time)
 {
     if(!game_object->is_active)
@@ -473,6 +450,33 @@ void game_object_update(game_object_t *game_object, double delta_time)
     }
 
 }
+
+void game_object_init(game_object_t *game_object)
+{
+    //rect_init(&game_object->bounding_box);
+    vector2_init(&(game_object->position));
+    vector2_init(&(game_object->velocity));
+    game_object->is_active = 0;
+    game_object->collider_type = 0;
+    game_object->update = game_object_update;
+}
+
+void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity)
+{
+    vector2_init(&(game_object->position));
+    game_object->position.x = position->x;
+    game_object->position.y = position->y;
+
+    vector2_init(&(game_object->velocity));
+    game_object->velocity.x = velocity->x;
+    game_object->velocity.y = velocity->y;
+
+    game_object->is_active = 0;
+    game_object->update = game_object_update;
+    game_object->sprite = NULL;
+}
+
+
 
 void game_object_set_position(game_object_t *game_object, vector2_t new_position)
 {
@@ -610,9 +614,19 @@ void test_game_object()
 }
 #endif
 
-void player_on_collision(struct game_object *game_object, collision_info_t *delta)
+void player_on_collision(struct game_object *game_object, collision_info_t *collision)
 {
-    printf("player collided");
+    game_object_t *collider = (game_object_t *)collision->collider;
+    printf("player collided with %d \n",collider->collider_type);
+    if(collider->collider_type==2)
+        player_die((player_t *)game_object);
+}
+
+void player_die(player_t *player)
+{
+    printf("player died");
+    player->game_object.position.x = player->spawn_point.x;
+    player->game_object.position.y = player->spawn_point.y;
 }
 
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
@@ -626,6 +640,7 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     vector2_t position,velocity;
     vector2_init_safe(&position,100,100);
     vector2_init_safe(&velocity,0,0);
+    vector2_init_safe(&player->spawn_point,0,0);
     
     game_object_init_with_vectors(&player->game_object, &position, &velocity);
     game_object_set_sprite(&player->game_object,sprite);
@@ -710,8 +725,8 @@ void physics_manager_update(physics_manager_t *physics_manager, double delta_tim
         rect_t *rect_address = physics_manager->rects[i];
 
         game_object_t *game_object_address = rect_address->owner;
-
-        game_object_update(game_object_address,delta_time);
+        game_object_address->update(game_object_address,delta_time);
+        //game_object_update();
     } 
 }
 
@@ -743,3 +758,42 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
         }     
     } 
 }
+
+void game_object_car_update(game_object_t *game_object, double delta_time)
+{
+    game_object_update(game_object,delta_time);
+    if(game_object->position.x>WINDOW_WIDTH)
+    {
+        game_object->position.x=-game_object->bounding_box.width;
+    }
+    else if(game_object->position.x<-(game_object->bounding_box.width))
+    {
+        game_object->position.x=WINDOW_WIDTH;
+    }
+}
+
+void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
+{
+    vector2_t position,velocity;
+    vector2_init_safe(&position,100,100);
+    vector2_init_safe(&velocity,-150,0);
+    game_object_init_with_vectors(&car->game_object, &position, &velocity);
+    car->game_object.update = game_object_car_update;
+    sprite_t *sprite=malloc(sizeof(sprite_t));
+    image_info_t img_inf;
+    load_image(&img_inf,"assets/ph_car.png");
+    init_sprite(sprite, img_inf, draw_manager->renderer,1);
+    draw_manager_add_sprite(draw_manager, sprite);
+    
+    game_object_set_sprite(&car->game_object,sprite);
+
+    sprite->sprite_rect.h=50;
+    sprite->sprite_rect.w=50;
+    rect_set_size(&car->game_object.bounding_box,50,50);
+    car->game_object.is_active = 1;
+    car->game_object.collider_type = COLLIDER_TYPE_CAR;
+    car->game_object.bounding_box.owner= &car->game_object;
+
+    physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
+}
+
