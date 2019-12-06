@@ -68,19 +68,8 @@ int game()
     double frame_time = (double)1/fps;
     double accumulator = 0;
 
-    sprite_t sprite;
-    image_info_t img_inf;
-    load_image(&img_inf,"assets/test.png");
-    init_sprite(&sprite, img_inf, draw_manager.renderer,1);
-    draw_manager_add_sprite(&draw_manager, &sprite);
-
-    game_object_t player;
-    vector2_t position,velocity;
-    vector2_init_safe(&position,100,100);
-    vector2_init_safe(&velocity,0,0);
-    
-    game_object_init_with_vectors(&player, &position, &velocity);
-    game_object_set_sprite(&player,&sprite);
+    player_t player;
+    player_init(&player,&draw_manager);
 
     for(;;)
     {
@@ -107,21 +96,9 @@ int game()
             continue;
         }
 
-        const Uint8* keystates = SDL_GetKeyboardState(NULL);
-
-        vector2_init(&velocity);
-        if(keystates[SDL_SCANCODE_LEFT])
-            velocity.x--;
-        if(keystates[SDL_SCANCODE_RIGHT])
-            velocity.x++;
-        if(keystates[SDL_SCANCODE_UP])
-            velocity.y--;
-        if(keystates[SDL_SCANCODE_DOWN])
-            velocity.y++;            
-
-        velocity = vector2_mul(&velocity,(double)100);
-        game_object_set_velocity(&player, velocity);
-        game_object_update(&player,frame_time);
+        //player_read
+        player_read_input(&player);
+        game_object_update(&player.game_object,frame_time);
 
         draw_manager.draw_scene(&draw_manager);
     }

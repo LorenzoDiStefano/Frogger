@@ -52,12 +52,15 @@ void game_object_init_with_vectors(game_object_t *game_object, vector2_t *positi
 
 void game_object_update(game_object_t *game_object, double delta_time)
 {
+    if(!game_object->is_active)
+        return;
+
     game_object->position.x+=game_object->velocity.x*delta_time;
     game_object->position.y+=game_object->velocity.y*delta_time;
 
     if(game_object->sprite == NULL)
         return;
-        
+
     game_object->sprite->sprite_rect.x = (int)game_object->position.x;
     game_object->sprite->sprite_rect.y = (int)game_object->position.y;
 }
@@ -197,3 +200,38 @@ void test_game_object()
     RUN_TEST_GAME_OBJECT(test_game_object_set_position_y);
 }
 #endif
+void player_init(player_t *player, draw_manager_t *draw_manager)
+{
+    game_object_init(&player->game_object);
+    sprite_t *sprite=malloc(sizeof(sprite_t));
+    image_info_t img_inf;
+    load_image(&img_inf,"assets/test.png");
+    init_sprite(sprite, img_inf, draw_manager->renderer,1);
+    draw_manager_add_sprite(draw_manager, sprite);
+    vector2_t position,velocity;
+    vector2_init_safe(&position,100,100);
+    vector2_init_safe(&velocity,0,0);
+    
+    game_object_init_with_vectors(&player->game_object, &position, &velocity);
+    game_object_set_sprite(&player->game_object,sprite);
+    player->game_object.is_active = 1;
+}
+    
+
+void player_read_input(player_t *player)
+{
+    const Uint8* keystates = SDL_GetKeyboardState(NULL);
+    vector2_init(&player->game_object.velocity);
+
+    if(keystates[SDL_SCANCODE_LEFT])
+        player->game_object.velocity.x--;
+    if(keystates[SDL_SCANCODE_RIGHT])
+        player->game_object.velocity.x++;
+    if(keystates[SDL_SCANCODE_UP])
+        player->game_object.velocity.y--;
+    if(keystates[SDL_SCANCODE_DOWN])
+        player->game_object.velocity.y++;            
+
+    player->game_object.velocity = vector2_mul(&player->game_object.velocity,(double)100);
+    game_object_set_velocity(&player->game_object, player->game_object.velocity);
+}

@@ -57,3 +57,11 @@ void game_object_test_wrapper(const char *name, int (*func)(game_object_t *game_
 void test_game_object();
 
 #endif
+typedef struct player
+{
+    game_object_t game_object;
+    int score;
+}player_t;
+
+void player_init(player_t *player, draw_manager_t *draw_manager);
+void player_read_input(player_t *player);
