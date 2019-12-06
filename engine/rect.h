@@ -12,6 +12,8 @@
 #include "engine/clock.c"
 #include "engine/game_object.h"
 #include "engine/game_object.c"
+#include "engine/collision_info.h"
+#include "engine/collision_info.c"
 
 #ifdef _TEST
 
@@ -31,19 +33,20 @@
 typedef struct rect
 {
     vector2_t position;
-    game_object_t *owner;
+    void *owner;//should be game_object
     int width, height;
     float half_width, half_height;
 } rect_t;
 
 void rect_init(rect_t* rect);
-void rect_init_safe(rect_t* rect, int width, int height, vector2_t position, game_object_t *owner);
+void rect_set_size(rect_t* rect, int width, int height);
+void rect_init_safe(rect_t* rect, int width, int height, vector2_t position, void *owner);
 void rect_set_position(rect_t* rect, vector2_t new_position);
 void rect_set_position_x(rect_t *game_object, float new_position_x);
 void rect_set_position_y(rect_t *game_object, float new_position_y);
 
 //to do, return collision info instead of int
-int rect_check_collision(rect_t *first_rect, rect_t *second_rect);
+int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info_t *collision);
 
 #ifdef _TEST
 void rect_test_wrapper(const char *name, int (*func)(rect_t *rect));

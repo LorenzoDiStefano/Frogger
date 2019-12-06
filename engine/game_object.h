@@ -10,6 +10,10 @@
 #include "engine/vector2.h"
 #include "engine/draw_manager.c"
 #include "engine/clock.c"
+#include "engine/rect.h"
+#include "engine/rect.c"
+#include "engine/collision_info.h"
+#include "engine/collision_info.c"
 
 #ifdef _TEST
 
@@ -27,11 +31,15 @@
 #include <stdio.h>
 #endif
 
+
 typedef struct game_object
 {
     vector2_t velocity,position;
     sprite_t *sprite;
+    rect_t bounding_box;
     int is_active;
+
+    void (*on_collision)(struct game_object *game_object, collision_info_t *delta);
 
 }game_object_t;
 
@@ -65,3 +73,10 @@ typedef struct player
 
 void player_init(player_t *player, draw_manager_t *draw_manager);
 void player_read_input(player_t *player);
+
+typedef struct wall
+{
+    game_object_t game_object;
+}wall_t;
+
+void wall_init(wall_t *wall, draw_manager_t *draw_manager);

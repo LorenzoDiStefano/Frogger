@@ -32,7 +32,7 @@
 typedef struct collision_info
 {
     vector2_t delta;
-    game_object_t *first_collider, *second_collider;
+    void *collider;
 
 }collision_info_t;
 

@@ -32,10 +32,10 @@ typedef struct sprite
     SDL_Rect sprite_rect;
     SDL_Texture *texture;
     SDL_Renderer *renderer;
-    int scale;
+    float scale;
 }sprite_t;
 
-void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer, int scale);
+void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer, float scale);
 
 typedef struct draw_manager
 {

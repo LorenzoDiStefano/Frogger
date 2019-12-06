@@ -15,6 +15,8 @@
 #include "engine/vector2.c"
 #include "engine/game_object.h"
 #include "engine/game_object.c"
+#include "engine/collision_info.h"
+#include "engine/collision_info.c"
 
 #ifdef _TEST
 
@@ -43,14 +45,22 @@ void rect_init(rect_t* rect)
     vector2_init(&rect->position);
 }
 
-void rect_init_safe(rect_t* rect, int width, int height, vector2_t position, game_object_t *owner)
+void rect_init_safe(rect_t* rect, int width, int height, vector2_t position, void *owner)
 {
     rect->owner = owner;
     rect->height = height;
     rect->width = width;
-    rect->half_height = height/2;
-    rect->half_width = width/2;
+    rect->half_height = (float)height/2;
+    rect->half_width = (float)width/2;
     rect->position = vector2_get_deep_copy(&position);
+}
+
+void rect_set_size(rect_t* rect, int width, int height)
+{
+    rect->height = height;
+    rect->width = width;
+    rect->half_height = (float)height/2;
+    rect->half_width = (float)width/2;
 }
 
 void rect_set_position(rect_t* rect, vector2_t new_position)
@@ -70,21 +80,35 @@ void rect_set_position_y(rect_t *rect, float new_position_y)
 }
 
 //TODO:, return collision info instead of int, for now, return -1 on non collision, 1 on collision
-int rect_check_collision(rect_t *first_rect, rect_t *second_rect)
+int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info_t *collision)
 {
-    vector2_t distance = vector2_sub(&first_rect->position, &second_rect->position);
 
-    float deltaX = fabs(distance.x) - (first_rect->half_width + second_rect->half_width);
-    float deltaY = fabs(distance.y) - (first_rect->half_height + second_rect->half_height);
-
-    if (deltaX <= 0 && deltaY <= 0)
+    if(first_rect->position.x < second_rect->position.x + second_rect->width &&
+        first_rect->position.x + first_rect->width > second_rect->position.x &&
+        first_rect->position.y < second_rect->position.y + second_rect->height &&
+        first_rect->position.y + first_rect->height > second_rect ->position.y)
     {
-        //TODO: setting collision's info, something like this
-        //collisionInfo.Type = Collision.CollisionType.RectsIntersection;
-        //collisionInfo.Delta = new Vector2(-deltaX, -deltaY);
+        float x=0,y=0;
+        if(first_rect->position.x < second_rect->position.x)
+            x = (first_rect->position.x + first_rect->width) - second_rect->position.x;
+        else
+            x = ((first_rect->position.x) - (second_rect->position.x+ second_rect->width));
 
+        if(first_rect->position.y < second_rect->position.y)
+            y = (first_rect->position.y + first_rect->height) - second_rect->position.y;
+        else
+            y = ((first_rect->position.y) - (second_rect->position.y+ second_rect->height));
+
+        if(x>y)
+            y=0;
+        else
+            x=0;
+        vector2_init_safe(&collision->delta,x,y);
         return 1;
     }
+
+    //printf("first rect x:%f y:%f w:%d h:%d\n",first_rect->position.x,first_rect->position.y,first_rect->width,first_rect->height);
+    //printf("first rect x:%f y:%f w:%d h:%d\n",second_rect->position.x,second_rect->position.y,second_rect->width,second_rect->height);
     return -1;
 }
 

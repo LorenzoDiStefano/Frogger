@@ -29,8 +29,7 @@
 
 void collision_info_init(collision_info_t *collision_info)
 {
-    collision_info->first_collider = NULL;
-    collision_info->second_collider = NULL;
+    collision_info->collider = NULL;
     vector2_init(&collision_info->delta);
 }
 
@@ -40,8 +39,7 @@ void collision_info_init(collision_info_t *collision_info)
 static int test_collision_info_init(collision_info_t *collision_info)
 {
     collision_info_init(collision_info);
-    return collision_info->first_collider == NULL &&
-    collision_info->second_collider == NULL &&
+    return collision_info->collider == NULL &&
     collision_info->delta.x == 0 &&
     collision_info->delta.y == 0;
 }

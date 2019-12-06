@@ -22,7 +22,7 @@
 #include <stdio.h>
 #endif
 
-void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer, int scale)
+void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer, float scale)
 {
     sprite->texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, img_info.width, img_info.height);
     sprite->scale = scale;
@@ -39,7 +39,7 @@ void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer
 
     memcpy(pixels, img_info.image, pitch * img_info.width);
 
-    free(img_info.image);
+    //free(img_info.image); //img info is not in the heap
 
     SDL_UnlockTexture(sprite->texture);
     sprite->renderer = renderer;

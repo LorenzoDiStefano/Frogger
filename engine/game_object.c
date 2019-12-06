@@ -11,8 +11,12 @@
 #include "engine/draw_manager.c"
 #include "engine/clock.c"
 #include "engine/vector2.c"
+#include "engine/rect.h"
+#include "engine/rect.c"
 #include "engine/game_object.h"
 #include "engine/game_object.c"
+#include "engine/collision_info.h"
+#include "engine/collision_info.c"
 
 #ifdef _TEST
 
@@ -31,6 +35,7 @@
 
 void game_object_init(game_object_t *game_object)
 {
+    //rect_init(&game_object->bounding_box);
     vector2_init(&(game_object->position));
     vector2_init(&(game_object->velocity));
     game_object->is_active = 0;
@@ -58,11 +63,15 @@ void game_object_update(game_object_t *game_object, double delta_time)
     game_object->position.x+=game_object->velocity.x*delta_time;
     game_object->position.y+=game_object->velocity.y*delta_time;
 
-    if(game_object->sprite == NULL)
-        return;
+    game_object->bounding_box.position.x = (int)game_object->position.x;
+    game_object->bounding_box.position.y = (int)game_object->position.y;      
 
-    game_object->sprite->sprite_rect.x = (int)game_object->position.x;
-    game_object->sprite->sprite_rect.y = (int)game_object->position.y;
+    if(game_object->sprite != NULL)
+    {
+        game_object->sprite->sprite_rect.x = (int)game_object->position.x;
+        game_object->sprite->sprite_rect.y = (int)game_object->position.y;
+    }
+
 }
 
 void game_object_set_position(game_object_t *game_object, vector2_t new_position)
@@ -205,7 +214,7 @@ void player_init(player_t *player, draw_manager_t *draw_manager)
     game_object_init(&player->game_object);
     sprite_t *sprite=malloc(sizeof(sprite_t));
     image_info_t img_inf;
-    load_image(&img_inf,"assets/test.png");
+    load_image(&img_inf,"assets/frog.png");
     init_sprite(sprite, img_inf, draw_manager->renderer,1);
     draw_manager_add_sprite(draw_manager, sprite);
     vector2_t position,velocity;
@@ -214,6 +223,11 @@ void player_init(player_t *player, draw_manager_t *draw_manager)
     
     game_object_init_with_vectors(&player->game_object, &position, &velocity);
     game_object_set_sprite(&player->game_object,sprite);
+
+    rect_set_size(&player->game_object.bounding_box,player->game_object.sprite->sprite_rect.w,player->game_object.sprite->sprite_rect.h);
+    /*printf("created bounding box w:%d h:%d hw:%f",player->game_object.bounding_box.width,player->game_object.bounding_box.height,
+    player->game_object.bounding_box.half_width);*/
+
     player->game_object.is_active = 1;
 }
     
@@ -234,4 +248,27 @@ void player_read_input(player_t *player)
 
     player->game_object.velocity = vector2_mul(&player->game_object.velocity,(double)100);
     game_object_set_velocity(&player->game_object, player->game_object.velocity);
+}
+
+void wall_init(wall_t *wall, draw_manager_t *draw_manager)
+{
+    game_object_init(&wall->game_object);
+    sprite_t *sprite=malloc(sizeof(sprite_t));
+    image_info_t img_inf;
+    load_image(&img_inf,"assets/ph_wall.png");
+    init_sprite(sprite, img_inf, draw_manager->renderer,1);
+    draw_manager_add_sprite(draw_manager, sprite);
+    vector2_t position,velocity;
+    vector2_init_safe(&position,0,0);
+    vector2_init_safe(&velocity,0,0);
+    
+    game_object_init_with_vectors(&wall->game_object, &position, &velocity);
+    game_object_set_sprite(&wall->game_object,sprite);
+
+    sprite->sprite_rect.h=500;
+    sprite->sprite_rect.w=50;
+    //rect_set_size(&wall->game_object.bounding_box,wall->game_object.sprite->sprite_rect.w,wall->game_object.sprite->sprite_rect.h);
+    rect_set_size(&wall->game_object.bounding_box,50,500);
+    //printf("created bounding box w:%d h:%d ",wall->game_object.bounding_box.width,wall->game_object.bounding_box.height);
+    wall->game_object.is_active = 1;
 }
