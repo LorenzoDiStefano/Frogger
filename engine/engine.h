@@ -31,7 +31,7 @@ typedef struct collision_info
 }collision_info_t;
 
 #define COLLIDER_TYPE_PLAYER 1
-#define COLLIDER_TYPE_WALL 2
+#define COLLIDER_TYPE_CAR 2
 #define COLLIDER_TYPE_OBASTACLE 4
 
 void collision_info_init(collision_info_t *collision_info);
@@ -114,6 +114,7 @@ typedef struct game_object
     sprite_t *sprite;
     rect_t bounding_box;
     int is_active;
+    uint8_t collider_type;
 
     void (*on_collision)(struct game_object *game_object, collision_info_t *delta);
 
@@ -141,13 +142,29 @@ void game_object_test_wrapper(const char *name, int (*func)(game_object_t *game_
 void test_game_object();
 
 #endif
+
+typedef struct physics_manager
+{
+    rect_t **rects;
+    int rects_to_draw;
+    int max_rects;
+    rect_t *player;
+
+} physics_manager_t;
+
+void physics_manager_init(physics_manager_t *physics_manager);
+void physics_manager_update(physics_manager_t *physics_manager, double delta_time);
+void physics_manager_add_rect(physics_manager_t *physics_manager, rect_t *rect);
+void physics_manager_check_collisions(physics_manager_t *physics_manager);
+void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect);
+
 typedef struct player
 {
     game_object_t game_object;
     int score;
 }player_t;
 
-void player_init(player_t *player, draw_manager_t *draw_manager);
+void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
 void player_read_input(player_t *player);
 
 typedef struct wall
@@ -155,4 +172,5 @@ typedef struct wall
     game_object_t game_object;
 }wall_t;
 
-void wall_init(wall_t *wall, draw_manager_t *draw_manager);
+void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
+

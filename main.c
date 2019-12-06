@@ -39,10 +39,18 @@ int game()
     double frame_time = (double)1000/fps;
     double accumulator = 0;
 
+    physics_manager_t physics_manager;
+    physics_manager_init(&physics_manager);
+
     player_t player;
-    player_init(&player,&draw_manager);
+    player_init(&player,&draw_manager,&physics_manager);
     wall_t wall;
-    wall_init(&wall,&draw_manager);
+    wall_init(&wall,&draw_manager,&physics_manager);
+    wall_t wall2;
+    wall_init(&wall2,&draw_manager,&physics_manager);
+    wall2.game_object.position.x=300;
+    wall2.game_object.position.y=0;
+
 
     for(;;)
     {
@@ -72,16 +80,8 @@ int game()
         player_read_input(&player);
         game_object_update(&player.game_object,frame_time*0.001);
         game_object_update(&wall.game_object,frame_time*0.001);
-        collision_info_t coll;
-        collision_info_init(&coll);
-        int collision_result =rect_check_collision(&player.game_object.bounding_box,&wall.game_object.bounding_box,&coll);
-        if(collision_result)
-        {
-            //printf("%f\n",coll.delta.x);
-            player.game_object.position.x-=coll.delta.x;
-            player.game_object.position.y-=coll.delta.y;
-        }
-        //printf("%d",collision_result);
+        game_object_update(&wall2.game_object,frame_time*0.001);
+        physics_manager_check_collisions(&physics_manager);
         draw_manager.draw_scene(&draw_manager);
     }
 }

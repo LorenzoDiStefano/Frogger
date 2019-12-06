@@ -427,12 +427,18 @@ void test_draw_manager()
 
 #endif
 
+void game_object_on_collision(game_object_t *game_object, collision_info_t *delta)
+{
+
+}
+
 void game_object_init(game_object_t *game_object)
 {
     //rect_init(&game_object->bounding_box);
     vector2_init(&(game_object->position));
     vector2_init(&(game_object->velocity));
     game_object->is_active = 0;
+    game_object->collider_type = 0;
 }
 
 void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity)
@@ -603,7 +609,13 @@ void test_game_object()
     RUN_TEST_GAME_OBJECT(test_game_object_set_position_y);
 }
 #endif
-void player_init(player_t *player, draw_manager_t *draw_manager)
+
+void player_on_collision(struct game_object *game_object, collision_info_t *delta)
+{
+    printf("player collided");
+}
+
+void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
 {
     game_object_init(&player->game_object);
     sprite_t *sprite=malloc(sizeof(sprite_t));
@@ -622,9 +634,14 @@ void player_init(player_t *player, draw_manager_t *draw_manager)
     /*printf("created bounding box w:%d h:%d hw:%f",player->game_object.bounding_box.width,player->game_object.bounding_box.height,
     player->game_object.bounding_box.half_width);*/
 
+    player->game_object.collider_type = COLLIDER_TYPE_PLAYER;
     player->game_object.is_active = 1;
+    physics_manager_add_player(physics_manager, &player->game_object.bounding_box);
+
+    player->game_object.bounding_box.owner= &player->game_object;
+    player->game_object.on_collision= player_on_collision;
+    printf("%p\n",&player->game_object.bounding_box);
 }
-    
 
 void player_read_input(player_t *player)
 {
@@ -644,7 +661,7 @@ void player_read_input(player_t *player)
     game_object_set_velocity(&player->game_object, player->game_object.velocity);
 }
 
-void wall_init(wall_t *wall, draw_manager_t *draw_manager)
+void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
 {
     game_object_init(&wall->game_object);
     sprite_t *sprite=malloc(sizeof(sprite_t));
@@ -665,4 +682,46 @@ void wall_init(wall_t *wall, draw_manager_t *draw_manager)
     rect_set_size(&wall->game_object.bounding_box,50,500);
     //printf("created bounding box w:%d h:%d ",wall->game_object.bounding_box.width,wall->game_object.bounding_box.height);
     wall->game_object.is_active = 1;
+    wall->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
+    physics_manager_add_rect(physics_manager, &wall->game_object.bounding_box);
+}
+
+void physics_manager_init(physics_manager_t *physics_manager)
+{
+    physics_manager->max_rects = 100;
+    physics_manager->player = NULL;
+    physics_manager->rects_to_draw = 0;
+    physics_manager->rects = malloc(100*sizeof(rect_t));
+}
+
+void physics_manager_update(physics_manager_t *physics_manager, double delta_time);
+
+void physics_manager_add_rect(physics_manager_t *physics_manager, rect_t *rect)
+{
+    physics_manager->rects[physics_manager->rects_to_draw] = rect;
+    physics_manager->rects_to_draw++;
+}
+
+void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect)
+{
+    physics_manager->player=rect;
+}
+
+void physics_manager_check_collisions(physics_manager_t *physics_manager)
+{
+    if(physics_manager->player==NULL)
+        return;
+
+    for (int i = 0; i < physics_manager->rects_to_draw; i++)
+    {
+        rect_t *rect_address = physics_manager->rects[i];
+        collision_info_t collision;
+        collision_info_init(&collision);
+        if(rect_check_collision(physics_manager->player, rect_address,&collision) == 1)
+        {
+            game_object_t *player_game_object=((game_object_t *)physics_manager->player->owner);
+            player_game_object->on_collision(player_game_object,&collision);
+        }
+        
+    } 
 }
