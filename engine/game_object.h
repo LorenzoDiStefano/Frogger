@@ -18,6 +18,7 @@
 #include "tests/test_clock.c"
 #include "tests/test_draw_manager.c"
 #include "tests/test_vector2.c"
+#include "engine/draw_manager.h"
 
 #endif
 #include <string.h>
@@ -29,6 +30,7 @@
 typedef struct game_object
 {
     vector2_t velocity,position;
+    sprite_t *sprite;
     int is_active;
 
 }game_object_t;
@@ -46,6 +48,7 @@ void game_object_set_velocity(game_object_t *game_object, vector2_t new_velocity
 void game_object_set_velocity_x(game_object_t *game_object, float new_velocity_x);
 void game_object_set_velocity_y(game_object_t *game_object, float new_velocity_y);
 
+void game_object_set_sprite(game_object_t *game_object, sprite_t *sprite);
 
 #ifdef _TEST
 void game_object_test_wrapper(const char *name, int (*func)(game_object_t *game_object));

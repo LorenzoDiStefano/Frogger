@@ -47,12 +47,19 @@ void game_object_init_with_vectors(game_object_t *game_object, vector2_t *positi
     game_object->velocity.y = velocity->y;
 
     game_object->is_active = 0;
+    game_object->sprite = NULL;
 }
 
 void game_object_update(game_object_t *game_object, double delta_time)
 {
     game_object->position.x+=game_object->velocity.x*delta_time;
     game_object->position.y+=game_object->velocity.y*delta_time;
+
+    if(game_object->sprite == NULL)
+        return;
+        
+    game_object->sprite->sprite_rect.x = (int)game_object->position.x;
+    game_object->sprite->sprite_rect.y = (int)game_object->position.y;
 }
 
 void game_object_set_position(game_object_t *game_object, vector2_t new_position)
@@ -85,6 +92,11 @@ void game_object_set_velocity_x(game_object_t *game_object, float new_velocity_x
 void game_object_set_velocity_y(game_object_t *game_object, float new_velocity_y)
 {
     game_object->velocity.y=new_velocity_y;
+}
+
+void game_object_set_sprite(game_object_t *game_object, sprite_t *sprite)
+{
+    game_object->sprite = sprite;
 }
 
 #ifdef _TEST
