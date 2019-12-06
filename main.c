@@ -78,9 +78,10 @@ int game()
         }
 
         player_read_input(&player);
-        game_object_update(&player.game_object,frame_time*0.001);
-        game_object_update(&wall.game_object,frame_time*0.001);
-        game_object_update(&wall2.game_object,frame_time*0.001);
+        //game_object_update(&player.game_object,frame_time*0.001);
+        //game_object_update(&wall.game_object,frame_time*0.001);
+        //game_object_update(&wall2.game_object,frame_time*0.001);
+        physics_manager_update(&physics_manager, frame_time*0.001);
         physics_manager_check_collisions(&physics_manager);
         draw_manager.draw_scene(&draw_manager);
     }

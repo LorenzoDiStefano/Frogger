@@ -683,6 +683,8 @@ void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *ph
     //printf("created bounding box w:%d h:%d ",wall->game_object.bounding_box.width,wall->game_object.bounding_box.height);
     wall->game_object.is_active = 1;
     wall->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
+    wall->game_object.bounding_box.owner= &wall->game_object;
+
     physics_manager_add_rect(physics_manager, &wall->game_object.bounding_box);
 }
 
@@ -694,7 +696,24 @@ void physics_manager_init(physics_manager_t *physics_manager)
     physics_manager->rects = malloc(100*sizeof(rect_t));
 }
 
-void physics_manager_update(physics_manager_t *physics_manager, double delta_time);
+void physics_manager_update(physics_manager_t *physics_manager, double delta_time)
+{
+    if(physics_manager->player==NULL)
+        return;
+
+    //update player
+    game_object_t *player_game_object=((game_object_t *)physics_manager->player->owner);
+    game_object_update(player_game_object,delta_time);
+
+    for (int i = 0; i < physics_manager->rects_to_draw; i++)
+    {
+        rect_t *rect_address = physics_manager->rects[i];
+
+        game_object_t *game_object_address = rect_address->owner;
+
+        game_object_update(game_object_address,delta_time);
+    } 
+}
 
 void physics_manager_add_rect(physics_manager_t *physics_manager, rect_t *rect)
 {
@@ -721,7 +740,6 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
         {
             game_object_t *player_game_object=((game_object_t *)physics_manager->player->owner);
             player_game_object->on_collision(player_game_object,&collision);
-        }
-        
+        }     
     } 
 }
