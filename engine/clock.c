@@ -1,19 +1,7 @@
-#ifndef FROGGER_LIBS
-#define FROGGER_LIBS
-
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-#include "engine/clock.h"
-#include "engine/clock.c"
-#include "tests/tests.c"
-#include "tests/test_clock.c"
-#include <string.h>
+#include "clock.h"
 #include <stdint.h>
-#include <stdlib.h>
-#include <stdio.h>
-#endif
 
 void cache_now(clock_t *clock)
 {
