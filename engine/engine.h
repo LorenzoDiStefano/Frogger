@@ -97,8 +97,8 @@ typedef struct draw_manager
     void (*draw_scene)(struct draw_manager *draw_manager);
 } draw_manager_t;
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 975
+#define WINDOW_HEIGHT 780
 
 int draw_manager_init(draw_manager_t* draw_manager);
 int load_image(image_info_t *img, const char *path);

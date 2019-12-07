@@ -50,13 +50,14 @@ int game()
 
     player_t player;
     player_init(&player,&draw_manager,&physics_manager);
+    /*
     wall_t wall;
     wall_init(&wall,&draw_manager,&physics_manager);
     wall_t wall2;
     wall_init(&wall2,&draw_manager,&physics_manager);
     wall2.game_object.position.x=300;
     wall2.game_object.position.y=0;
-
+    */
     car_t car;
     car_init(&car,&draw_manager,&physics_manager);
 

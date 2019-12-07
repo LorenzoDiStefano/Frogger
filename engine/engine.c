@@ -640,8 +640,8 @@ void test_game_object()
 void player_on_collision(struct game_object *game_object, collision_info_t *collision)
 {
     game_object_t *collider = (game_object_t *)collision->collider;
-    printf("player collided with %d \n",collider->collider_type);
-    if(collider->collider_type==2)
+    printf("player collided with %d \n", collider->collider_type);
+    if(collider->collider_type == 2)
         player_die((player_t *)game_object);
 }
 
@@ -652,10 +652,33 @@ void player_die(player_t *player)
     player->game_object.position.y = player->spawn_point.y;
 }
 
+void game_object_player_update(game_object_t *game_object,const double delta_time)
+{
+    game_object_update(game_object,delta_time);
+    printf("override");
+    if(game_object->position.x>WINDOW_WIDTH-game_object->bounding_box.width)
+    {
+        game_object->position.x=WINDOW_WIDTH-game_object->bounding_box.width;
+        game_object->velocity.x=0;
+    }
+    else if(game_object->position.x<0)
+    {
+        game_object->position.x=0;
+        game_object->velocity.x=0;
+    }
+    game_object->bounding_box.position.x = (int)game_object->position.x;
+    game_object->bounding_box.position.y = (int)game_object->position.y;      
+
+    if(game_object->sprite != NULL)
+    {
+        game_object->sprite->sprite_rect.x = (int)game_object->position.x;
+        game_object->sprite->sprite_rect.y = (int)game_object->position.y;
+    }
+}
+
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
 {
-    game_object_init(&player->game_object);
-    sprite_t *sprite=malloc(sizeof(sprite_t));
+    sprite_t *sprite = malloc(sizeof(sprite_t));
     image_info_t img_inf;
     load_image(&img_inf,"assets/frog.png");
     init_sprite(sprite, img_inf, draw_manager->renderer,1);
@@ -663,11 +686,11 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     vector2_t position,velocity;
     vector2_init_safe(&position,100,100);
     vector2_init_safe(&velocity,0,0);
-    vector2_init_safe(&player->spawn_point,0,0);
     
     game_object_init_with_vectors(&player->game_object, &position, &velocity);
     game_object_set_sprite(&player->game_object,sprite);
 
+    vector2_init_safe(&player->spawn_point,(WINDOW_WIDTH-78)/2,(WINDOW_HEIGHT-78));
     rect_set_size(&player->game_object.bounding_box,player->game_object.sprite->sprite_rect.w,player->game_object.sprite->sprite_rect.h);
     /*printf("created bounding box w:%d h:%d hw:%f",player->game_object.bounding_box.width,player->game_object.bounding_box.height,
     player->game_object.bounding_box.half_width);*/
@@ -678,7 +701,10 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
 
     player->game_object.bounding_box.owner= &player->game_object;
     player->game_object.on_collision= player_on_collision;
-    printf("%p\n",&player->game_object.bounding_box);
+
+    printf("%p\n",&player->game_object.update);
+    player->game_object.update= game_object_player_update;
+    printf("%p\n",&player->game_object.update);
 }
 
 void player_read_input(player_t *player)
@@ -695,13 +721,12 @@ void player_read_input(player_t *player)
     if(keystates[SDL_SCANCODE_DOWN])
         player->game_object.velocity.y++;            
 
-    player->game_object.velocity = vector2_mul(&player->game_object.velocity,(double)100);
+    player->game_object.velocity = vector2_mul(&player->game_object.velocity,(double)200);
     game_object_set_velocity(&player->game_object, player->game_object.velocity);
 }
 
 void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
 {
-    game_object_init(&wall->game_object);
     sprite_t *sprite=malloc(sizeof(sprite_t));
     image_info_t img_inf;
     load_image(&img_inf,"assets/ph_wall.png");
@@ -741,7 +766,7 @@ void physics_manager_update(physics_manager_t *physics_manager, const double del
 
     //update player
     game_object_t *player_game_object=((game_object_t *)physics_manager->player->owner);
-    game_object_update(player_game_object,delta_time);
+    player_game_object->update(player_game_object,delta_time);
 
     for (int i = 0; i < physics_manager->rects_to_draw; i++)
     {
@@ -749,7 +774,6 @@ void physics_manager_update(physics_manager_t *physics_manager, const double del
 
         game_object_t *game_object_address = rect_address->owner;
         game_object_address->update(game_object_address,delta_time);
-        //game_object_update();
     } 
 }
 
