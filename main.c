@@ -7,6 +7,12 @@
 #include "engine/clock.c"
 #include "engine/engine.c"
 
+#ifdef _TEST
+
+#include "tests/tests.c"
+
+#endif
+
 int crash()
 {
     SDL_Log("window error %s",SDL_GetError());

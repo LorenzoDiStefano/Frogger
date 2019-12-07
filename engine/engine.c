@@ -63,60 +63,63 @@ vector2_t vector2_get_deep_copy(vector2_t *vector2)
 
 #ifdef _TEST
 
-static int test_init(vector2_t *vector2)
+static int test_vector2_init()
 {
-    int ret_val = vector2_init(vector2);
-    return vector2->x == 0 && vector2->y == 0 && ret_val == 1;
+    vector2_t vector2;
+    int ret_val = vector2_init(&vector2);
+    return vector2.x == 0 && vector2.y == 0 && ret_val == 1;
 }
 
-static int test_init_safe(vector2_t *vector2)
+static int test_vector2_init_safe()
 {
-    int ret_val = vector2_init_safe(vector2, 50, 70);
-    return vector2->x == 50 && vector2->y == 70 && ret_val == 1;
+    vector2_t vector2;
+    int ret_val = vector2_init_safe(&vector2, 50, 70);
+    return vector2.x == 50 && vector2.y == 70 && ret_val == 1;
 }
 
-static int test_add(vector2_t *vector2)
+static int test_vector2_add()
 {
-    vector2_t second_vector2;
-    vector2_init_safe(vector2, 50, 70);
+    vector2_t second_vector2, vector2;
+    vector2_init_safe(&vector2, 50, 70);
     vector2_init_safe(&second_vector2, 50, 70);
-    second_vector2 = vector2_add(vector2, &second_vector2);
+    second_vector2 = vector2_add(&vector2, &second_vector2);
     return second_vector2.x == 100 && second_vector2.y == 140;
 }
 
-static int test_sub(vector2_t *vector2)
+static int test_vector2_sub()
 {
-    vector2_t second_vector2;
-    vector2_init_safe(vector2, 50, 70);
+    vector2_t second_vector2, vector2;
+    vector2_init_safe(&vector2, 50, 70);
     vector2_init_safe(&second_vector2, 50, 70);
-    second_vector2= vector2_sub(vector2, &second_vector2);
+    second_vector2 = vector2_sub(&vector2, &second_vector2);
     return second_vector2.x == 0 && second_vector2.y == 0;
 }
 
-static int test_deep_copy(vector2_t *vector2)
+static int test_vector2_deep_copy()
 {
-    vector2_init_safe(vector2, 50, 70);
-    vector2_t second_vector2 = vector2_get_deep_copy(vector2);
-    return second_vector2.x == 50 && second_vector2.y==70 &&
-    &(second_vector2.y) != &(vector2->y) && &(second_vector2.x) != &(vector2->x);
+    vector2_t vector2;
+    vector2_init_safe(&vector2, 50, 70);
+    vector2_t second_vector2 = vector2_get_deep_copy(&vector2);
+    return second_vector2.x == 50 && second_vector2.y == 70 &&
+    &(second_vector2.y) != &(vector2.y) && &(second_vector2.x) != &(vector2.x);
 }
 
-static int test_mul(vector2_t *vector2)
+static int test_vector2_mul()
 {
-    vector2_t second_vector2;
-    vector2_init_safe(vector2, 10, 2);
-    second_vector2= vector2_mul(vector2, 4);
+    vector2_t second_vector2, vector2;
+    vector2_init_safe(&vector2, 10, 2);
+    second_vector2 = vector2_mul(&vector2, 4);
     return second_vector2.x == 40 && second_vector2.y == 8;
 }
 
 void test_vector2()
 {
-    RUN_TEST_VECTOR2(test_init);
-    RUN_TEST_VECTOR2(test_init_safe);
-    RUN_TEST_VECTOR2(test_add);
-    RUN_TEST_VECTOR2(test_sub);
-    RUN_TEST_VECTOR2(test_mul);
-    RUN_TEST_VECTOR2(test_deep_copy);
+    RUN_TEST_VECTOR2(test_vector2_init);
+    RUN_TEST_VECTOR2(test_vector2_init_safe);
+    RUN_TEST_VECTOR2(test_vector2_add);
+    RUN_TEST_VECTOR2(test_vector2_sub);
+    RUN_TEST_VECTOR2(test_vector2_mul);
+    RUN_TEST_VECTOR2(test_vector2_deep_copy);
 }
 #endif
 
@@ -129,12 +132,13 @@ void collision_info_init(collision_info_t *collision_info)
 
 #ifdef _TEST
 
-static int test_collision_info_init(collision_info_t *collision_info)
+static int test_collision_info_init()
 {
-    collision_info_init(collision_info);
-    return collision_info->collider == NULL &&
-    collision_info->delta.x == 0 &&
-    collision_info->delta.y == 0;
+    collision_info_t collision_info;
+    collision_info_init(&collision_info);
+    return collision_info.collider == NULL &&
+    collision_info.delta.x == 0 &&
+    collision_info.delta.y == 0;
 }
 
 void test_collision_info()
@@ -224,57 +228,65 @@ int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info
 
 #ifdef _TEST
 
-static int test_rect_init(rect_t *rect)
+static int test_rect_init()
 {
-    rect_init(rect);
-    return rect->owner == NULL &&
-    rect->height == 0 &&
-    rect->width == 0 &&
-    rect->half_height == 0 &&
-    rect->half_width == 0 &&
-    rect->position.x == 0 &&
-    rect->position.y == 0;
+    rect_t rect;
+    rect_init(&rect);
+    return rect.owner == NULL &&
+    rect.height == 0 &&
+    rect.width == 0 &&
+    rect.half_height == 0 &&
+    rect.half_width == 0 &&
+    rect.position.x == 0 &&
+    rect.position.y == 0;
 }
 
-static int test_rect_init_safe(rect_t *rect)
+static int test_rect_init_safe()
 {
+    rect_t rect;
     game_object_t owner;
     vector2_t position;
     vector2_init_safe(&position,20,30);
-    rect_init_safe(rect, 100, 50, position, &owner);
+    rect_init_safe(&rect, 100, 50, position, &owner);
 
-    return rect->owner == &owner &&
-    rect->width == 100 &&
-    rect->height == 50 &&
-    rect->half_width == 50 &&
-    rect->half_height == 25 &&
-    rect->position.x == 20 &&
-    rect->position.y == 30;
+    return rect.owner == &owner &&
+    rect.width == 100 &&
+    rect.height == 50 &&
+    rect.half_width == 50 &&
+    rect.half_height == 25 &&
+    rect.position.x == 20 &&
+    rect.position.y == 30;
 }
 
-static int test_rect_set_position(rect_t *rect)
+static int test_rect_set_position()
 {
+    rect_t rect;
     vector2_t new_position;
     vector2_init_safe(&new_position, 100, 50);
-    rect_set_position(rect,new_position);
-    return rect->position.x == 100 && rect->position.y == 50;
+    rect_set_position(&rect,new_position);
+    return rect.position.x == 100 && rect.position.y == 50;
 }
 
-static int test_rect_set_position_x(rect_t *rect)
+static int test_rect_set_position_x()
 {
-    rect_set_position_x(rect, 100);
-    return rect->position.x == 100 && rect->position.y == 0;
+    rect_t rect;
+    rect_init(&rect);
+    rect_set_position_x(&rect, 100);
+    return rect.position.x == 100 && rect.position.y == 0;
 }
 
-static int test_rect_set_position_y(rect_t *rect)
+static int test_rect_set_position_y()
 {
-    rect_set_position_y(rect, 100);
-    return rect->position.x == 0 && rect->position.y == 100;
+    rect_t rect;
+    rect_init(&rect);
+    rect_set_position_y(&rect, 100);
+    return rect.position.x == 0 && rect.position.y == 100;
 }
 
-static int test_rect_collision_successful(rect_t *rect)
+static int test_rect_collision_successful()
 {
     rect_t first_rect, second_rect;
+    collision_info_t collisio_info;
     vector2_t position;
 
     vector2_init(&position);
@@ -283,26 +295,23 @@ static int test_rect_collision_successful(rect_t *rect)
     vector2_init_safe(&position, 20, 30);
     rect_init_safe(&second_rect, 50, 50, position, NULL);
 
-    rect_init_safe(rect, 100, 50, position, NULL);
-
-    int collision = rect_check_collision(&first_rect, &second_rect);
+    int collision = rect_check_collision(&first_rect, &second_rect, &collisio_info);
     return collision == 1;
 }
 
-static int test_rect_collision_failed(rect_t *rect)
+static int test_rect_collision_failed()
 {
     rect_t first_rect, second_rect;
+    collision_info_t collisio_info;
     vector2_t position;
 
     vector2_init(&position);
     rect_init_safe(&first_rect, 50, 50, position, NULL);
 
-    vector2_init_safe(&position, 20, 30);
+    vector2_init_safe(&position, 51, 30);
     rect_init_safe(&second_rect, 5, 5, position, NULL);
 
-    rect_init_safe(rect, 100, 50, position, NULL);
-
-    int collision = rect_check_collision(&first_rect, &second_rect);
+    int collision = rect_check_collision(&first_rect, &second_rect, &collisio_info);
     return collision == -1;
 }
 
@@ -388,7 +397,7 @@ int draw_manager_init(draw_manager_t* draw_manager)
     return 0;
 }
 
-int load_image(image_info_t *img,const char* path)
+int load_image(image_info_t *img, const char* path)
 {
     int width, height, comp;
     unsigned char* image;
@@ -412,12 +421,14 @@ int load_image(image_info_t *img,const char* path)
 
 #ifdef _TEST
 
-static int test_draw_manager_init(draw_manager_t *draw_manager)
+static int test_draw_manager_init()
 {
-    int return_value = draw_manager_init(draw_manager);
+    draw_manager_t draw_manager;
+    
+    int return_value = draw_manager_init(&draw_manager);
     return !return_value &&
-    draw_manager->max_sprites == 100 &&
-    draw_manager->sprites_to_draw == 0;
+    draw_manager.max_sprites == 100 &&
+    draw_manager.sprites_to_draw == 0;
 }
 
 void test_draw_manager()
@@ -432,7 +443,7 @@ void game_object_on_collision(game_object_t *game_object, collision_info_t *delt
 
 }
 
-void game_object_update(game_object_t *game_object, double delta_time)
+void game_object_update(game_object_t *game_object, const double delta_time)
 {
     if(!game_object->is_active)
         return;
@@ -480,8 +491,8 @@ void game_object_init_with_vectors(game_object_t *game_object, vector2_t *positi
 
 void game_object_set_position(game_object_t *game_object, vector2_t new_position)
 {
-    game_object_set_position_x(game_object,new_position.x);
-    game_object_set_position_y(game_object,new_position.y);
+    game_object_set_position_x(game_object, new_position.x);
+    game_object_set_position_y(game_object, new_position.y);
 }
 
 void game_object_set_position_x(game_object_t *game_object, float new_position_x)
@@ -496,18 +507,18 @@ void game_object_set_position_y(game_object_t *game_object, float new_position_y
 
 void game_object_set_velocity(game_object_t *game_object, vector2_t new_velocity)
 {
-    game_object_set_velocity_x(game_object,new_velocity.x);
-    game_object_set_velocity_y(game_object,new_velocity.y);
+    game_object_set_velocity_x(game_object, new_velocity.x);
+    game_object_set_velocity_y(game_object, new_velocity.y);
 }
 
 void game_object_set_velocity_x(game_object_t *game_object, float new_velocity_x)
 {
-    game_object->velocity.x=new_velocity_x;
+    game_object->velocity.x = new_velocity_x;
 }
 
 void game_object_set_velocity_y(game_object_t *game_object, float new_velocity_y)
 {
-    game_object->velocity.y=new_velocity_y;
+    game_object->velocity.y = new_velocity_y;
 }
 
 void game_object_set_sprite(game_object_t *game_object, sprite_t *sprite)
@@ -517,86 +528,98 @@ void game_object_set_sprite(game_object_t *game_object, sprite_t *sprite)
 
 #ifdef _TEST
 
-static int test_game_object_init(game_object_t *game_object)
+static int test_game_object_init()
 {
-    game_object_init(game_object);
-    return game_object->position.x == 0 && game_object->velocity.y == 0;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    return game_object.position.x == 0 && game_object.velocity.y == 0;
 }
 
-static int test_game_object_init_with_vectors(game_object_t *game_object)
+static int test_game_object_init_with_vectors()
 {
+    game_object_t game_object;
     vector2_t position,velocity;
     vector2_init_safe(&position,100,100);
     vector2_init_safe(&velocity,50,50);
 
-    game_object_init_with_vectors(game_object,&position,&velocity);
+    game_object_init_with_vectors(&game_object, &position, &velocity);
     
-    return game_object->position.x < 100.001 && game_object->position.x > 99.999 &&
-    game_object->position.y < 100.001 && game_object->position.y > 99.999 &&
-    game_object->velocity.x < 50.001 && game_object->velocity.x > 49.999 &&
-    game_object->velocity.y <= 50.001 && game_object->velocity.y >= 49.999 ;
+    return game_object.position.x < 100.001 && game_object.position.x > 99.999 &&
+    game_object.position.y < 100.001 && game_object.position.y > 99.999 &&
+    game_object.velocity.x < 50.001 && game_object.velocity.x > 49.999 &&
+    game_object.velocity.y <= 50.001 && game_object.velocity.y >= 49.999 ;
 
 }
 
-static int test_game_object_update(game_object_t *game_object)
+static int test_game_object_update()
 {
-    game_object_init(game_object);
-    game_object_update(game_object,1);
-    return game_object->position.x == 0 && game_object->position.y == 0;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    game_object.is_active = 1;
+    game_object_update(&game_object, 1);
+    return game_object.position.x == 0 && game_object.position.y == 0;
 }
 
-static int test_game_object_update_moving(game_object_t *game_object)
+static int test_game_object_update_moving()
 {
-    game_object_init(game_object);
-    game_object_set_velocity_x(game_object,5);
-    game_object_update(game_object,1);
-    return game_object->position.x == 5 && game_object->position.y == 0;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    game_object.is_active = 1;
+    game_object_set_velocity_x(&game_object, 5);
+    game_object_update(&game_object, 1);
+    return game_object.position.x == 5 && game_object.position.y == 0;
 }
 
-static int test_game_object_set_velocity_x(game_object_t *game_object)
+static int test_game_object_set_velocity_x()
 {
-    game_object_init(game_object);
-    game_object_set_velocity_x(game_object,1);
-    return game_object->velocity.x == 1 && game_object->velocity.y == 0;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    game_object_set_velocity_x(&game_object, 1);
+    return game_object.velocity.x == 1 && game_object.velocity.y == 0;
 }
 
-static int test_game_object_set_velocity_y(game_object_t *game_object)
+static int test_game_object_set_velocity_y()
 {
-    game_object_init(game_object);
-    game_object_set_velocity_y(game_object,1);
-    return game_object->velocity.x == 0 && game_object->velocity.y == 1;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    game_object_set_velocity_y(&game_object, 1);
+    return game_object.velocity.x == 0 && game_object.velocity.y == 1;
 }
 
-static int test_game_object_set_velocity(game_object_t *game_object)
+static int test_game_object_set_velocity()
 {
+    game_object_t game_object;
     vector2_t new_velocity;
-    vector2_init_safe(&new_velocity,50,40);
-    game_object_init(game_object);
-    game_object_set_velocity(game_object,new_velocity);
-    return game_object->velocity.x == 50 && game_object->velocity.y == 40;
+    vector2_init_safe(&new_velocity, 50, 40);
+    game_object_init(&game_object);
+    game_object_set_velocity(&game_object, new_velocity);
+    return game_object.velocity.x == 50 && game_object.velocity.y == 40;
 }
 
-static int test_game_object_set_position_x(game_object_t *game_object)
+static int test_game_object_set_position_x()
 {
-    game_object_init(game_object);
-    game_object_set_position_x(game_object,1);
-    return game_object->position.x == 1 && game_object->position.y == 0;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    game_object_set_position_x(&game_object, 1);
+    return game_object.position.x == 1 && game_object.position.y == 0;
 }
 
-static int test_game_object_set_position_y(game_object_t *game_object)
+static int test_game_object_set_position_y()
 {
-    game_object_init(game_object);
-    game_object_set_position_y(game_object,1);
-    return game_object->position.x == 0 && game_object->position.y == 1;
+    game_object_t game_object;
+    game_object_init(&game_object);
+    game_object_set_position_y(&game_object, 1);
+    return game_object.position.x == 0 && game_object.position.y == 1;
 }
 
-static int test_game_object_set_position(game_object_t *game_object)
+static int test_game_object_set_position()
 {
+    game_object_t game_object;
     vector2_t new_position;
-    vector2_init_safe(&new_position,50,40);
-    game_object_init(game_object);
-    game_object_set_position(game_object,new_position);
-    return game_object->position.x == 50 && game_object->position.y == 40;
+    vector2_init_safe(&new_position, 50, 40);
+    game_object_init(&game_object);
+    game_object_set_position(&game_object, new_position);
+    return game_object.position.x == 50 && game_object.position.y == 40;
 }
 
 void test_game_object()
@@ -711,7 +734,7 @@ void physics_manager_init(physics_manager_t *physics_manager)
     physics_manager->rects = malloc(100*sizeof(rect_t));
 }
 
-void physics_manager_update(physics_manager_t *physics_manager, double delta_time)
+void physics_manager_update(physics_manager_t *physics_manager, const double delta_time)
 {
     if(physics_manager->player==NULL)
         return;
@@ -759,7 +782,7 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
     } 
 }
 
-void game_object_car_update(game_object_t *game_object, double delta_time)
+void game_object_car_update(game_object_t *game_object,const double delta_time)
 {
     game_object_update(game_object,delta_time);
     if(game_object->position.x>WINDOW_WIDTH)
