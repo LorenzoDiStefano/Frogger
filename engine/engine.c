@@ -211,10 +211,6 @@ int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info
         else
             y = ((first_rect->position.y) - (second_rect->position.y+ second_rect->height));
 
-        if(x>y)
-            y=0;
-        else
-            x=0;
         vector2_init_safe(&collision->delta,x,y);
         collision->collider= (void*)second_rect->owner;
         return 1;
@@ -661,14 +657,33 @@ void test_game_object()
 void player_on_collision(struct game_object *game_object, collision_info_t *collision)
 {
     game_object_t *collider = (game_object_t *)collision->collider;
-    printf("player collided with %d \n", collider->collider_type);
-    if(collider->collider_type == 2)
+    //printf("player collided with %d \n", collider->collider_type);
+    if(collider->collider_type == COLLIDER_TYPE_WATER)
+    {
+        if(((player_t *)game_object)->is_on_log == 0)
+            player_die((player_t *)game_object);
+            //printf("drown");
+    }
+    if(collider->collider_type == COLLIDER_TYPE_CAR)
         player_die((player_t *)game_object);
+    else if(collider->collider_type == COLLIDER_TYPE_END)
+    {
+        if(collision->delta.y<-77)
+        {
+            printf("Player win\n");
+            game_state = 0;
+        }
+    }
+    else if(collider->collider_type == COLLIDER_TYPE_LOG)
+    {
+        ((player_t *)game_object)->is_on_log = 1;
+        //printf("onlog");
+    }
 }
 
 void player_die(player_t *player)
 {
-    printf("player died");
+    printf("Player died\n");
     player->game_object.position.x = player->spawn_point.x;
     player->game_object.position.y = player->spawn_point.y;
 }
@@ -679,7 +694,7 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
 
     if(game_object->position.x>WINDOW_WIDTH-game_object->bounding_box.width)
     {
-        game_object->position.x=WINDOW_WIDTH-game_object->bounding_box.width;
+        game_object->position.x = WINDOW_WIDTH-game_object->bounding_box.width;
     }
     else if(game_object->position.x<0)
     {
@@ -704,6 +719,9 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
         game_object->sprite->sprite_rect.x = (int)game_object->position.x;
         game_object->sprite->sprite_rect.y = (int)game_object->position.y;
     }
+
+    ((player_t *)game_object)->is_on_log = 0;
+
 }
 
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
@@ -716,11 +734,11 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     vector2_t position,velocity;
     vector2_init_safe(&position,100,100);
     vector2_init_safe(&velocity,0,0);
-    
+    player->is_on_log = 0;
     game_object_init_with_vectors(&player->game_object, &position, &velocity);
     game_object_set_sprite(&player->game_object,sprite);
 
-    vector2_init_safe(&player->spawn_point,(WINDOW_WIDTH-78)/2,(WINDOW_HEIGHT-78));
+    vector2_init_safe(&player->spawn_point,(WINDOW_WIDTH-GAME_ROW_HEIGHT)/2,(WINDOW_HEIGHT-GAME_ROW_HEIGHT));
     rect_set_size(&player->game_object.bounding_box,player->game_object.sprite->sprite_rect.w,player->game_object.sprite->sprite_rect.h);
     /*printf("created bounding box w:%d h:%d hw:%f",player->game_object.bounding_box.width,player->game_object.bounding_box.height,
     player->game_object.bounding_box.half_width);*/
@@ -849,7 +867,7 @@ void game_object_car_update(game_object_t *game_object, const double delta_time)
     }
 }
 
-void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
+void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char *path)
 {
     vector2_t position,velocity;
     vector2_init_safe(&position, 100, 100);
@@ -858,18 +876,18 @@ void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physi
     car->game_object.update = game_object_car_update;
     sprite_t *sprite=malloc(sizeof(sprite_t));
     image_info_t img_inf;
-    load_image(&img_inf,"assets/ph_car.png");
+    load_image(&img_inf, path);
     init_sprite(sprite, img_inf, draw_manager->renderer,1);
     draw_manager_add_sprite(draw_manager, sprite);
     
     game_object_set_sprite(&car->game_object,sprite);
 
-    sprite->sprite_rect.h=50;
-    sprite->sprite_rect.w=50;
-    rect_set_size(&car->game_object.bounding_box, 50, 50);
+    sprite->sprite_rect.h = GAME_ROW_HEIGHT+5;
+    sprite->sprite_rect.w = GAME_ROW_HEIGHT+5;
+    rect_set_size(&car->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
     car->game_object.is_active = 1;
     car->game_object.collider_type = COLLIDER_TYPE_CAR;
-    car->game_object.bounding_box.owner= &car->game_object;
+    car->game_object.bounding_box.owner = &car->game_object;
 
     physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
 }
@@ -891,7 +909,9 @@ void backgound_init(backgound_t *car, draw_manager_t *draw_manager, physics_mana
 
     sprite->sprite_rect.h = 78;
     sprite->sprite_rect.w = WINDOW_WIDTH;
-    rect_set_size(&car->game_object.bounding_box, 78, 50);
+    rect_set_size(&car->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
+    //printf("%d ",car->game_object.bounding_box.height);
+    //printf("%d\n",car->game_object.bounding_box.width);
     car->game_object.is_active = 1;
     car->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
     car->game_object.bounding_box.owner = &car->game_object;

@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <math.h>
 
+
+static int game_state = 1;
 #include "engine/clock.c"
 #include "engine/engine.c"
 
@@ -27,8 +29,11 @@ int end()
     return 0;
 }
 
+
+
 int game()
 {
+    
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK|SDL_INIT_AUDIO))
     {
         SDL_Log("error %s",SDL_GetError());
@@ -48,17 +53,31 @@ int game()
     physics_manager_t physics_manager;
     physics_manager_init(&physics_manager);
 
-    player_t player;
-    player_init(&player,&draw_manager,&physics_manager);
+    car_t log;
+    car_init(&log,&draw_manager,&physics_manager,"assets/ph_log.png");
+    game_object_set_position(&log.game_object, 0, 78*5);
+    log.game_object.collider_type = COLLIDER_TYPE_LOG;
 
     backgound_t road;
-    backgound_init(&road, &draw_manager, &physics_manager, "assets/ph_road.png");
-    game_object_set_position(&road.game_object,0,78);
+    backgound_init(&road, &draw_manager, &physics_manager, "assets/ph_road_bg.png");
+    game_object_set_position(&road.game_object, 0, 78);
 
     backgound_t road2;
-    backgound_init(&road2, &draw_manager, &physics_manager, "assets/ph_water_bg.png");
-    game_object_set_position(&road2.game_object,0,78*2);
+    backgound_init(&road2, &draw_manager, &physics_manager, "assets/ph_road_bg.png");
+    game_object_set_position(&road2.game_object, 0, 78*2);
 
+    backgound_t end_bg;
+    backgound_init(&end_bg, &draw_manager, &physics_manager, "assets/ph_victory_bg.png");
+    game_object_set_position(&end_bg.game_object, 0, 0);
+    end_bg.game_object.collider_type = COLLIDER_TYPE_END;
+
+    backgound_t water_bg;
+    backgound_init(&water_bg, &draw_manager, &physics_manager, "assets/ph_water_bg.png");
+    game_object_set_position(&water_bg.game_object, 0, 78*5);
+    water_bg.game_object.collider_type = COLLIDER_TYPE_WATER;
+
+    player_t player;
+    player_init(&player,&draw_manager,&physics_manager);
     /*
     wall_t wall;
     wall_init(&wall,&draw_manager,&physics_manager);
@@ -67,10 +86,16 @@ int game()
     wall2.game_object.position.x=300;
     wall2.game_object.position.y=0;
     */
-    car_t car;
-    car_init(&car,&draw_manager,&physics_manager);
 
-    for(;;)
+    car_t car;
+    car_init(&car,&draw_manager,&physics_manager,"assets/ph_car.png");
+
+    car_t car2;
+    car_init(&car2,&draw_manager,&physics_manager,"assets/ph_car.png");
+    //car2.game_object
+    game_object_set_position(&car2.game_object, 200, 200);
+
+    while(game_state)
     {
         SDL_Event event;
         while (SDL_PollEvent(&event))
@@ -96,18 +121,16 @@ int game()
         }
 
         player_read_input(&player);
-        //game_object_update(&player.game_object,frame_time*0.001);
-        //game_object_update(&wall.game_object,frame_time*0.001);
-        //game_object_update(&wall2.game_object,frame_time*0.001);
         physics_manager_update(&physics_manager, frame_time*0.001);
         physics_manager_check_collisions(&physics_manager);
         draw_manager.draw_scene(&draw_manager);
     }
+
+    return 1;
 }
 
 int main (int argc, char **argv)
 {
-
     #ifdef _TEST
 
     printf("Executing tests\n");

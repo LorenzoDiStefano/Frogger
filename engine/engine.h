@@ -33,6 +33,9 @@ typedef struct collision_info
 #define COLLIDER_TYPE_PLAYER 1
 #define COLLIDER_TYPE_CAR 2
 #define COLLIDER_TYPE_OBASTACLE 4
+#define COLLIDER_TYPE_END 8
+#define COLLIDER_TYPE_WATER 16
+#define COLLIDER_TYPE_LOG 0
 
 void collision_info_init(collision_info_t *collision_info);
 
@@ -134,7 +137,6 @@ typedef struct game_object
 void game_object_init(game_object_t *game_object);
 void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity);
 
-
 void game_object_set_position_with_vector(game_object_t *game_object, vector2_t new_position);
 void game_object_set_position(game_object_t *game_object, float x, float y);
 void game_object_set_position_x(game_object_t *game_object, float new_position_x);
@@ -173,6 +175,7 @@ typedef struct player
 {
     game_object_t game_object;
     vector2_t spawn_point;
+    int is_on_log;
     int score;
 }player_t;
 
@@ -193,11 +196,11 @@ typedef struct car
     game_object_t game_object;
 }car_t;
 
-void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
+void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char* path);
 
 typedef struct backgound
 {
     game_object_t game_object;
 }backgound_t;
 
-void backgound_init(backgound_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char* path);
+void backgound_init(backgound_t *backgound, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char* path);
