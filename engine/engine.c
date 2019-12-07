@@ -664,7 +664,7 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
             player_die((player_t *)game_object);
             //printf("drown");
     }
-    if(collider->collider_type == COLLIDER_TYPE_CAR)
+    else if(collider->collider_type == COLLIDER_TYPE_CAR)
         player_die((player_t *)game_object);
     else if(collider->collider_type == COLLIDER_TYPE_END)
     {
@@ -677,6 +677,12 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
     else if(collider->collider_type == COLLIDER_TYPE_LOG)
     {
         ((player_t *)game_object)->is_on_log = 1;
+        int fps = 60;
+        double frame_time = (double)1000/fps;
+        vector2_t movement = vector2_mul(&collider->velocity,frame_time*0.001);
+        game_object->position = vector2_add(&game_object->position,&movement);
+        //((player_t *)game_object)->last_log_position = collider->position;
+        //((player_t *)game_object)->last_log_touched = collider;
         //printf("onlog");
     }
 }
