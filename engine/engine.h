@@ -94,12 +94,19 @@ typedef struct draw_manager
     int sprites_to_draw;
     int max_sprites;
 
+    sprite_t **bg_sprites;
+    int bg_sprites_to_draw;
+    int bg_max_sprites;
+
     void (*draw_scene)(struct draw_manager *draw_manager);
 } draw_manager_t;
 
 #define WINDOW_WIDTH 975
 #define WINDOW_HEIGHT 780
+#define GAME_ROW_HEIGHT 78
 
+void draw_manager_add_sprite(draw_manager_t *draw_manager, sprite_t *sprite);
+void draw_manager_add_sprite_bg(draw_manager_t *draw_manager, sprite_t *sprite);
 int draw_manager_init(draw_manager_t* draw_manager);
 int load_image(image_info_t *img, const char *path);
 
@@ -128,7 +135,8 @@ void game_object_init(game_object_t *game_object);
 void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity);
 
 
-void game_object_set_position(game_object_t *game_object, vector2_t new_position);
+void game_object_set_position_with_vector(game_object_t *game_object, vector2_t new_position);
+void game_object_set_position(game_object_t *game_object, float x, float y);
 void game_object_set_position_x(game_object_t *game_object, float new_position_x);
 void game_object_set_position_y(game_object_t *game_object, float new_position_y);
 
@@ -171,6 +179,7 @@ typedef struct player
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
 void player_read_input(player_t *player);
 void player_die(player_t *player);
+void player_set_position(player_t *player, float x, float y);
 
 typedef struct wall
 {
@@ -185,3 +194,10 @@ typedef struct car
 }car_t;
 
 void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
+
+typedef struct backgound
+{
+    game_object_t game_object;
+}backgound_t;
+
+void backgound_init(backgound_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char* path);

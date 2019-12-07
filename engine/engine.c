@@ -356,6 +356,12 @@ void draw_scene(draw_manager_t *draw_manager)
     SDL_SetRenderDrawColor(draw_manager->renderer, 67, 33, 33, 255);
     SDL_RenderClear(draw_manager->renderer);
 
+    for (int i = 0; i < draw_manager->bg_sprites_to_draw; i++)
+    {
+        sprite_t *sprite_address = draw_manager->bg_sprites[i];
+        SDL_RenderCopy(draw_manager->renderer, sprite_address->texture, NULL, &sprite_address->sprite_rect);
+    }
+
     for (int i = 0; i < draw_manager->sprites_to_draw; i++)
     {
         sprite_t *sprite_address = draw_manager->sprites[i];
@@ -369,6 +375,12 @@ void draw_manager_add_sprite(draw_manager_t *draw_manager, sprite_t *sprite)
 {
     draw_manager->sprites[draw_manager->sprites_to_draw] = sprite;
     draw_manager->sprites_to_draw++;
+}
+
+void draw_manager_add_sprite_bg(draw_manager_t *draw_manager, sprite_t *sprite)
+{
+    draw_manager->bg_sprites[draw_manager->bg_sprites_to_draw] = sprite;
+    draw_manager->bg_sprites_to_draw++;
 }
 
 int draw_manager_init(draw_manager_t* draw_manager)
@@ -393,6 +405,10 @@ int draw_manager_init(draw_manager_t* draw_manager)
     draw_manager->max_sprites = 100;
     draw_manager->sprites_to_draw = 0;
     draw_manager->sprites = malloc(100*sizeof(sprite_t));
+
+    draw_manager->bg_max_sprites = 100;
+    draw_manager->bg_sprites_to_draw = 0;
+    draw_manager->bg_sprites = malloc(100*sizeof(sprite_t));
 
     return 0;
 }
@@ -487,9 +503,14 @@ void game_object_init_with_vectors(game_object_t *game_object, vector2_t *positi
     game_object->sprite = NULL;
 }
 
+void game_object_set_position(game_object_t *game_object, float x, float y)
+{
+    vector2_t vector2;
+    vector2_init_safe(&vector2,x,y);
+    game_object_set_position_with_vector(game_object, vector2);
+}
 
-
-void game_object_set_position(game_object_t *game_object, vector2_t new_position)
+void game_object_set_position_with_vector(game_object_t *game_object, vector2_t new_position)
 {
     game_object_set_position_x(game_object, new_position.x);
     game_object_set_position_y(game_object, new_position.y);
@@ -655,17 +676,26 @@ void player_die(player_t *player)
 void game_object_player_update(game_object_t *game_object,const double delta_time)
 {
     game_object_update(game_object,delta_time);
-    printf("override");
+
     if(game_object->position.x>WINDOW_WIDTH-game_object->bounding_box.width)
     {
         game_object->position.x=WINDOW_WIDTH-game_object->bounding_box.width;
-        game_object->velocity.x=0;
     }
     else if(game_object->position.x<0)
     {
-        game_object->position.x=0;
-        game_object->velocity.x=0;
+        game_object->position.x = 0;
     }
+
+    if(game_object->position.y<0)
+    {
+        game_object->position.y = 0;
+    }
+    else if (game_object->position.y > WINDOW_HEIGHT - game_object->bounding_box.height)
+    {
+        game_object->position.y = WINDOW_HEIGHT - game_object->bounding_box.height;
+    }
+    
+
     game_object->bounding_box.position.x = (int)game_object->position.x;
     game_object->bounding_box.position.y = (int)game_object->position.y;      
 
@@ -806,24 +836,24 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
     } 
 }
 
-void game_object_car_update(game_object_t *game_object,const double delta_time)
+void game_object_car_update(game_object_t *game_object, const double delta_time)
 {
-    game_object_update(game_object,delta_time);
-    if(game_object->position.x>WINDOW_WIDTH)
+    game_object_update(game_object, delta_time);
+    if(game_object->position.x > WINDOW_WIDTH)
     {
         game_object->position.x=-game_object->bounding_box.width;
     }
     else if(game_object->position.x<-(game_object->bounding_box.width))
     {
-        game_object->position.x=WINDOW_WIDTH;
+        game_object->position.x = WINDOW_WIDTH;
     }
 }
 
 void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
 {
     vector2_t position,velocity;
-    vector2_init_safe(&position,100,100);
-    vector2_init_safe(&velocity,-150,0);
+    vector2_init_safe(&position, 100, 100);
+    vector2_init_safe(&velocity, -150, 0);
     game_object_init_with_vectors(&car->game_object, &position, &velocity);
     car->game_object.update = game_object_car_update;
     sprite_t *sprite=malloc(sizeof(sprite_t));
@@ -836,7 +866,7 @@ void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physi
 
     sprite->sprite_rect.h=50;
     sprite->sprite_rect.w=50;
-    rect_set_size(&car->game_object.bounding_box,50,50);
+    rect_set_size(&car->game_object.bounding_box, 50, 50);
     car->game_object.is_active = 1;
     car->game_object.collider_type = COLLIDER_TYPE_CAR;
     car->game_object.bounding_box.owner= &car->game_object;
@@ -844,3 +874,27 @@ void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physi
     physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
 }
 
+void backgound_init(backgound_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char *path)
+{
+    vector2_t position,velocity;
+    vector2_init_safe(&position, 100, 100);
+    vector2_init_safe(&velocity, 0, 0);
+    game_object_init_with_vectors(&car->game_object, &position, &velocity);
+    car->game_object.update = game_object_car_update;
+    sprite_t *sprite = malloc(sizeof(sprite_t));
+    image_info_t img_inf;
+    load_image(&img_inf, path);
+    init_sprite(sprite, img_inf, draw_manager->renderer,1);
+    draw_manager_add_sprite_bg(draw_manager, sprite);
+    
+    game_object_set_sprite(&car->game_object, sprite);
+
+    sprite->sprite_rect.h = 78;
+    sprite->sprite_rect.w = WINDOW_WIDTH;
+    rect_set_size(&car->game_object.bounding_box, 78, 50);
+    car->game_object.is_active = 1;
+    car->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
+    car->game_object.bounding_box.owner = &car->game_object;
+
+    physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
+}

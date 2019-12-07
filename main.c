@@ -50,6 +50,15 @@ int game()
 
     player_t player;
     player_init(&player,&draw_manager,&physics_manager);
+
+    backgound_t road;
+    backgound_init(&road, &draw_manager, &physics_manager, "assets/ph_road.png");
+    game_object_set_position(&road.game_object,0,78);
+
+    backgound_t road2;
+    backgound_init(&road2, &draw_manager, &physics_manager, "assets/ph_water_bg.png");
+    game_object_set_position(&road2.game_object,0,78*2);
+
     /*
     wall_t wall;
     wall_init(&wall,&draw_manager,&physics_manager);
