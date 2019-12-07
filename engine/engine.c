@@ -738,7 +738,7 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     game_object_init_with_vectors(&player->game_object, &position, &velocity);
     game_object_set_sprite(&player->game_object,sprite);
 
-    vector2_init_safe(&player->spawn_point,(WINDOW_WIDTH-GAME_ROW_HEIGHT)/2,(WINDOW_HEIGHT-GAME_ROW_HEIGHT));
+    vector2_init_safe(&player->spawn_point,(WINDOW_WIDTH-TILE_SIZE)/2,(WINDOW_HEIGHT-TILE_SIZE));
     rect_set_size(&player->game_object.bounding_box,player->game_object.sprite->sprite_rect.w,player->game_object.sprite->sprite_rect.h);
     /*printf("created bounding box w:%d h:%d hw:%f",player->game_object.bounding_box.width,player->game_object.bounding_box.height,
     player->game_object.bounding_box.half_width);*/
@@ -748,29 +748,38 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     physics_manager_add_player(physics_manager, &player->game_object.bounding_box);
 
     player->game_object.bounding_box.owner= &player->game_object;
-    player->game_object.on_collision= player_on_collision;
-
-    printf("%p\n",&player->game_object.update);
-    player->game_object.update= game_object_player_update;
-    printf("%p\n",&player->game_object.update);
+    player->game_object.on_collision = player_on_collision;
+    player->game_object.update = game_object_player_update;
+    player->last_frame_input = 0;
 }
 
 void player_read_input(player_t *player)
 {
     const Uint8* keystates = SDL_GetKeyboardState(NULL);
-    vector2_init(&player->game_object.velocity);
+    
+    vector2_t direction;
+    vector2_init(&direction);
 
     if(keystates[SDL_SCANCODE_LEFT])
-        player->game_object.velocity.x--;
-    if(keystates[SDL_SCANCODE_RIGHT])
-        player->game_object.velocity.x++;
-    if(keystates[SDL_SCANCODE_UP])
-        player->game_object.velocity.y--;
-    if(keystates[SDL_SCANCODE_DOWN])
-        player->game_object.velocity.y++;            
+        direction.x--;
+    else if(keystates[SDL_SCANCODE_RIGHT])
+        direction.x++;
+    else if(keystates[SDL_SCANCODE_UP])
+        direction.y--;
+    else if(keystates[SDL_SCANCODE_DOWN])
+        direction.y++;    
 
-    player->game_object.velocity = vector2_mul(&player->game_object.velocity,(double)200);
-    game_object_set_velocity(&player->game_object, player->game_object.velocity);
+    if(player->last_frame_input > 0)
+    {
+        player->last_frame_input--;
+        return;
+    }
+
+    player->last_frame_input = 7;
+
+    direction = vector2_mul(&direction,78);
+    direction = vector2_add(&direction,&player->game_object.position);
+    game_object_set_position_with_vector(&player->game_object, direction);
 }
 
 void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
@@ -882,8 +891,8 @@ void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physi
     
     game_object_set_sprite(&car->game_object,sprite);
 
-    sprite->sprite_rect.h = GAME_ROW_HEIGHT+5;
-    sprite->sprite_rect.w = GAME_ROW_HEIGHT+5;
+    sprite->sprite_rect.h = TILE_SIZE;
+    sprite->sprite_rect.w = TILE_SIZE;
     rect_set_size(&car->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
     car->game_object.is_active = 1;
     car->game_object.collider_type = COLLIDER_TYPE_CAR;
@@ -907,7 +916,7 @@ void backgound_init(backgound_t *car, draw_manager_t *draw_manager, physics_mana
     
     game_object_set_sprite(&car->game_object, sprite);
 
-    sprite->sprite_rect.h = 78;
+    sprite->sprite_rect.h = TILE_SIZE;
     sprite->sprite_rect.w = WINDOW_WIDTH;
     rect_set_size(&car->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
     //printf("%d ",car->game_object.bounding_box.height);

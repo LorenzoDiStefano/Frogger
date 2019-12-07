@@ -104,9 +104,9 @@ typedef struct draw_manager
     void (*draw_scene)(struct draw_manager *draw_manager);
 } draw_manager_t;
 
-#define WINDOW_WIDTH 975
-#define WINDOW_HEIGHT 780
-#define GAME_ROW_HEIGHT 78
+#define WINDOW_WIDTH 858        //
+#define WINDOW_HEIGHT 858
+#define TILE_SIZE 78
 
 void draw_manager_add_sprite(draw_manager_t *draw_manager, sprite_t *sprite);
 void draw_manager_add_sprite_bg(draw_manager_t *draw_manager, sprite_t *sprite);
@@ -176,6 +176,7 @@ typedef struct player
     game_object_t game_object;
     vector2_t spawn_point;
     int is_on_log;
+    int last_frame_input;
     int score;
 }player_t;
 
