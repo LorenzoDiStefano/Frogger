@@ -77,6 +77,7 @@ typedef struct image_info
 {
     int width, height, comp, length;
     unsigned char *image;
+    SDL_Texture *texture;
 }image_info_t;
 
 typedef struct sprite
@@ -87,7 +88,7 @@ typedef struct sprite
     float scale;
 }sprite_t;
 
-void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer, float scale);
+void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, float scale);
 
 typedef struct draw_manager
 {
@@ -129,8 +130,8 @@ typedef struct game_object
     int is_active;
     uint8_t collider_type;
 
-    void (*on_collision)(struct game_object *game_object, collision_info_t *delta);
-    void (*update)(struct game_object *game_object,const double delta_time);
+    void (*on_collision)(struct game_object *game_object, collision_info_t *collision);
+    void (*update)(struct game_object *game_object, const double delta_time);
 
 }game_object_t;
 
@@ -180,28 +181,21 @@ typedef struct player
     int score;
 }player_t;
 
-void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
+void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);
 void player_read_input(player_t *player);
 void player_die(player_t *player);
 void player_set_position(player_t *player, float x, float y);
-
-typedef struct wall
-{
-    game_object_t game_object;
-}wall_t;
-
-void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager);
 
 typedef struct car
 {
     game_object_t game_object;
 }car_t;
 
-void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char* path);
+void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);
 
 typedef struct backgound
 {
     game_object_t game_object;
 }backgound_t;
 
-void backgound_init(backgound_t *backgound, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char* path);
+void backgound_init(backgound_t *backgound, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);

@@ -216,8 +216,6 @@ int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info
         return 1;
     }
 
-    //printf("first rect x:%f y:%f w:%d h:%d\n",first_rect->position.x,first_rect->position.y,first_rect->width,first_rect->height);
-    //printf("first rect x:%f y:%f w:%d h:%d\n",second_rect->position.x,second_rect->position.y,second_rect->width,second_rect->height);
     return -1;
 }
 
@@ -324,26 +322,35 @@ void test_rect()
 
 #endif
 
-void init_sprite(sprite_t *sprite, image_info_t img_info, SDL_Renderer *renderer, float scale)
+void load_texture(image_info_t *img_info, SDL_Renderer *renderer)
 {
-    sprite->texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, img_info.width, img_info.height);
-    sprite->scale = scale;
-    sprite->sprite_rect.w = img_info.width*scale;
-    sprite->sprite_rect.h = img_info.height*scale;
-    sprite->sprite_rect.x = 0;
-    sprite->sprite_rect.y = 0;
+    SDL_Texture *texture = SDL_CreateTexture(renderer,SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, img_info->width, img_info->height);
+    if(!texture)
+        printf("error");
 
-    SDL_SetTextureBlendMode(sprite->texture, SDL_BLENDMODE_BLEND);
-
+    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     Uint8 *pixels = NULL;
     int pitch = 0;
-    SDL_LockTexture(sprite->texture, NULL, (void **)&pixels, &pitch);
+    if (SDL_LockTexture(texture, NULL, (void **)&pixels, &pitch))
+    {
+        printf("Unable to map texture into address space");
+    }
+    memcpy(pixels, (void *)img_info->image, img_info->height *4* img_info->width);
 
-    memcpy(pixels, img_info.image, pitch * img_info.width);
+    SDL_UnlockTexture(texture);
+    //free(img_info->image); //img info is not in the heap but image is
+    img_info->texture = texture;
+    return;
+}
 
-    //free(img_info.image); //img info is not in the heap
-
-    SDL_UnlockTexture(sprite->texture);
+void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, float scale)
+{
+    sprite->texture = img_info->texture;
+    sprite->scale = scale;
+    sprite->sprite_rect.w = img_info->width * scale;
+    sprite->sprite_rect.h = img_info->height * scale;
+    sprite->sprite_rect.x = 0;
+    sprite->sprite_rect.y = 0;
     sprite->renderer = renderer;
 }
 
@@ -381,14 +388,14 @@ void draw_manager_add_sprite_bg(draw_manager_t *draw_manager, sprite_t *sprite)
 
 int draw_manager_init(draw_manager_t* draw_manager)
 {
-    draw_manager->window = SDL_CreateWindow("Game",100,100,WINDOW_WIDTH,WINDOW_HEIGHT,SDL_WINDOW_SHOWN);
+    draw_manager->window = SDL_CreateWindow("Game", 100, 100 ,WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
     if(!draw_manager->window)
     {
         return -1;
     }
 
-    draw_manager->renderer = SDL_CreateRenderer(draw_manager->window,-1,SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_ACCELERATED);
+    draw_manager->renderer = SDL_CreateRenderer(draw_manager->window, -1,SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_ACCELERATED);
 
     if(!draw_manager->renderer)
     {
@@ -419,6 +426,7 @@ int load_image(image_info_t *img, const char* path)
     SDL_Log("Loading img: %s",path);
     if (!image)
     {
+        SDL_Log("Error loading img: %s",path);
         return 1;
     }
 
@@ -471,12 +479,11 @@ void game_object_update(game_object_t *game_object, const double delta_time)
         game_object->sprite->sprite_rect.x = (int)game_object->position.x;
         game_object->sprite->sprite_rect.y = (int)game_object->position.y;
     }
-
 }
 
 void game_object_init(game_object_t *game_object)
 {
-    //rect_init(&game_object->bounding_box);
+    rect_init(&game_object->bounding_box);
     vector2_init(&(game_object->position));
     vector2_init(&(game_object->velocity));
     game_object->is_active = 0;
@@ -635,8 +642,8 @@ static int test_game_object_set_position()
     vector2_t new_position;
     vector2_init_safe(&new_position, 50, 40);
     game_object_init(&game_object);
-    game_object_set_position(&game_object, new_position);
-    return game_object.position.x == 50 && game_object.position.y == 40;
+    game_object_set_position(&game_object, 100, 40);
+    return game_object.position.x == 100 && game_object.position.y == 40;
 }
 
 void test_game_object()
@@ -660,12 +667,15 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
     //printf("player collided with %d \n", collider->collider_type);
     if(collider->collider_type == COLLIDER_TYPE_WATER)
     {
+        //check if player is drowning
         if(((player_t *)game_object)->is_on_log == 0)
-            player_die((player_t *)game_object);
-            //printf("drown");
+            player_die((player_t *)game_object);    
     }
     else if(collider->collider_type == COLLIDER_TYPE_CAR)
+    {
+        //got hit by a car
         player_die((player_t *)game_object);
+    }
     else if(collider->collider_type == COLLIDER_TYPE_END)
     {
         if(collision->delta.y<-77)
@@ -679,11 +689,8 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
         ((player_t *)game_object)->is_on_log = 1;
         int fps = 60;
         double frame_time = (double)1000/fps;
-        vector2_t movement = vector2_mul(&collider->velocity,frame_time*0.001);
-        game_object->position = vector2_add(&game_object->position,&movement);
-        //((player_t *)game_object)->last_log_position = collider->position;
-        //((player_t *)game_object)->last_log_touched = collider;
-        //printf("onlog");
+        vector2_t movement = vector2_mul(&collider->velocity, frame_time*0.001);
+        game_object->position = vector2_add(&game_object->position, &movement);
     }
 }
 
@@ -698,9 +705,9 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
 {
     game_object_update(game_object,delta_time);
 
-    if(game_object->position.x>WINDOW_WIDTH-game_object->bounding_box.width)
+    if(game_object->position.x>WINDOW_WIDTH - game_object->bounding_box.width)
     {
-        game_object->position.x = WINDOW_WIDTH-game_object->bounding_box.width;
+        game_object->position.x = WINDOW_WIDTH - game_object->bounding_box.width;
     }
     else if(game_object->position.x<0)
     {
@@ -715,7 +722,6 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
     {
         game_object->position.y = WINDOW_HEIGHT - game_object->bounding_box.height;
     }
-    
 
     game_object->bounding_box.position.x = (int)game_object->position.x;
     game_object->bounding_box.position.y = (int)game_object->position.y;      
@@ -730,33 +736,30 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
 
 }
 
-void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
+void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
 {
-    sprite_t *sprite = malloc(sizeof(sprite_t));
-    image_info_t img_inf;
-    load_image(&img_inf,"assets/frog.png");
-    init_sprite(sprite, img_inf, draw_manager->renderer,1);
-    draw_manager_add_sprite(draw_manager, sprite);
-    vector2_t position,velocity;
-    vector2_init_safe(&position,100,100);
-    vector2_init_safe(&velocity,0,0);
+    player->last_frame_input = 0;
     player->is_on_log = 0;
-    game_object_init_with_vectors(&player->game_object, &position, &velocity);
-    game_object_set_sprite(&player->game_object,sprite);
+    vector2_init_safe(&player->spawn_point, (WINDOW_WIDTH-TILE_SIZE)/2, (WINDOW_HEIGHT-TILE_SIZE));
 
-    vector2_init_safe(&player->spawn_point,(WINDOW_WIDTH-TILE_SIZE)/2,(WINDOW_HEIGHT-TILE_SIZE));
-    rect_set_size(&player->game_object.bounding_box,player->game_object.sprite->sprite_rect.w,player->game_object.sprite->sprite_rect.h);
-    /*printf("created bounding box w:%d h:%d hw:%f",player->game_object.bounding_box.width,player->game_object.bounding_box.height,
-    player->game_object.bounding_box.half_width);*/
+    game_object_init(&player->game_object);
 
-    player->game_object.collider_type = COLLIDER_TYPE_PLAYER;
-    player->game_object.is_active = 1;
-    physics_manager_add_player(physics_manager, &player->game_object.bounding_box);
-
-    player->game_object.bounding_box.owner= &player->game_object;
+    player->game_object.bounding_box.owner = &player->game_object;
     player->game_object.on_collision = player_on_collision;
     player->game_object.update = game_object_player_update;
-    player->last_frame_input = 0;
+    player->game_object.collider_type = COLLIDER_TYPE_PLAYER;
+    player->game_object.is_active = 1;
+
+    sprite_t *sprite = malloc(sizeof(sprite_t));
+    init_sprite(sprite, img_info, draw_manager->renderer, 1);
+    game_object_set_sprite(&player->game_object, sprite);
+
+    rect_set_size(&player->game_object.bounding_box, player->game_object.sprite->sprite_rect.w, player->game_object.sprite->sprite_rect.h);
+
+    player_die(player);
+
+    draw_manager_add_sprite(draw_manager, sprite);
+    physics_manager_add_player(physics_manager, &player->game_object.bounding_box);
 }
 
 void player_read_input(player_t *player)
@@ -783,35 +786,9 @@ void player_read_input(player_t *player)
 
     player->last_frame_input = 7;
 
-    direction = vector2_mul(&direction,78);
-    direction = vector2_add(&direction,&player->game_object.position);
+    direction = vector2_mul(&direction, TILE_SIZE);
+    direction = vector2_add(&direction, &player->game_object.position);
     game_object_set_position_with_vector(&player->game_object, direction);
-}
-
-void wall_init(wall_t *wall, draw_manager_t *draw_manager, physics_manager_t *physics_manager)
-{
-    sprite_t *sprite=malloc(sizeof(sprite_t));
-    image_info_t img_inf;
-    load_image(&img_inf,"assets/ph_wall.png");
-    init_sprite(sprite, img_inf, draw_manager->renderer,1);
-    draw_manager_add_sprite(draw_manager, sprite);
-    vector2_t position,velocity;
-    vector2_init_safe(&position,0,0);
-    vector2_init_safe(&velocity,0,0);
-    
-    game_object_init_with_vectors(&wall->game_object, &position, &velocity);
-    game_object_set_sprite(&wall->game_object,sprite);
-
-    sprite->sprite_rect.h=500;
-    sprite->sprite_rect.w=50;
-    //rect_set_size(&wall->game_object.bounding_box,wall->game_object.sprite->sprite_rect.w,wall->game_object.sprite->sprite_rect.h);
-    rect_set_size(&wall->game_object.bounding_box,50,500);
-    //printf("created bounding box w:%d h:%d ",wall->game_object.bounding_box.width,wall->game_object.bounding_box.height);
-    wall->game_object.is_active = 1;
-    wall->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
-    wall->game_object.bounding_box.owner= &wall->game_object;
-
-    physics_manager_add_rect(physics_manager, &wall->game_object.bounding_box);
 }
 
 void physics_manager_init(physics_manager_t *physics_manager)
@@ -828,7 +805,7 @@ void physics_manager_update(physics_manager_t *physics_manager, const double del
         return;
 
     //update player
-    game_object_t *player_game_object=((game_object_t *)physics_manager->player->owner);
+    game_object_t *player_game_object = ((game_object_t *)physics_manager->player->owner);
     player_game_object->update(player_game_object,delta_time);
 
     for (int i = 0; i < physics_manager->rects_to_draw; i++)
@@ -848,7 +825,7 @@ void physics_manager_add_rect(physics_manager_t *physics_manager, rect_t *rect)
 
 void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect)
 {
-    physics_manager->player=rect;
+    physics_manager->player = rect;
 }
 
 void physics_manager_check_collisions(physics_manager_t *physics_manager)
@@ -863,8 +840,8 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
         collision_info_init(&collision);
         if(rect_check_collision(physics_manager->player, rect_address,&collision) == 1)
         {
-            game_object_t *player_game_object=((game_object_t *)physics_manager->player->owner);
-            player_game_object->on_collision(player_game_object,&collision);
+            game_object_t *player_game_object = ((game_object_t *)physics_manager->player->owner);
+            player_game_object->on_collision(player_game_object, &collision);
         }     
     } 
 }
@@ -882,54 +859,47 @@ void game_object_car_update(game_object_t *game_object, const double delta_time)
     }
 }
 
-void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char *path)
+void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
 {
-    vector2_t position,velocity;
-    vector2_init_safe(&position, 100, 100);
-    vector2_init_safe(&velocity, -150, 0);
-    game_object_init_with_vectors(&car->game_object, &position, &velocity);
-    car->game_object.update = game_object_car_update;
-    sprite_t *sprite=malloc(sizeof(sprite_t));
-    image_info_t img_inf;
-    load_image(&img_inf, path);
-    init_sprite(sprite, img_inf, draw_manager->renderer,1);
-    draw_manager_add_sprite(draw_manager, sprite);
-    
-    game_object_set_sprite(&car->game_object,sprite);
+    //initializing game_object
+    game_object_init(&car->game_object);
 
-    sprite->sprite_rect.h = TILE_SIZE;
-    sprite->sprite_rect.w = TILE_SIZE;
-    rect_set_size(&car->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
     car->game_object.is_active = 1;
+    car->game_object.update = game_object_car_update;
     car->game_object.collider_type = COLLIDER_TYPE_CAR;
     car->game_object.bounding_box.owner = &car->game_object;
 
+    sprite_t *sprite = malloc(sizeof(sprite_t));
+    init_sprite(sprite, img_info, draw_manager->renderer, 1); 
+    game_object_set_sprite(&car->game_object, sprite);
+
+    //temporary, waiting for art
+    car->game_object.sprite->sprite_rect.h = TILE_SIZE;
+    car->game_object.sprite->sprite_rect.w = TILE_SIZE;
+    rect_set_size(&car->game_object.bounding_box, TILE_SIZE, TILE_SIZE);
+
+    draw_manager_add_sprite(draw_manager, car->game_object.sprite);
     physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
 }
 
-void backgound_init(backgound_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, const char *path)
+void backgound_init(backgound_t *background, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
 {
-    vector2_t position,velocity;
-    vector2_init_safe(&position, 100, 100);
-    vector2_init_safe(&velocity, 0, 0);
-    game_object_init_with_vectors(&car->game_object, &position, &velocity);
-    car->game_object.update = game_object_car_update;
-    sprite_t *sprite = malloc(sizeof(sprite_t));
-    image_info_t img_inf;
-    load_image(&img_inf, path);
-    init_sprite(sprite, img_inf, draw_manager->renderer,1);
-    draw_manager_add_sprite_bg(draw_manager, sprite);
-    
-    game_object_set_sprite(&car->game_object, sprite);
+    //initializing game_object
+    game_object_init(&background->game_object);
 
+    background->game_object.is_active = 1;
+    background->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
+    background->game_object.bounding_box.owner = &background->game_object;
+    
+    sprite_t *sprite = malloc(sizeof(sprite_t));
+    init_sprite(sprite, img_info, draw_manager->renderer, 1);  
+    game_object_set_sprite(&background->game_object, sprite);
+
+    //temporary, waiting for art
     sprite->sprite_rect.h = TILE_SIZE;
     sprite->sprite_rect.w = WINDOW_WIDTH;
-    rect_set_size(&car->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
-    //printf("%d ",car->game_object.bounding_box.height);
-    //printf("%d\n",car->game_object.bounding_box.width);
-    car->game_object.is_active = 1;
-    car->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
-    car->game_object.bounding_box.owner = &car->game_object;
+    rect_set_size(&background->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
 
-    physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
+    draw_manager_add_sprite_bg(draw_manager, background->game_object.sprite);
+    physics_manager_add_rect(physics_manager, &background->game_object.bounding_box);
 }
