@@ -47,10 +47,12 @@ void test_collision_info();
 
 #endif
 
+typedef struct game_object game_object_t;
+
 typedef struct rect
 {
     vector2_t position;
-    void *owner;//should be game_object
+    game_object_t *owner;//should be game_object
     int width, height;
     float half_width, half_height;
 } rect_t;
@@ -105,8 +107,8 @@ typedef struct draw_manager
     void (*draw_scene)(struct draw_manager *draw_manager);
 } draw_manager_t;
 
-#define WINDOW_WIDTH 858        //
-#define WINDOW_HEIGHT 858
+#define WINDOW_WIDTH 780
+#define WINDOW_HEIGHT 780
 #define TILE_SIZE 78
 
 void draw_manager_add_sprite(draw_manager_t *draw_manager, sprite_t *sprite);
@@ -159,7 +161,7 @@ void test_game_object();
 
 typedef struct physics_manager
 {
-    rect_t **rects;
+    rect_t *rects[100];
     int rects_to_draw;
     int max_rects;
     rect_t *player;

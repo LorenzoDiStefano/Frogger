@@ -150,7 +150,7 @@ void test_collision_info()
 
 void rect_init(rect_t* rect)
 {
-    rect->owner = NULL;
+    rect->owner = malloc(300);;
     rect->height = 0;
     rect->width = 0;
     rect->half_height = 0;
@@ -471,8 +471,8 @@ void game_object_update(game_object_t *game_object, const double delta_time)
     game_object->position.x+=game_object->velocity.x*delta_time;
     game_object->position.y+=game_object->velocity.y*delta_time;
 
-    game_object->bounding_box.position.x = (int)game_object->position.x;
-    game_object->bounding_box.position.y = (int)game_object->position.y;      
+    game_object->bounding_box.position.x = game_object->position.x;
+    game_object->bounding_box.position.y = game_object->position.y;      
 
     if(game_object->sprite != NULL)
     {
@@ -488,6 +488,7 @@ void game_object_init(game_object_t *game_object)
     vector2_init(&(game_object->velocity));
     game_object->is_active = 0;
     game_object->collider_type = 0;
+    game_object->sprite = NULL;
     game_object->update = game_object_update;
 }
 
@@ -796,24 +797,27 @@ void physics_manager_init(physics_manager_t *physics_manager)
     physics_manager->max_rects = 100;
     physics_manager->player = NULL;
     physics_manager->rects_to_draw = 0;
-    physics_manager->rects = malloc(100*sizeof(rect_t));
 }
 
 void physics_manager_update(physics_manager_t *physics_manager, const double delta_time)
 {
     if(physics_manager->player==NULL)
+    {
+        printf("missing player\n");
         return;
+    }
 
     //update player
     game_object_t *player_game_object = ((game_object_t *)physics_manager->player->owner);
-    player_game_object->update(player_game_object,delta_time);
+    player_game_object->update(player_game_object, delta_time);
 
     for (int i = 0; i < physics_manager->rects_to_draw; i++)
     {
-        rect_t *rect_address = physics_manager->rects[i];
+        game_object_t *game_object_address = physics_manager->rects[i]->owner;
 
-        game_object_t *game_object_address = rect_address->owner;
-        game_object_address->update(game_object_address,delta_time);
+        if(game_object_address->update == NULL)
+            printf("null update");
+        game_object_address->update(game_object_address, delta_time);
     } 
 }
 
@@ -830,17 +834,16 @@ void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect
 
 void physics_manager_check_collisions(physics_manager_t *physics_manager)
 {
-    if(physics_manager->player==NULL)
+    if(physics_manager->player == NULL)
         return;
 
     for (int i = 0; i < physics_manager->rects_to_draw; i++)
     {
-        rect_t *rect_address = physics_manager->rects[i];
         collision_info_t collision;
         collision_info_init(&collision);
-        if(rect_check_collision(physics_manager->player, rect_address,&collision) == 1)
+        if(rect_check_collision(physics_manager->player, physics_manager->rects[i] ,&collision) == 1)
         {
-            game_object_t *player_game_object = ((game_object_t *)physics_manager->player->owner);
+            game_object_t *player_game_object = physics_manager->player->owner;
             player_game_object->on_collision(player_game_object, &collision);
         }     
     } 
@@ -849,6 +852,7 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
 void game_object_car_update(game_object_t *game_object, const double delta_time)
 {
     game_object_update(game_object, delta_time);
+    //printf("override");
     if(game_object->position.x > WINDOW_WIDTH)
     {
         game_object->position.x=-game_object->bounding_box.width;
@@ -868,6 +872,8 @@ void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physi
     car->game_object.update = game_object_car_update;
     car->game_object.collider_type = COLLIDER_TYPE_CAR;
     car->game_object.bounding_box.owner = &car->game_object;
+
+    game_object_set_position(&car->game_object, 0, WINDOW_HEIGHT);
 
     sprite_t *sprite = malloc(sizeof(sprite_t));
     init_sprite(sprite, img_info, draw_manager->renderer, 1); 

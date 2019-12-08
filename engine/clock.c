@@ -3,25 +3,25 @@
 #include "clock.h"
 #include <stdint.h>
 
-void cache_now(clock_t *clock)
+void cache_now(game_clock_t *clock)
 {
     clock->last = clock->now;
     clock->now = SDL_GetPerformanceCounter();
 }
 
-void fake_cache_now(clock_t *clock, Uint64 value)
+void fake_cache_now(game_clock_t *clock, Uint64 value)
 {
     clock->last = clock->now;
     clock->now = value;
 }
 
-double get_delta_time(clock_t *clock)
+double get_delta_time(game_clock_t *clock)
 {
     clock->delta_time_cached = (double)((clock->now - clock->last)*1000 / (double)SDL_GetPerformanceFrequency());
     return clock->delta_time_cached;
 }
 
-void clock_init_safe(clock_t *clock)
+void clock_init_safe(game_clock_t *clock)
 {
     clock->cache_now = cache_now;
     clock->cache_now(clock);
@@ -33,7 +33,7 @@ void clock_init_safe(clock_t *clock)
 
 static int test_cache_now()
 {
-    clock_t clock;
+    game_clock_t clock;
     clock_init_safe(&clock);
     clock.last = 0;
     clock.now = 5;
@@ -43,7 +43,7 @@ static int test_cache_now()
 
 static int test_get_delta_time()
 {
-    clock_t clock;
+    game_clock_t clock;
     clock_init_safe(&clock);
     clock.last = 0;
     clock.now = 5;

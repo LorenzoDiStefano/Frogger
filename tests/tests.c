@@ -1,3 +1,7 @@
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+
+
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
