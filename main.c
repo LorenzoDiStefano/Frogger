@@ -81,6 +81,7 @@ void generate_map(backgound_t *backgrounds, draw_manager_t *draw_manager,physics
 {
     int used_obstacles = 0;
     int base_x_velocity = 100;
+    int lane_direction;
 
     for (size_t i = 0; i < 10; i++)
     {
@@ -96,25 +97,43 @@ void generate_map(backgound_t *backgrounds, draw_manager_t *draw_manager,physics
         else
         {
             int random_bg = (rand()%2);
-            float random_additive_velocity= ((float)rand()/(float)(RAND_MAX)) * base_x_velocity;
+            lane_direction = (rand() % 2) * 2 - 1;
+            float random_additive_velocity = ((float)rand()/(float)(RAND_MAX)) * base_x_velocity;
+            float lane_velocity = (random_additive_velocity+base_x_velocity)*lane_direction;
             if(random_bg)
             {
                 backgound_init(&backgrounds[i],draw_manager,physics_manager, &texture_info[TEXTURE_WATER]);
                 backgrounds[i].game_object.collider_type = COLLIDER_TYPE_WATER;
 
-                game_object_set_position(&obstacles[used_obstacles].game_object, 0, TILE_SIZE*i);
-                game_object_set_velocity_x(&obstacles[used_obstacles].game_object, 100 + random_additive_velocity);
+                game_object_set_position(&obstacles[used_obstacles].game_object, (rand()%5)*TILE_SIZE, TILE_SIZE*i);
+                game_object_set_velocity_x(&obstacles[used_obstacles].game_object, lane_velocity);
                 obstacles[used_obstacles].game_object.collider_type = COLLIDER_TYPE_LOG;
                 obstacles[used_obstacles].game_object.sprite->texture = texture_info[TEXTURE_LOG].texture;
                 used_obstacles++;
+
+                if((rand()%2))
+                {
+                    game_object_set_position(&obstacles[used_obstacles].game_object, ((rand()%5)+5)*TILE_SIZE, TILE_SIZE*i);
+                    game_object_set_velocity_x(&obstacles[used_obstacles].game_object, lane_velocity);
+                    obstacles[used_obstacles].game_object.collider_type = COLLIDER_TYPE_LOG;
+                    obstacles[used_obstacles].game_object.sprite->texture = texture_info[TEXTURE_LOG].texture;
+                    used_obstacles++;
+                }
+
             }
             else
             {
                 backgound_init(&backgrounds[i], draw_manager,physics_manager, &texture_info[TEXTURE_ROAD]);
                 
-                game_object_set_position(&obstacles[used_obstacles].game_object,0 , TILE_SIZE*i);
-                game_object_set_velocity_x(&obstacles[used_obstacles].game_object, 100 + random_additive_velocity);
+                game_object_set_position(&obstacles[used_obstacles].game_object, (rand()%5)*TILE_SIZE , TILE_SIZE*i);
+                game_object_set_velocity_x(&obstacles[used_obstacles].game_object, lane_velocity);
                 used_obstacles++;
+                if((rand()%2))
+                {
+                    game_object_set_position(&obstacles[used_obstacles].game_object, ((rand()%5)+5)*TILE_SIZE , TILE_SIZE*i);
+                    game_object_set_velocity_x(&obstacles[used_obstacles].game_object, lane_velocity);
+                    used_obstacles++;
+                }
             }
             
         }            
