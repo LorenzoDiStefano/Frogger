@@ -150,7 +150,7 @@ void test_collision_info()
 
 void rect_init(rect_t* rect)
 {
-    rect->owner = malloc(300);;
+    rect->owner = NULL;
     rect->height = 0;
     rect->width = 0;
     rect->half_height = 0;
@@ -347,8 +347,8 @@ void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *rendere
 {
     sprite->texture = img_info->texture;
     sprite->scale = scale;
-    sprite->sprite_rect.w = img_info->width * scale;
-    sprite->sprite_rect.h = img_info->height * scale;
+    sprite->sprite_rect.w = img_info->width;
+    sprite->sprite_rect.h = img_info->height;
     sprite->sprite_rect.x = 0;
     sprite->sprite_rect.y = 0;
     sprite->renderer = renderer;
@@ -458,6 +458,12 @@ void test_draw_manager()
 
 #endif
 
+void game_object_update_sprite(game_object_t *game_object)
+{
+    game_object->sprite->sprite_rect.x = (int)game_object->position.x;
+    game_object->sprite->sprite_rect.y = (int)game_object->position.y;
+}
+
 void game_object_on_collision(game_object_t *game_object, collision_info_t *delta)
 {
 
@@ -476,8 +482,7 @@ void game_object_update(game_object_t *game_object, const double delta_time)
 
     if(game_object->sprite != NULL)
     {
-        game_object->sprite->sprite_rect.x = (int)game_object->position.x;
-        game_object->sprite->sprite_rect.y = (int)game_object->position.y;
+        game_object_update_sprite(game_object);
     }
 }
 
@@ -665,7 +670,6 @@ void test_game_object()
 void player_on_collision(struct game_object *game_object, collision_info_t *collision)
 {
     game_object_t *collider = (game_object_t *)collision->collider;
-    //printf("player collided with %d \n", collider->collider_type);
     if(collider->collider_type == COLLIDER_TYPE_WATER)
     {
         //check if player is drowning
@@ -700,6 +704,8 @@ void player_die(player_t *player)
     printf("Player died\n");
     player->game_object.position.x = player->spawn_point.x;
     player->game_object.position.y = player->spawn_point.y;
+    game_object_update_sprite(&player->game_object);
+
 }
 
 void game_object_player_update(game_object_t *game_object,const double delta_time)
@@ -729,8 +735,7 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
 
     if(game_object->sprite != NULL)
     {
-        game_object->sprite->sprite_rect.x = (int)game_object->position.x;
-        game_object->sprite->sprite_rect.y = (int)game_object->position.y;
+        game_object_update_sprite(game_object);
     }
 
     ((player_t *)game_object)->is_on_log = 0;
@@ -801,7 +806,7 @@ void physics_manager_init(physics_manager_t *physics_manager)
 
 void physics_manager_update(physics_manager_t *physics_manager, const double delta_time)
 {
-    if(physics_manager->player==NULL)
+    if(physics_manager->player == NULL)
     {
         printf("missing player\n");
         return;
@@ -852,7 +857,6 @@ void physics_manager_check_collisions(physics_manager_t *physics_manager)
 void game_object_car_update(game_object_t *game_object, const double delta_time)
 {
     game_object_update(game_object, delta_time);
-    //printf("override");
     if(game_object->position.x > WINDOW_WIDTH)
     {
         game_object->position.x=-game_object->bounding_box.width;
@@ -879,10 +883,7 @@ void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physi
     init_sprite(sprite, img_info, draw_manager->renderer, 1); 
     game_object_set_sprite(&car->game_object, sprite);
 
-    //temporary, waiting for art
-    car->game_object.sprite->sprite_rect.h = TILE_SIZE;
-    car->game_object.sprite->sprite_rect.w = TILE_SIZE;
-    rect_set_size(&car->game_object.bounding_box, TILE_SIZE, TILE_SIZE);
+    rect_set_size(&car->game_object.bounding_box, car->game_object.sprite->sprite_rect.w, car->game_object.sprite->sprite_rect.h);
 
     draw_manager_add_sprite(draw_manager, car->game_object.sprite);
     physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
