@@ -29,71 +29,35 @@ int end()
     return 0;
 }
 
-#define TEXTURE_FROG    0
-#define TEXTURE_ROAD    1
-#define TEXTURE_WATER   2
-#define TEXTURE_WIN     3
-#define TEXTURE_CAR     4
-#define TEXTURE_LOG     5
-#define TEXTURE_SPAWN   6
-#define TEXTURE_CAR_FLIP     7
-#define TEXTURE_MAX     8
+#define TEXTURE_FROG        0
+#define TEXTURE_ROAD        1
+#define TEXTURE_WATER       2
+#define TEXTURE_WIN         3
+#define TEXTURE_CAR         4
+#define TEXTURE_LOG         5
+#define TEXTURE_SPAWN       6
+#define TEXTURE_CAR_FLIP    7
+#define TEXTURE_MAX         8
 
 void load_textures(image_info_t texture[], SDL_Renderer *renderer)
 {
-    /*
-    char *paths[10];
-    paths[0] = "assets/frog.png";
-    paths[1] = "assets/ph_road_bg.png";
+    const char *paths[TEXTURE_MAX];
+    paths[TEXTURE_FROG] = "assets/frog.png";
+    paths[TEXTURE_ROAD] = "assets/ph_road_bg.png";
+    paths[TEXTURE_WATER] = "assets/ph_water_bg.png";
+    paths[TEXTURE_WIN] = "assets/ph_victory_bg.png";
+    paths[TEXTURE_CAR] = "assets/car.png";
+    paths[TEXTURE_CAR_FLIP] = "assets/car_flip.png";
+    paths[TEXTURE_LOG] = "assets/log.png";
+    paths[TEXTURE_SPAWN] = "assets/ph_spawn_bg.png";
 
-    for (size_t i = 0; i < 2; i++)
+    for (size_t i = 0; i < TEXTURE_MAX; i++)
     {
         image_info_t texture_inf;
-        load_image(&texture_inf, (const char)paths[i]);
+        load_image(&texture_inf, paths[i]);
         load_texture(&texture_inf, renderer);
         texture[i] = texture_inf;
     }
-    */
-
-    image_info_t frog_texture_inf;
-    load_image(&frog_texture_inf, "assets/frog.png");
-    load_texture(&frog_texture_inf, renderer);
-    texture[TEXTURE_FROG] = frog_texture_inf;
-
-    image_info_t road_texture_inf;
-    load_image(&road_texture_inf, "assets/ph_road_bg.png");
-    load_texture(&road_texture_inf, renderer);
-    texture[TEXTURE_ROAD] = road_texture_inf;
-
-    image_info_t water_texture_inf;
-    load_image(&water_texture_inf, "assets/ph_water_bg.png");
-    load_texture(&water_texture_inf, renderer);
-    texture[TEXTURE_WATER] = water_texture_inf;
-
-    image_info_t win_texture_inf;
-    load_image(&win_texture_inf, "assets/ph_victory_bg.png");
-    load_texture(&win_texture_inf, renderer);
-    texture[TEXTURE_WIN] = win_texture_inf;
-
-    image_info_t car_texture_inf;
-    load_image(&car_texture_inf, "assets/car.png");
-    load_texture(&car_texture_inf, renderer);
-    texture[TEXTURE_CAR] = car_texture_inf;
-
-    image_info_t flip_car_texture_inf;
-    load_image(&flip_car_texture_inf, "assets/car_flip.png");
-    load_texture(&flip_car_texture_inf, renderer);
-    texture[TEXTURE_CAR_FLIP] = flip_car_texture_inf;
-
-    image_info_t log_texture_inf;
-    load_image(&log_texture_inf, "assets/log.png");
-    load_texture(&log_texture_inf, renderer);
-    texture[TEXTURE_LOG] = log_texture_inf;
-
-    image_info_t spawn_texture_inf;
-    load_image(&spawn_texture_inf, "assets/ph_spawn_bg.png");
-    load_texture(&spawn_texture_inf, renderer);
-    texture[TEXTURE_SPAWN] = spawn_texture_inf;
 }
 
 void generate_map(backgound_t *backgrounds, draw_manager_t *draw_manager,physics_manager_t *physics_manager, image_info_t *texture_info, car_t *obstacles)
