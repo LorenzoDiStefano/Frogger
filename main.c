@@ -1,3 +1,6 @@
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -6,28 +9,19 @@
 #include <time.h>
 
 static int game_state = 1;
+
 #include "engine/clock.c"
-#include "engine/engine.c"
+#include "engine/gfx/draw_manager.c"
+#include "engine/gfx/sprite.c"
+#include "engine/actors/game_object.c"
+#include "engine/actors/player.c"
+#include "engine/physics/physics_manager.c"
 
 #ifdef _TEST
 
-#include "tests/tests.c"
+#include "tests.c"
 
 #endif
-
-int crash()
-{
-    SDL_Log("window error %s",SDL_GetError());
-    SDL_Quit();
-    getchar();
-    return 1;
-}
-
-int end()
-{
-    SDL_Quit();
-    return 0;
-}
 
 #define TEXTURE_FROG        0
 #define TEXTURE_ROAD        1
@@ -73,7 +67,7 @@ void generate_map(backgound_t *backgrounds, draw_manager_t *draw_manager,physics
             backgound_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_WIN]);
             backgrounds[i].game_object.collider_type = COLLIDER_TYPE_END;
         }
-        else if(i == 9)
+        else if(i == 10)
         {
             backgound_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_SPAWN]);
         }
@@ -145,12 +139,26 @@ void generate_map(backgound_t *backgrounds, draw_manager_t *draw_manager,physics
     }
 }
 
+int crash()
+{
+    SDL_Log("window error %s",SDL_GetError());
+    SDL_Quit();
+    getchar();
+    return 1;
+}
+
+int end()
+{
+    SDL_Quit();
+    return 0;
+}
+
 int game()
 {
     
     if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK|SDL_INIT_AUDIO))
     {
-        SDL_Log("error %s",SDL_GetError());
+        SDL_Log("error %s", SDL_GetError());
         return 1;
     }
 
@@ -178,12 +186,13 @@ int game()
         car_init(&obstacles[i], &draw_manager, &physics_manager, &textures_info[TEXTURE_CAR]);
     }
 
-    backgound_t backrounds[10];
+    backgound_t backrounds[11];
     generate_map(backrounds,&draw_manager,&physics_manager,textures_info, obstacles);
 
     player_t player;
     player_init(&player,&draw_manager, &physics_manager, &textures_info[TEXTURE_FROG]);
     
+
     while(game_state)
     {
         SDL_Event event;
@@ -194,7 +203,6 @@ int game()
                 return end();
             }
         }
-
         game_clock.cache_now(&game_clock);
         accumulator += game_clock.get_delta_time(&game_clock);
         
@@ -212,8 +220,7 @@ int game()
         player_read_input(&player);
         physics_manager_update(&physics_manager, frame_time / 1000);
         physics_manager_check_collisions(&physics_manager);
-        //getchar();
-        draw_manager.draw_scene(&draw_manager);
+        draw_scene(&draw_manager);
     }
 
     return 1;

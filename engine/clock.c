@@ -17,7 +17,7 @@ void fake_cache_now(game_clock_t *clock, Uint64 value)
 
 double get_delta_time(game_clock_t *clock)
 {
-    clock->delta_time_cached = (double)((clock->now - clock->last)*1000 / (double)SDL_GetPerformanceFrequency());
+    clock->delta_time_cached = (double)((clock->now - clock->last) * 1000 / (double)SDL_GetPerformanceFrequency());
     return clock->delta_time_cached;
 }
 

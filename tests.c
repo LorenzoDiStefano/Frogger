@@ -1,7 +1,6 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
 
-
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -34,7 +33,6 @@ void test_wrapper(const char *name, int (*func)())
         tests_succeded++;
     } 
 }
-
 
 int run_tests()
 {
