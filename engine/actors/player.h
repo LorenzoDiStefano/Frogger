@@ -2,6 +2,7 @@
 #define FROGGER_PLAYER_HEADER
 
 #include "../physics/vector2.h"
+#include "../physics/physics_manager.h"
 #include "../actors/game_object.h"
 #include "../gfx/draw_manager.h"
 

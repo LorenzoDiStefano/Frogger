@@ -10,10 +10,10 @@
 
 static int game_state = 1;
 
-#include "engine/clock.c"
+#include "engine/game_clock.c"
 #include "engine/gfx/draw_manager.c"
 #include "engine/gfx/sprite.c"
-#include "engine/actors/game_object.c"
+#include "engine/gfx/image_info.c"
 #include "engine/actors/player.c"
 #include "engine/physics/physics_manager.c"
 
@@ -206,9 +206,9 @@ int game()
         game_clock.cache_now(&game_clock);
         accumulator += game_clock.get_delta_time(&game_clock);
         
-        if(accumulator>=frame_time)
+        if(accumulator >= frame_time)
         {
-            accumulator-=frame_time;
+            accumulator -= frame_time;
             //printf("rendering new frame\n");
             //printf("fps time: %f\n",frame_time);
         }

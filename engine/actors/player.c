@@ -10,16 +10,16 @@ void game_object_player_update(game_object_t *game_object,const double delta_tim
 {
     game_object_update(game_object, delta_time);
 
-    if(game_object->position.x>WINDOW_WIDTH - game_object->bounding_box.width)
+    if(game_object->position.x > WINDOW_WIDTH - game_object->bounding_box.width)
     {
         game_object->position.x = WINDOW_WIDTH - game_object->bounding_box.width;
     }
-    else if(game_object->position.x<0)
+    else if(game_object->position.x < 0)
     {
         game_object->position.x = 0;
     }
 
-    if(game_object->position.y<0)
+    if(game_object->position.y < 0)
     {
         game_object->position.y = 0;
     }

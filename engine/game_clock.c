@@ -1,6 +1,6 @@
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
-#include "clock.h"
+#include "game_clock.h"
 #include <stdint.h>
 
 void cache_now(game_clock_t *clock)

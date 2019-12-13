@@ -23,8 +23,8 @@ void game_object_update(game_object_t *game_object, const double delta_time)
     if(!game_object->is_active)
         return;
 
-    game_object->position.x+=game_object->velocity.x*delta_time;
-    game_object->position.y+=game_object->velocity.y*delta_time;
+    game_object->position.x += game_object->velocity.x * delta_time;
+    game_object->position.y += game_object->velocity.y * delta_time;
 
     game_object->bounding_box.position.x = game_object->position.x;
     game_object->bounding_box.position.y = game_object->position.y;      
