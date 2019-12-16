@@ -1,8 +1,10 @@
 #ifndef FROGGER_SPRITE_HEADER
 #define FROGGER_SPRITE_HEADER
 
+#ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#endif
 #include "image_info.h"
 
 typedef struct sprite
@@ -13,6 +15,7 @@ typedef struct sprite
     float scale;
 }sprite_t;
 
-void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, float scale);
+void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, const float scale);
+
 #include "sprite.c"
 #endif

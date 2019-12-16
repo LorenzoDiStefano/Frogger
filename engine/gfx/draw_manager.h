@@ -1,8 +1,10 @@
 #ifndef FROGGER_DRAW_MANAGER_HEADER
 #define FROGGER_DRAW_MANAGER_HEADER
 
+#ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#endif
 
 #include "sprite.h"
 

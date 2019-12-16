@@ -20,7 +20,7 @@ int vector2_init(vector2_t *vector2);
 int vector2_init_safe(vector2_t *vector2, float x, float y);
 
 #ifdef _TEST
-void test_wrapper(const char *name, int (*func)());
+void test_wrapper(const char *name, int (*func)(void));
 #define RUN_TEST_VECTOR2(func) test_wrapper(#func, func);
 void test_vector2();
 #endif

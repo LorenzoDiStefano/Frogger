@@ -22,7 +22,7 @@ void physics_manager_update(physics_manager_t *physics_manager, const double del
     }
 
     //update player
-    game_object_t *player_game_object = ((game_object_t *)physics_manager->player->owner);
+    game_object_t *player_game_object = physics_manager->player->owner;
     player_game_object->update(player_game_object, delta_time);
 
     for (int i = 0; i < physics_manager->rects_to_draw; i++)

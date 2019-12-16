@@ -8,7 +8,15 @@
 
 void game_object_update_sprite(game_object_t *game_object)
 {
-    game_object->sprite->sprite_rect.x = (int)game_object->position.x;
+    double integral;
+    double fractional = modf(game_object->position.x, &integral);
+    int dir = (int)copysign(1.0, fractional);
+
+    if(fabs(fractional)>.5f)
+        game_object->sprite->sprite_rect.x = (int)integral + (1*dir);
+    else
+        game_object->sprite->sprite_rect.x = (int)integral;
+
     game_object->sprite->sprite_rect.y = (int)game_object->position.y;
 }
 
@@ -45,7 +53,7 @@ void game_object_init(game_object_t *game_object)
     game_object->update = game_object_update;
 }
 
-void game_object_init_with_vectors(game_object_t *game_object, vector2_t *position, vector2_t *velocity)
+void game_object_init_with_vectors(game_object_t *game_object, const vector2_t *position, const vector2_t *velocity)
 {
     vector2_init(&(game_object->position));
     game_object->position.x = position->x;
@@ -60,41 +68,41 @@ void game_object_init_with_vectors(game_object_t *game_object, vector2_t *positi
     game_object->sprite = NULL;
 }
 
-void game_object_set_position(game_object_t *game_object, float x, float y)
+void game_object_set_position(game_object_t *game_object, const float x, const float y)
 {
     vector2_t vector2;
-    vector2_init_safe(&vector2,x,y);
+    vector2_init_safe(&vector2, x, y);
     game_object_set_position_with_vector(game_object, vector2);
 }
 
-void game_object_set_position_with_vector(game_object_t *game_object, vector2_t new_position)
+void game_object_set_position_with_vector(game_object_t *game_object, const vector2_t new_position)
 {
     game_object_set_position_x(game_object, new_position.x);
     game_object_set_position_y(game_object, new_position.y);
 }
 
-void game_object_set_position_x(game_object_t *game_object, float new_position_x)
+void game_object_set_position_x(game_object_t *game_object, const float new_position_x)
 {
     game_object->position.x = new_position_x;
 }
 
-void game_object_set_position_y(game_object_t *game_object, float new_position_y)
+void game_object_set_position_y(game_object_t *game_object, const float new_position_y)
 {
     game_object->position.y = new_position_y;
 }
 
-void game_object_set_velocity(game_object_t *game_object, vector2_t new_velocity)
+void game_object_set_velocity(game_object_t *game_object, const vector2_t new_velocity)
 {
     game_object_set_velocity_x(game_object, new_velocity.x);
     game_object_set_velocity_y(game_object, new_velocity.y);
 }
 
-void game_object_set_velocity_x(game_object_t *game_object, float new_velocity_x)
+void game_object_set_velocity_x(game_object_t *game_object, const float new_velocity_x)
 {
     game_object->velocity.x = new_velocity_x;
 }
 
-void game_object_set_velocity_y(game_object_t *game_object, float new_velocity_y)
+void game_object_set_velocity_y(game_object_t *game_object, const float new_velocity_y)
 {
     game_object->velocity.y = new_velocity_y;
 }
@@ -117,8 +125,8 @@ static int test_game_object_init_with_vectors()
 {
     game_object_t game_object;
     vector2_t position,velocity;
-    vector2_init_safe(&position,100,100);
-    vector2_init_safe(&velocity,50,50);
+    vector2_init_safe(&position, 100, 100);
+    vector2_init_safe(&velocity, 50, 50);
 
     game_object_init_with_vectors(&game_object, &position, &velocity);
     

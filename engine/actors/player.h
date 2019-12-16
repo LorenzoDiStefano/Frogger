@@ -21,19 +21,5 @@ void player_read_input(player_t *player);
 void player_die(player_t *player);
 void player_set_position(player_t *player, float x, float y);
 
-typedef struct car
-{
-    game_object_t game_object;
-}car_t;
-
-void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);
-
-typedef struct backgound
-{
-    game_object_t game_object;
-}backgound_t;
-
-void backgound_init(backgound_t *backgound, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);
-
 #include "player.c"
 #endif

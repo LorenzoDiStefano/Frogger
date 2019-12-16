@@ -7,7 +7,7 @@
 #include "../physics/collision_info.h"
 #include "../physics/physics_manager.h"
 
-void game_object_player_update(game_object_t *game_object,const double delta_time)
+void player_update(game_object_t *game_object,const double delta_time)
 {
     game_object_update(game_object, delta_time);
 
@@ -93,7 +93,7 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
 
     player->game_object.bounding_box.owner = &player->game_object;
     player->game_object.on_collision = player_on_collision;
-    player->game_object.update = game_object_player_update;
+    player->game_object.update = player_update;
     player->game_object.collider_type = COLLIDER_TYPE_PLAYER;
     player->game_object.is_active = 1;
 
@@ -148,63 +148,6 @@ void player_read_input(player_t *player)
     }
 
     player->last_frame_input = frame_input;
-}
-
-void game_object_car_update(game_object_t *game_object, const double delta_time)
-{
-    game_object_update(game_object, delta_time);
-    if(game_object->position.x > WINDOW_WIDTH)
-    {
-        game_object->position.x=-game_object->bounding_box.width;
-    }
-    else if(game_object->position.x<-(game_object->bounding_box.width))
-    {
-        game_object->position.x = WINDOW_WIDTH;
-    }
-}
-
-void car_init(car_t *car, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
-{
-    //initializing game_object
-    game_object_init(&car->game_object);
-
-    car->game_object.is_active = 1;
-    car->game_object.update = game_object_car_update;
-    car->game_object.collider_type = COLLIDER_TYPE_CAR;
-    car->game_object.bounding_box.owner = &car->game_object;
-
-    game_object_set_position(&car->game_object, 0, WINDOW_HEIGHT);
-
-    sprite_t *sprite = malloc(sizeof(sprite_t));
-    init_sprite(sprite, img_info, draw_manager->renderer, 1); 
-    game_object_set_sprite(&car->game_object, sprite);
-
-    rect_set_size(&car->game_object.bounding_box, car->game_object.sprite->sprite_rect.w, car->game_object.sprite->sprite_rect.h);
-
-    draw_manager_add_sprite(draw_manager, car->game_object.sprite);
-    physics_manager_add_rect(physics_manager, &car->game_object.bounding_box);
-}
-
-void backgound_init(backgound_t *background, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
-{
-    //initializing game_object
-    game_object_init(&background->game_object);
-
-    background->game_object.is_active = 1;
-    background->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
-    background->game_object.bounding_box.owner = &background->game_object;
-    
-    sprite_t *sprite = malloc(sizeof(sprite_t));
-    init_sprite(sprite, img_info, draw_manager->renderer, 1);  
-    game_object_set_sprite(&background->game_object, sprite);
-
-    //temporary, waiting for art
-    sprite->sprite_rect.h = TILE_SIZE;
-    sprite->sprite_rect.w = WINDOW_WIDTH;
-    rect_set_size(&background->game_object.bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
-
-    draw_manager_add_sprite_bg(draw_manager, background->game_object.sprite);
-    physics_manager_add_rect(physics_manager, &background->game_object.bounding_box);
 }
 
 #endif

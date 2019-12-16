@@ -13,6 +13,8 @@ static int game_state = 1;
 #include "engine/game_clock.h"
 #include "engine/gfx/sprite.h"
 #include "engine/actors/player.h"
+#include "engine/actors/obstacle.h"
+#include "engine/actors/background.h"
 #include "engine/gfx/image_info.h"
 #include "engine/gfx/draw_manager.h"
 #include "engine/physics/physics_manager.h"
@@ -54,7 +56,7 @@ void load_textures(image_info_t texture[], SDL_Renderer *renderer)
     }
 }
 
-void generate_map(backgound_t *backgrounds, draw_manager_t *draw_manager,physics_manager_t *physics_manager, image_info_t *texture_info, car_t *obstacles)
+void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physics_manager_t *physics_manager, image_info_t *texture_info, obstacle_t *obstacles)
 {
     int used_obstacles = 0;
     int base_x_velocity = 100;
@@ -179,14 +181,14 @@ int game()
     image_info_t textures_info[TEXTURE_MAX];
     load_textures(textures_info, draw_manager.renderer);
 
-    car_t obstacles[20];
+    obstacle_t obstacles[20];
 
     for (size_t i = 0; i < 20; i++)
     {
-        car_init(&obstacles[i], &draw_manager, &physics_manager, &textures_info[TEXTURE_CAR]);
+        obstacle_init(&obstacles[i], &draw_manager, &physics_manager, &textures_info[TEXTURE_CAR]);
     }
 
-    backgound_t backrounds[11];
+    background_t backrounds[11];
     generate_map(backrounds,&draw_manager,&physics_manager,textures_info, obstacles);
 
     player_t player;

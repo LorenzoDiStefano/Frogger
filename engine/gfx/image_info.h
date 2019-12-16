@@ -1,12 +1,17 @@
 #ifndef FROGGER_IMAGE_INFO_HEADER
 #define FROGGER_IMAGE_INFO_HEADER
 
+#ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#endif
 
 typedef struct image_info
 {
-    int width, height, comp, length;
+    int width;
+    int height;
+    int comp;
+    int length;
     unsigned char *image;
     SDL_Texture *texture;
 }image_info_t;

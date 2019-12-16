@@ -70,14 +70,14 @@ static int test_vector2_init()
 {
     vector2_t vector2;
     int ret_val = vector2_init(&vector2);
-    return vector2.x == 0 && vector2.y == 0 && ret_val == 1;
+    return vector2.x == 0 && vector2.y == 0 && ret_val == 0;
 }
 
 static int test_vector2_init_safe()
 {
     vector2_t vector2;
     int ret_val = vector2_init_safe(&vector2, 50, 70);
-    return vector2.x == 50 && vector2.y == 70 && ret_val == 1;
+    return vector2.x == 50 && vector2.y == 70 && ret_val == 0;
 }
 
 static int test_vector2_add()

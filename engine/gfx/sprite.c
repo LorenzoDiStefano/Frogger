@@ -4,7 +4,7 @@
 #include "sprite.h"
 
 
-void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, float scale)
+void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, const float scale)
 {
     sprite->texture = img_info->texture;
     sprite->scale = scale;

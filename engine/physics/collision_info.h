@@ -20,7 +20,7 @@ typedef struct collision_info
 void collision_info_init(collision_info_t *collision_info);
 
 #ifdef _TEST
-void test_wrapper(const char *name, int (*func)());
+void test_wrapper(const char *name, int (*func)(void));
 #define RUN_TEST_COLLISION_INFO(func) test_wrapper(#func, func);
 
 void test_collision_info();

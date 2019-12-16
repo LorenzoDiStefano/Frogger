@@ -15,12 +15,6 @@ void cache_now(game_clock_t *clock)
     clock->now = SDL_GetPerformanceCounter();
 }
 
-void fake_cache_now(game_clock_t *clock, Uint64 value)
-{
-    clock->last = clock->now;
-    clock->now = value;
-}
-
 double get_delta_time(game_clock_t *clock)
 {
     clock->delta_time_cached = (double)((clock->now - clock->last) * 1000 / (double)SDL_GetPerformanceFrequency());
@@ -36,6 +30,12 @@ void clock_init_safe(game_clock_t *clock)
 }
 
 #ifdef _TEST
+
+static void fake_cache_now(game_clock_t *clock, Uint64 value)
+{
+    clock->last = clock->now;
+    clock->now = value;
+}
 
 static int test_cache_now()
 {
