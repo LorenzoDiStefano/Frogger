@@ -14,4 +14,5 @@ typedef struct image_info
 void load_texture(image_info_t *img_info, SDL_Renderer *renderer);
 int load_image(image_info_t *img, const char* path);
 
+#include "image_info.c"
 #endif

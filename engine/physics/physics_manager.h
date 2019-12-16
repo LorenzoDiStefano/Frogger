@@ -18,5 +18,5 @@ void physics_manager_add_rect(physics_manager_t *physics_manager, rect_t *rect);
 void physics_manager_check_collisions(physics_manager_t *physics_manager);
 void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect);
 
-
+#include "physics_manager.c"
 #endif

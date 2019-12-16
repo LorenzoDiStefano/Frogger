@@ -3,6 +3,8 @@
 
 #include "../physics/vector2.h"
 #include "../physics/rect.h"
+#include "../physics/physics_manager.h"
+#include "../physics/collision_info.h"
 #include "../gfx/sprite.h"
 
 typedef struct game_object
@@ -39,5 +41,5 @@ void test_wrapper(const char *name, int (*func)());
 void test_game_object();
 
 #endif
-
+#include "game_object.c"
 #endif 

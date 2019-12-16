@@ -10,12 +10,12 @@
 
 static int game_state = 1;
 
-#include "engine/game_clock.c"
-#include "engine/gfx/draw_manager.c"
-#include "engine/gfx/sprite.c"
-#include "engine/gfx/image_info.c"
-#include "engine/actors/player.c"
-#include "engine/physics/physics_manager.c"
+#include "engine/game_clock.h"
+#include "engine/gfx/sprite.h"
+#include "engine/actors/player.h"
+#include "engine/gfx/image_info.h"
+#include "engine/gfx/draw_manager.h"
+#include "engine/physics/physics_manager.h"
 
 #ifdef _TEST
 

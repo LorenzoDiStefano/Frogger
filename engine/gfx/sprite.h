@@ -14,5 +14,5 @@ typedef struct sprite
 }sprite_t;
 
 void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, float scale);
-
+#include "sprite.c"
 #endif

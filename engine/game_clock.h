@@ -1,5 +1,10 @@
+#ifndef FROGGER_GAME_CLOCK_HEADER
+#define FROGGER_GAME_CLOCK_HEADER
+
+#ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#endif
 
 typedef struct game_clock
 {
@@ -20,4 +25,6 @@ void test_wrapper(const char *name, int (*func)());
 
 void test_clock();
 
+#endif
+#include "game_clock.c"
 #endif

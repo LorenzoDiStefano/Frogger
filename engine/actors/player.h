@@ -35,5 +35,5 @@ typedef struct backgound
 
 void backgound_init(backgound_t *backgound, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);
 
-
+#include "player.c"
 #endif

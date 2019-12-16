@@ -2,9 +2,10 @@
 #define FROGGER_PLAYER
 
 #include "player.h"
-#include "game_object.c"
-#include "../gfx/draw_manager.c"
-#include "../physics/physics_manager.c"
+#include "game_object.h"
+#include "../gfx/draw_manager.h"
+#include "../physics/collision_info.h"
+#include "../physics/physics_manager.h"
 
 void game_object_player_update(game_object_t *game_object,const double delta_time)
 {

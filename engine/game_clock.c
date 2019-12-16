@@ -1,5 +1,11 @@
+#ifndef FROGGER_GAME_CLOCK
+#define FROGGER_GAME_CLOCK
+
+#ifndef SDL_MAIN_HANDLED
 #define SDL_MAIN_HANDLED
 #include <SDL.h>
+#endif
+
 #include "game_clock.h"
 #include <stdint.h>
 
@@ -56,4 +62,6 @@ void test_clock()
     RUN_TEST_CLOCK(test_cache_now);
     RUN_TEST_CLOCK(test_get_delta_time);
 }
+
+#endif
 #endif

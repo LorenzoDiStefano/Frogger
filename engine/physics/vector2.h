@@ -24,5 +24,5 @@ void test_wrapper(const char *name, int (*func)());
 #define RUN_TEST_VECTOR2(func) test_wrapper(#func, func);
 void test_vector2();
 #endif
-
+#include "vector2.c"
 #endif

@@ -36,4 +36,5 @@ void test_wrapper(const char *name, int (*func)(void));
 void test_draw_manager();
 
 #endif
+#include "draw_manager.c"
 #endif

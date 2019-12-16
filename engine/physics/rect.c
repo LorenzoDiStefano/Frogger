@@ -2,7 +2,8 @@
 #define FROGGER_RECT
 
 #include "rect.h"
-#include "vector2.c"
+#include "vector2.h"
+#include "collision_info.h"
 
 void rect_init(rect_t* rect)
 {
@@ -172,30 +173,6 @@ void test_rect()
     RUN_TEST_RECT(test_rect_set_position_y);
     RUN_TEST_RECT(test_rect_collision_successful);
     RUN_TEST_RECT(test_rect_collision_failed);
-}
-
-#endif
-
-void collision_info_init(collision_info_t *collision_info)
-{
-    collision_info->collider = NULL;
-    vector2_init(&collision_info->delta);
-}
-
-#ifdef _TEST
-
-static int test_collision_info_init()
-{
-    collision_info_t collision_info;
-    collision_info_init(&collision_info);
-    return collision_info.collider == NULL &&
-    collision_info.delta.x == 0 &&
-    collision_info.delta.y == 0;
-}
-
-void test_collision_info()
-{
-    RUN_TEST_COLLISION_INFO(test_collision_info_init);
 }
 
 #endif
