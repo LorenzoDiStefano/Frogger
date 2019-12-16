@@ -11,8 +11,9 @@ typedef struct player
     game_object_t game_object;
     vector2_t spawn_point;
     int is_on_log;
-    int last_frame_input;
     int score;
+    int last_frame_input;
+    vector2_t input_direction;
 }player_t;
 
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info);

@@ -96,6 +96,9 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     player->game_object.collider_type = COLLIDER_TYPE_PLAYER;
     player->game_object.is_active = 1;
 
+    player->last_frame_input = 0;
+    vector2_init(&player->input_direction);
+
     sprite_t *sprite = malloc(sizeof(sprite_t));
     init_sprite(sprite, img_info, draw_manager->renderer, 1);
     game_object_set_sprite(&player->game_object, sprite);
@@ -124,17 +127,26 @@ void player_read_input(player_t *player)
     else if(keystates[SDL_SCANCODE_DOWN])
         direction.y++;    
 
-    if(player->last_frame_input > 0)
+    int frame_input;
+
+    if(direction.x == 0 && direction.y == 0)
     {
-        player->last_frame_input--;
-        return;
+        frame_input = 0;
+    }
+    else
+    {
+        frame_input = 1;
+        player->input_direction = direction;
     }
 
-    player->last_frame_input = 7;
+    if(player->last_frame_input == 1 && frame_input == 0)
+    {
+        direction = vector2_mul(&player->input_direction, TILE_SIZE);
+        direction = vector2_add(&direction, &player->game_object.position);
+        game_object_set_position_with_vector(&player->game_object, direction);
+    }
 
-    direction = vector2_mul(&direction, TILE_SIZE);
-    direction = vector2_add(&direction, &player->game_object.position);
-    game_object_set_position_with_vector(&player->game_object, direction);
+    player->last_frame_input = frame_input;
 }
 
 void game_object_car_update(game_object_t *game_object, const double delta_time)
