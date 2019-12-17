@@ -1,10 +1,9 @@
 #ifndef FROGGER_PLAYER_HEADER
 #define FROGGER_PLAYER_HEADER
 
-#include "../physics/vector2.h"
 #include "../physics/physics_manager.h"
-#include "../actors/game_object.h"
 #include "../gfx/draw_manager.h"
+#include "game_object.h"
 
 typedef struct player
 {
@@ -21,5 +20,4 @@ void player_read_input(player_t *player);
 void player_die(player_t *player);
 void player_set_position(player_t *player, float x, float y);
 
-#include "player.c"
 #endif

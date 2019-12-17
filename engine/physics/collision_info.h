@@ -26,5 +26,4 @@ void test_wrapper(const char *name, int (*func)(void));
 void test_collision_info();
 
 #endif
-#include "collision_info.c"
 #endif

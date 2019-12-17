@@ -54,6 +54,17 @@ vector2_t vector2_mul(const vector2_t *first_value, const double value)
     return result;
 }
 
+vector2_t vector2_mul_vec2(const vector2_t *first_value, const vector2_t *second_value)
+{
+    vector2_t result;
+
+    result.x = first_value->x * second_value->x;
+    result.y = first_value->y * second_value->y;
+
+    return result;    
+}
+
+
 vector2_t vector2_get_deep_copy(const vector2_t *vector2)
 {
     vector2_t result;
@@ -115,6 +126,15 @@ static int test_vector2_mul()
     return second_vector2.x == 40 && second_vector2.y == 8;
 }
 
+static int test_vector2_mul_vec2()
+{
+    vector2_t second_vector2, vector2;
+    vector2_init_safe(&vector2, 10, 2);
+    vector2_init_safe(&second_vector2, 2, 4);
+    second_vector2 = vector2_mul_vec2(&vector2, &second_vector2);
+    return second_vector2.x == 20 && second_vector2.y == 8;
+}
+
 void test_vector2()
 {
     RUN_TEST_VECTOR2(test_vector2_init);
@@ -122,6 +142,7 @@ void test_vector2()
     RUN_TEST_VECTOR2(test_vector2_add);
     RUN_TEST_VECTOR2(test_vector2_sub);
     RUN_TEST_VECTOR2(test_vector2_mul);
+    RUN_TEST_VECTOR2(test_vector2_mul_vec2);
     RUN_TEST_VECTOR2(test_vector2_deep_copy);
 }
 #endif

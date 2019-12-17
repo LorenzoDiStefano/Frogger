@@ -2,9 +2,6 @@
 #define FROGGER_GAME_OBJECT
 
 #include "game_object.h"
-#include "../physics/physics_manager.h"
-#include "../physics/vector2.h"
-#include "../physics/rect.h"
 
 void game_object_update_sprite(game_object_t *game_object)
 {

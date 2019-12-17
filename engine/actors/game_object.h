@@ -1,10 +1,7 @@
 #ifndef FROGGER_GAME_OBJECT_HEADER
 #define FROGGER_GAME_OBJECT_HEADER
 
-#include "../physics/vector2.h"
-#include "../physics/rect.h"
 #include "../physics/physics_manager.h"
-#include "../physics/collision_info.h"
 #include "../gfx/sprite.h"
 
 typedef struct game_object
@@ -33,6 +30,8 @@ void game_object_set_velocity_x(game_object_t *game_object, const float new_velo
 void game_object_set_velocity_y(game_object_t *game_object, const float new_velocity_y);
 
 void game_object_set_sprite(game_object_t *game_object, sprite_t *sprite);
+void game_object_update(game_object_t *game_object, const double delta_time);
+void game_object_update_sprite(game_object_t *game_object);
 
 #ifdef _TEST
 void test_wrapper(const char *name, int (*func)());
@@ -41,5 +40,4 @@ void test_wrapper(const char *name, int (*func)());
 void test_game_object();
 
 #endif
-#include "game_object.c"
 #endif 

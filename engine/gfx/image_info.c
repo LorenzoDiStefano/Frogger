@@ -1,13 +1,11 @@
 #ifndef FROGGER_IMAGE_INFO
 #define FROGGER_IMAGE_INFO
 
-#ifndef SDL_MAIN_HANDLED
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#endif
-#include "image_info.h"
+#ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../stb_image.h"
+#endif
+#include "image_info.h"
 
 int load_image(image_info_t *img, const char* path)
 {

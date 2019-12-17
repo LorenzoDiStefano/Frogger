@@ -26,5 +26,4 @@ void test_wrapper(const char *name, int (*func)());
 void test_clock();
 
 #endif
-#include "game_clock.c"
 #endif

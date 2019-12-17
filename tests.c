@@ -43,6 +43,7 @@ int run_tests()
     test_rect();
     test_collision_info();
     test_draw_manager();
+    
     fprintf(stdout, "Tests succeded: %llu failed: %llu\n", tests_succeded, tests_failed);
     return 0;
 }

@@ -2,7 +2,6 @@
 #define FROGGER_COLLISION_INFO
 
 #include "collision_info.h"
-#include "vector2.h"
 
 void collision_info_init(collision_info_t *collision_info)
 {

@@ -1,7 +1,7 @@
 #ifndef FROGGER_RECT_HEADER
 #define FROGGER_RECT_HEADER
 
-#include "vector2.h"
+#include "collision_info.h"
 
 typedef struct game_object game_object_t;
 
@@ -20,8 +20,7 @@ void rect_set_position(rect_t* rect, const vector2_t new_position);
 void rect_set_position_x(rect_t *game_object, const float new_position_x);
 void rect_set_position_y(rect_t *game_object, const float new_position_y);
 
-//to do, return collision info instead of int
-//int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info_t *collision);
+int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info_t *collision);
 
 #ifdef _TEST
 void test_wrapper(const char *name, int (*func)(void));
@@ -31,5 +30,4 @@ void test_rect();
 
 #endif
 
-#include "rect.c"
 #endif

@@ -2,10 +2,6 @@
 #define FROGGER_OBSTACLE
 
 #include "obstacle.h"
-#include "../physics/vector2.h"
-#include "../physics/physics_manager.h"
-#include "../actors/game_object.h"
-#include "../gfx/draw_manager.h"
 
 void obstacle_update(game_object_t *game_object, const double delta_time)
 {

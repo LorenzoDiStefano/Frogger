@@ -1,6 +1,3 @@
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-
 #include <string.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -11,11 +8,9 @@
 static int game_state = 1;
 
 #include "engine/game_clock.h"
-#include "engine/gfx/sprite.h"
 #include "engine/actors/player.h"
 #include "engine/actors/obstacle.h"
 #include "engine/actors/background.h"
-#include "engine/gfx/image_info.h"
 #include "engine/gfx/draw_manager.h"
 #include "engine/physics/physics_manager.h"
 
@@ -66,12 +61,12 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
     {
         if(i == 0)
         {
-            backgound_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_WIN]);
+            background_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_WIN]);
             backgrounds[i].game_object.collider_type = COLLIDER_TYPE_END;
         }
         else if(i == 10)
         {
-            backgound_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_SPAWN]);
+            background_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_SPAWN]);
         }
         else
         {
@@ -81,7 +76,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
             float lane_velocity = (random_additive_velocity + base_x_velocity) * lane_direction;
             if(random_bg)
             {
-                backgound_init(&backgrounds[i],draw_manager,physics_manager, &texture_info[TEXTURE_WATER]);
+                background_init(&backgrounds[i],draw_manager,physics_manager, &texture_info[TEXTURE_WATER]);
                 backgrounds[i].game_object.collider_type = COLLIDER_TYPE_WATER;
 
                 game_object_set_position(&obstacles[used_obstacles].game_object, (rand() % 3) * TILE_SIZE, TILE_SIZE * i);
@@ -115,7 +110,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
             }
             else
             {
-                backgound_init(&backgrounds[i], draw_manager,physics_manager, &texture_info[TEXTURE_ROAD]);
+                background_init(&backgrounds[i], draw_manager,physics_manager, &texture_info[TEXTURE_ROAD]);
                 
                 game_object_set_position(&obstacles[used_obstacles].game_object, (rand()%3)*TILE_SIZE , TILE_SIZE*i);
                 game_object_set_velocity_x(&obstacles[used_obstacles].game_object, lane_velocity);

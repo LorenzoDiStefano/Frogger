@@ -1,10 +1,8 @@
 #ifndef FROGGER_RECT
 #define FROGGER_RECT
 
-#include "rect.h"
-#include "vector2.h"
-#include "collision_info.h"
 #include "../actors/game_object.h"
+#include "rect.h"
 
 void rect_init(rect_t* rect)
 {

@@ -2,10 +2,6 @@
 #define FROGGER_PLAYER
 
 #include "player.h"
-#include "game_object.h"
-#include "../gfx/draw_manager.h"
-#include "../physics/collision_info.h"
-#include "../physics/physics_manager.h"
 
 void player_update(game_object_t *game_object,const double delta_time)
 {
@@ -61,7 +57,8 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
         if(collision->delta.y<-77)
         {
             printf("Player win\n");
-            game_state = 0;
+            //game_state = 0;
+            exit(1);
         }
     }
     else if(collider->collider_type == COLLIDER_TYPE_LOG)

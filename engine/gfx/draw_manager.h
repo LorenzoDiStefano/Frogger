@@ -1,11 +1,6 @@
 #ifndef FROGGER_DRAW_MANAGER_HEADER
 #define FROGGER_DRAW_MANAGER_HEADER
 
-#ifndef SDL_MAIN_HANDLED
-#define SDL_MAIN_HANDLED
-#include <SDL.h>
-#endif
-
 #include "sprite.h"
 
 typedef struct draw_manager
@@ -38,5 +33,4 @@ void test_wrapper(const char *name, int (*func)(void));
 void test_draw_manager();
 
 #endif
-#include "draw_manager.c"
 #endif

@@ -2,9 +2,6 @@
 #define PHYSICS_MANAGER
 
 #include "physics_manager.h"
-#include "collision_info.h"
-#include "../actors/game_object.h"
-#include "rect.h"
 
 void physics_manager_init(physics_manager_t *physics_manager)
 {

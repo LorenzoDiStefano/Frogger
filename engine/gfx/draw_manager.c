@@ -1,7 +1,6 @@
 #ifndef FROGGER_DRAW_MANAGER
 #define FROGGER_DRAW_MANAGER
 
-#include <stdio.h>
 #include "draw_manager.h"
 
 void draw_scene(draw_manager_t *draw_manager)
