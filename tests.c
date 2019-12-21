@@ -20,16 +20,16 @@ void test_init()
 void test_wrapper(const char *name, int (*func)())
 {
 
+    printf("executing: %s : ",name);
     if (!func())
     {
-        //printf("executing: %s Result: ",name);
-        //printf("FAILED\n");
-        fprintf(stderr, "TEST %s FAILED\n", name);
+        printf("FAILED\n");
+        //fprintf(stderr, "TEST %s FAILED\n", name);
         tests_failed++;
     }
     else
     {
-        //printf("SUCCESSFUL\n");
+        printf("SUCCESSFUL\n");
         tests_succeded++;
     } 
 }
@@ -43,6 +43,7 @@ int run_tests()
     test_rect();
     test_collision_info();
     test_draw_manager();
+    test_rigid_body();
     
     fprintf(stdout, "Tests succeded: %llu failed: %llu\n", tests_succeded, tests_failed);
     return 0;

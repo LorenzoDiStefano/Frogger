@@ -1,6 +1,3 @@
-#ifndef FROGGER_IMAGE_INFO
-#define FROGGER_IMAGE_INFO
-
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #include "../../stb_image.h"
@@ -43,4 +40,3 @@ void load_texture(image_info_t *img_info, SDL_Renderer *renderer)
     img_info->texture = texture;
     return;
 }
-#endif

@@ -1,6 +1,3 @@
-#ifndef FROGGER_COLLISION_INFO
-#define FROGGER_COLLISION_INFO
-
 #include "collision_info.h"
 
 void collision_info_init(collision_info_t *collision_info)
@@ -25,5 +22,4 @@ void test_collision_info()
     RUN_TEST_COLLISION_INFO(test_collision_info_init);
 }
 
-#endif
 #endif

@@ -1,6 +1,3 @@
-#ifndef FROGGER_SPRITE
-#define FROGGER_SPRITE
-
 #include "sprite.h"
 
 void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, const float scale)
@@ -13,5 +10,3 @@ void init_sprite(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *rendere
     sprite->sprite_rect.y = 0;
     sprite->renderer = renderer;
 }
-
-#endif

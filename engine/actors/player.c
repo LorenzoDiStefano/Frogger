@@ -1,15 +1,12 @@
-#ifndef FROGGER_PLAYER
-#define FROGGER_PLAYER
-
 #include "player.h"
 
 void player_update(game_object_t *game_object,const double delta_time)
 {
     game_object_update(game_object, delta_time);
 
-    if(game_object->position.x > WINDOW_WIDTH - game_object->bounding_box.width)
+    if(game_object->position.x > WINDOW_WIDTH - game_object->rigid_body->bounding_box.width)
     {
-        game_object->position.x = WINDOW_WIDTH - game_object->bounding_box.width;
+        game_object->position.x = WINDOW_WIDTH - game_object->rigid_body->bounding_box.width;
     }
     else if(game_object->position.x < 0)
     {
@@ -20,13 +17,10 @@ void player_update(game_object_t *game_object,const double delta_time)
     {
         game_object->position.y = 0;
     }
-    else if (game_object->position.y > WINDOW_HEIGHT - game_object->bounding_box.height)
+    else if (game_object->position.y > WINDOW_HEIGHT - game_object->rigid_body->bounding_box.height)
     {
-        game_object->position.y = WINDOW_HEIGHT - game_object->bounding_box.height;
+        game_object->position.y = WINDOW_HEIGHT - game_object->rigid_body->bounding_box.height;
     }
-
-    game_object->bounding_box.position.x = (int)game_object->position.x;
-    game_object->bounding_box.position.y = (int)game_object->position.y;      
 
     if(game_object->sprite != NULL)
     {
@@ -57,7 +51,6 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
         if(collision->delta.y<-77)
         {
             printf("Player win\n");
-            //game_state = 0;
             exit(1);
         }
     }
@@ -66,29 +59,27 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
         ((player_t *)game_object)->is_on_log = 1;
         int fps = 60;
         double frame_time = (double)1000 / fps;
-        vector2_t movement = vector2_mul(&collider->velocity, frame_time * 0.001);
-        game_object->position = vector2_add(&game_object->position, &movement);
+        vector2_t movement = vector2_mul(&collider->rigid_body->velocity, frame_time * 0.001);
+        game_object_set_position_with_vector(game_object,  vector2_add(&game_object->position, &movement));
     }
 }
 
 void player_die(player_t *player)
 {
     printf("Player died\n");
-    player->game_object.position.x = player->spawn_point.x;
-    player->game_object.position.y = player->spawn_point.y;
+    game_object_set_position_with_vector(&player->game_object, player->spawn_point);
     game_object_update_sprite(&player->game_object);
 
 }
 
 void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
 {
+    game_object_init(&player->game_object);
+
     player->last_frame_input = 0;
     player->is_on_log = 0;
     vector2_init_safe(&player->spawn_point, (WINDOW_WIDTH-TILE_SIZE)/2, (WINDOW_HEIGHT-TILE_SIZE));
 
-    game_object_init(&player->game_object);
-
-    player->game_object.bounding_box.owner = &player->game_object;
     player->game_object.on_collision = player_on_collision;
     player->game_object.update = player_update;
     player->game_object.collider_type = COLLIDER_TYPE_PLAYER;
@@ -101,12 +92,17 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     init_sprite(sprite, img_info, draw_manager->renderer, 1);
     game_object_set_sprite(&player->game_object, sprite);
 
-    rect_set_size(&player->game_object.bounding_box, player->game_object.sprite->sprite_rect.w, player->game_object.sprite->sprite_rect.h);
+    rigid_body_t *rigid_body = malloc(sizeof(rigid_body_t));
+    rigid_body_init(rigid_body);
+    player->game_object.rigid_body = rigid_body;
+
+    rect_set_size(&player->game_object.rigid_body->bounding_box, player->game_object.sprite->sprite_rect.w, player->game_object.sprite->sprite_rect.h);
+    player->game_object.rigid_body->bounding_box.owner = &player->game_object;
 
     player_die(player);
 
     draw_manager_add_sprite(draw_manager, sprite);
-    physics_manager_add_player(physics_manager, &player->game_object.bounding_box);
+    physics_manager_add_player(physics_manager, &player->game_object.rigid_body->bounding_box);
 }
 
 void player_read_input(player_t *player)
@@ -146,5 +142,3 @@ void player_read_input(player_t *player)
 
     player->last_frame_input = frame_input;
 }
-
-#endif

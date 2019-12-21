@@ -1,7 +1,3 @@
-
-#ifndef FROGGER_VECTOR2
-#define FROGGER_VECTOR2
-
 #include "vector2.h"
 
 int vector2_init(vector2_t *vector2)
@@ -75,6 +71,12 @@ vector2_t vector2_get_deep_copy(const vector2_t *vector2)
     return result;
 }
 
+int vector2_equals(const vector2_t *first_value, const vector2_t *second_value)
+{
+    return first_value->x == second_value->x && first_value->y == second_value->y;
+}
+
+
 #ifdef _TEST
 
 static int test_vector2_init()
@@ -135,6 +137,26 @@ static int test_vector2_mul_vec2()
     return second_vector2.x == 20 && second_vector2.y == 8;
 }
 
+static int test_vector2_equals()
+{
+    vector2_t second_vector2, vector2;
+
+    vector2_init_safe(&second_vector2, 5, 10);
+    vector2_init_safe(&vector2, 5, 10);
+
+    return vector2_equals(&second_vector2, &vector2);
+}
+
+static int test_vector2_not_equals()
+{
+    vector2_t second_vector2, vector2;
+
+    vector2_init_safe(&second_vector2, 5, 10);
+    vector2_init_safe(&vector2, 10, 10);
+
+    return !vector2_equals(&second_vector2, &vector2);
+}
+
 void test_vector2()
 {
     RUN_TEST_VECTOR2(test_vector2_init);
@@ -144,6 +166,7 @@ void test_vector2()
     RUN_TEST_VECTOR2(test_vector2_mul);
     RUN_TEST_VECTOR2(test_vector2_mul_vec2);
     RUN_TEST_VECTOR2(test_vector2_deep_copy);
+    RUN_TEST_VECTOR2(test_vector2_equals);
+    RUN_TEST_VECTOR2(test_vector2_not_equals);
 }
-#endif
 #endif

@@ -87,7 +87,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
                 obstacles[used_obstacles].game_object.sprite->sprite_rect.h = texture_info[TEXTURE_LOG].height;
                 obstacles[used_obstacles].game_object.sprite->sprite_rect.w = texture_info[TEXTURE_LOG].width;
 
-                rect_set_size(&obstacles[used_obstacles].game_object.bounding_box, 
+                rect_set_size(&obstacles[used_obstacles].game_object.rigid_body->bounding_box, 
                 obstacles[used_obstacles].game_object.sprite->sprite_rect.w, obstacles[used_obstacles].game_object.sprite->sprite_rect.h);
 
                 used_obstacles++;
@@ -102,7 +102,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
                     obstacles[used_obstacles].game_object.sprite->sprite_rect.h = texture_info[TEXTURE_LOG].height;
                     obstacles[used_obstacles].game_object.sprite->sprite_rect.w = texture_info[TEXTURE_LOG].width;
 
-                    rect_set_size(&obstacles[used_obstacles].game_object.bounding_box, 
+                    rect_set_size(&obstacles[used_obstacles].game_object.rigid_body->bounding_box, 
                     obstacles[used_obstacles].game_object.sprite->sprite_rect.w, obstacles[used_obstacles].game_object.sprite->sprite_rect.h);
 
                     used_obstacles++;
@@ -216,6 +216,7 @@ int game()
 
         player_read_input(&player);
         physics_manager_update(&physics_manager, frame_time / 1000);
+        physics_manager_update_rb(&physics_manager, frame_time / 1000);
         physics_manager_check_collisions(&physics_manager);
         draw_scene(&draw_manager);
     }

@@ -6,11 +6,12 @@
 
 typedef struct game_object
 {
-    vector2_t velocity,position;
-    sprite_t *sprite;
-    rect_t bounding_box;
-    int is_active;
+    vector2_t position;
     uint8_t collider_type;
+    int is_active;
+
+    sprite_t *sprite;
+    rigid_body_t *rigid_body;
 
     void (*on_collision)(struct game_object *game_object, collision_info_t *collision);
     void (*update)(struct game_object *game_object, const double delta_time);

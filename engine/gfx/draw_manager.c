@@ -1,6 +1,3 @@
-#ifndef FROGGER_DRAW_MANAGER
-#define FROGGER_DRAW_MANAGER
-
 #include "draw_manager.h"
 
 void draw_scene(draw_manager_t *draw_manager)
@@ -79,5 +76,4 @@ void test_draw_manager()
     RUN_TEST_DRAW_MANAGER(test_draw_manager_init);
 }
 
-#endif
 #endif
