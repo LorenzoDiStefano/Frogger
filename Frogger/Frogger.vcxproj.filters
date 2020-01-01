@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="File di risorse">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{7f1c55bf-2921-452f-aa41-5b8cb3e487f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{8ae22f72-7fb0-4d73-ad79-fc50216320a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Actors">
+      <UniqueIdentifier>{8cb7475a-d372-4ca6-8561-66a34373ee30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Gfx">
+      <UniqueIdentifier>{879d595b-30f9-466d-8b5b-882475752eec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Physics">
+      <UniqueIdentifier>{c655fe36-7648-41ad-935d-eeb4bc4cb483}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Engine\game_clock.c">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\collision_info.c">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\physics_manager.c">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\rect.c">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\rigid_body.c">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Physics\vector2.c">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Gfx\draw_manager.c">
+      <Filter>Engine\Gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Gfx\image_info.c">
+      <Filter>Engine\Gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Gfx\sprite.c">
+      <Filter>Engine\Gfx</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Actors\background.c">
+      <Filter>Engine\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Actors\game_object.c">
+      <Filter>Engine\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Actors\obstacle.c">
+      <Filter>Engine\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine\Actors\player.c">
+      <Filter>Engine\Actors</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Engine\game_clock.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\collision_info.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\physics_manager.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\rect.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\rigid_body.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\vector2.h">
+      <Filter>Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Gfx\draw_manager.h">
+      <Filter>Engine\Gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Gfx\image_info.h">
+      <Filter>Engine\Gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Gfx\sprite.h">
+      <Filter>Engine\Gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Actors\background.h">
+      <Filter>Engine\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Actors\game_object.h">
+      <Filter>Engine\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Actors\obstacle.h">
+      <Filter>Engine\Actors</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Actors\player.h">
+      <Filter>Engine\Actors</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\car.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\car_flip.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\frog.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\frog_original.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\log.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_car.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_log.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_road_bg.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_spawn_bg.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_victory_bg.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_wall.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\ph_water_bg.png">
+      <Filter>Assets</Filter>
+    </Image>
+    <Image Include="Assets\test.png">
+      <Filter>Assets</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="SDL2-2.0.10\lib\x64\SDL2.dll">
+      <Filter>File di risorse</Filter>
+    </CopyFileToFolders>
+  </ItemGroup>
+</Project>
