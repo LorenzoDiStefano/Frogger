@@ -36,7 +36,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)\Frogger.Tests;$(SolutionDir)\Frogger\Engine;$(SolutionDir)\Frogger\SDL2-2.0.10\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)\Frogger.Tests;$(SolutionDir)\Frogger;$(SolutionDir)\Frogger\SDL2-2.0.10\include;$(IncludePath)</IncludePath>
     <SourcePath>$(SolutionDir)\Frogger\Engine;$(SourcePath)</SourcePath>
     <LibraryPath>$(SolutionDir)\Frogger\SDL2-2.0.10\lib\x64;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
@@ -44,12 +44,13 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Engine\Actors\test_game_object.cpp" />
-    <ClCompile Include="Engine\Gfx\test_draw_manager.cpp" />
-    <ClCompile Include="Engine\Physics\test_collision_info.cpp" />
-    <ClCompile Include="Engine\Physics\test_rect.cpp" />
-    <ClCompile Include="Engine\Physics\test_rigid_body.cpp" />
-    <ClCompile Include="Engine\Physics\test_vector2.cpp" />
+    <ClCompile Include="Engine.Tests\Actors\test_game_object.cpp" />
+    <ClCompile Include="Engine.Tests\Gfx\test_draw_manager.cpp" />
+    <ClCompile Include="Engine.Tests\Physics\test_collision_info.cpp" />
+    <ClCompile Include="Engine.Tests\Physics\test_rect.cpp" />
+    <ClCompile Include="Engine.Tests\Physics\test_rigid_body.cpp" />
+    <ClCompile Include="Engine.Tests\Physics\test_vector2.cpp" />
+    <ClCompile Include="Engine.Tests\test_update_manager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -95,7 +96,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)\Frogger\Engine;$(SolutionDir)\Frogger\SDL2-2.0.10\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)\Frogger;$(SolutionDir)\Frogger\SDL2-2.0.10\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>

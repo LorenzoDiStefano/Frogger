@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Actors/game_object.h"
+#include "Engine/Actors/game_object.h"
 
 TEST(game_object_tests, init)
 {
@@ -21,8 +21,8 @@ TEST(game_object_tests, init_with_vectors)
 {
     game_object_t game_object;
     vector2_t position, velocity;
-    vector2_init_safe(&position, 100, 100);
-    vector2_init_safe(&velocity, 50, 50);
+    vector2_set(&position, 100, 100);
+    vector2_set(&velocity, 50, 50);
 
     game_object_init_with_vectors(&game_object, &position, &velocity);
     EXPECT_TRUE
@@ -118,7 +118,7 @@ TEST(game_object_tests, set_velocity)
     vector2_t new_velocity;
 
     rigid_body_init(&rigid_body);
-    vector2_init_safe(&new_velocity, 50, 40);
+    vector2_set(&new_velocity, 50, 40);
     game_object_init(&game_object);
 
     game_object.rigid_body = &rigid_body;
@@ -157,12 +157,11 @@ TEST(game_object_tests, set_position_y)
     );
 }
 
-
 TEST(game_object_tests, set_position)
 {
     game_object_t game_object;
     vector2_t new_position;
-    vector2_init_safe(&new_position, 50, 40);
+    vector2_set(&new_position, 50, 40);
     game_object_init(&game_object);
     game_object_set_position(&game_object, 100, 40);
 

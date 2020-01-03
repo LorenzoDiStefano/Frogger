@@ -3,23 +3,26 @@
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Engine\Physics\test_collision_info.cpp">
-      <Filter>Engine\Physics</Filter>
+    <ClCompile Include="Engine.Tests\Actors\test_game_object.cpp">
+      <Filter>Engine\Actors</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Physics\test_rect.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Physics\test_rigid_body.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Physics\test_vector2.cpp">
-      <Filter>Engine\Physics</Filter>
-    </ClCompile>
-    <ClCompile Include="Engine\Gfx\test_draw_manager.cpp">
+    <ClCompile Include="Engine.Tests\Gfx\test_draw_manager.cpp">
       <Filter>Engine\Gfx</Filter>
     </ClCompile>
-    <ClCompile Include="Engine\Actors\test_game_object.cpp">
-      <Filter>Engine\Actors</Filter>
+    <ClCompile Include="Engine.Tests\Physics\test_collision_info.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.Tests\Physics\test_rect.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.Tests\Physics\test_rigid_body.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.Tests\Physics\test_vector2.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.Tests\test_update_manager.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

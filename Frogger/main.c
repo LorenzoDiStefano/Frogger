@@ -13,12 +13,7 @@ static int game_state = 1;
 #include "engine/actors/background.h"
 #include "engine/gfx/draw_manager.h"
 #include "engine/physics/physics_manager.h"
-
-#ifdef _TEST
-
-#include "tests.c"
-
-#endif
+#include "engine/update_manager.h"
 
 #define TEXTURE_FROG        0
 #define TEXTURE_ROAD        1
@@ -140,7 +135,6 @@ int crash()
 {
     SDL_Log("window error %s",SDL_GetError());
     SDL_Quit();
-    getchar();
     return 1;
 }
 
@@ -167,6 +161,9 @@ int game()
     game_clock_t game_clock;
     clock_init_safe(&game_clock);
 
+    update_manager_t update_manager;
+    update_manager_init(&update_manager);
+
     draw_manager_t draw_manager;
     draw_manager_init(&draw_manager);
 
@@ -181,6 +178,7 @@ int game()
     for (size_t i = 0; i < 20; i++)
     {
         obstacle_init(&obstacles[i], &draw_manager, &physics_manager, &textures_info[TEXTURE_CAR]);
+        update_manager_add_game_object(&update_manager, &obstacles[i].game_object);
     }
 
     background_t backrounds[11];
@@ -188,7 +186,7 @@ int game()
 
     player_t player;
     player_init(&player,&draw_manager, &physics_manager, &textures_info[TEXTURE_FROG]);
-    
+    update_manager_add_game_object(&update_manager, &player.game_object);
 
     while(game_state)
     {
@@ -215,7 +213,7 @@ int game()
         }
 
         player_read_input(&player);
-        physics_manager_update(&physics_manager, frame_time / 1000);
+        update_manager_update(&update_manager, frame_time / 1000);
         physics_manager_update_rb(&physics_manager, frame_time / 1000);
         physics_manager_check_collisions(&physics_manager);
         draw_scene(&draw_manager);
@@ -226,13 +224,6 @@ int game()
 
 int main (int argc, char **argv)
 {
-    #ifdef _TEST
-
-    printf("Executing tests\n");
-    return run_tests();
-
-    #endif
-    
     return game();
 }
 

@@ -26,7 +26,7 @@ void game_object_update(game_object_t *game_object, const double delta_time)
 
     if (game_object->rigid_body != NULL)
     {
-        vector2_init_safe(&game_object->position, game_object->rigid_body->position.x, game_object->rigid_body->position.y);
+        vector2_set(&game_object->position, game_object->rigid_body->position.x, game_object->rigid_body->position.y);
     }
 
     if(game_object->sprite != NULL)
@@ -55,16 +55,16 @@ void game_object_init_with_vectors(game_object_t *game_object, const vector2_t *
 
     game_object->rigid_body->velocity.x = velocity->x;
     game_object->rigid_body->velocity.y = velocity->y;
-
-
-
 }
 
 void game_object_set_position(game_object_t *game_object, const float x, const float y)
 {
     vector2_t vector2;
-    vector2_init_safe(&vector2, x, y);
+    vector2_set(&vector2, x, y);
     game_object_set_position_with_vector(game_object, vector2);
+
+    if(game_object->sprite != NULL)
+        game_object_update_sprite(game_object);
 }
 
 void game_object_set_position_with_vector(game_object_t *game_object, const vector2_t new_position)

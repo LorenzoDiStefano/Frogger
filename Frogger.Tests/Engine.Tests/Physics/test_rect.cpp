@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "Actors/game_object.h"
-#include "Physics/rect.h"
+#include "Engine/Actors/game_object.h"
+#include "Engine/Physics/rect.h"
 
 TEST(rect_tests, rect_init)
 {
@@ -24,7 +24,7 @@ TEST(rect_tests, rect_init_safe)
     rect_t rect;
     game_object_t owner;
     vector2_t position;
-    vector2_init_safe(&position, 20, 30);
+    vector2_set(&position, 20, 30);
     rect_init_safe(&rect, 100, 50, position, &owner);
 
     EXPECT_TRUE
@@ -62,7 +62,7 @@ TEST(rect_tests, set_position)
 {
     rect_t rect;
     vector2_t new_position;
-    vector2_init_safe(&new_position, 100, 50);
+    vector2_set(&new_position, 100, 50);
     rect_set_position(&rect, new_position);
 
     EXPECT_TRUE(
@@ -79,7 +79,7 @@ TEST(rect_tests, test_rect_collision_successful)
     vector2_init(&position);
     rect_init_safe(&first_rect, 50, 50, position, NULL);
 
-    vector2_init_safe(&position, 20, 30);
+    vector2_set(&position, 20, 30);
     rect_init_safe(&second_rect, 50, 50, position, NULL);
 
     int collision = rect_check_collision(&first_rect, &second_rect, &collision_info);
@@ -95,7 +95,7 @@ TEST(rect_tests, test_rect_collision_failed)
     vector2_init(&position);
     rect_init_safe(&first_rect, 50, 50, position, NULL);
 
-    vector2_init_safe(&position, 51, 30);
+    vector2_set(&position, 51, 30);
     rect_init_safe(&second_rect, 5, 5, position, NULL);
 
     int collision = rect_check_collision(&first_rect, &second_rect, &collisio_info);

@@ -68,7 +68,7 @@ int rect_check_collision(rect_t *first_rect, rect_t *second_rect, collision_info
         else
             y = ((first_rect->position.y) - (second_rect->position.y + second_rect->height));
 
-        vector2_init_safe(&collision->delta, x, y);
+        vector2_set(&collision->delta, x, y);
         collision->collider = second_rect->owner;
         return 1;
     }

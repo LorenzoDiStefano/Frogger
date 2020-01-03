@@ -62,6 +62,9 @@
       <Filter>Engine\Actors</Filter>
     </ClCompile>
     <ClCompile Include="main.c" />
+    <ClCompile Include="Engine\update_manager.c">
+      <Filter>Engine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\game_clock.h">
@@ -103,51 +106,54 @@
     <ClInclude Include="Engine\Actors\player.h">
       <Filter>Engine\Actors</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\update_manager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Assets\car.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\car_flip.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\frog.png">
-      <Filter>Assets</Filter>
-    </Image>
     <Image Include="Assets\frog_original.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\log.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_car.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_log.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_road_bg.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_spawn_bg.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_victory_bg.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_wall.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\ph_water_bg.png">
-      <Filter>Assets</Filter>
-    </Image>
-    <Image Include="Assets\test.png">
       <Filter>Assets</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="SDL2-2.0.10\lib\x64\SDL2.dll">
       <Filter>File di risorse</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\test.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_water_bg.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_wall.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_victory_bg.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_spawn_bg.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_road_bg.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_log.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\ph_car.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\log.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\frog.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\car_flip.png">
+      <Filter>Assets</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Assets\car.png">
+      <Filter>Assets</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

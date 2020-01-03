@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Physics/rigid_body.h"
+#include "Engine/Physics/rigid_body.h"
 
 TEST(rigid_body_tests, init)
 {
@@ -8,7 +8,7 @@ TEST(rigid_body_tests, init)
 
     rigid_body_init(&rigid_body);
 
-    int return_value = vector2_init_safe(&vector2_control, 0, 0);
+    int return_value = vector2_set(&vector2_control, 0, 0);
 
     EXPECT_TRUE
     (

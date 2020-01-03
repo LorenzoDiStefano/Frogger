@@ -18,7 +18,7 @@ int rigid_body_init(rigid_body_t *rigid_body)
 
 void rigid_body_set_position(rigid_body_t *rigid_body, const float x, const float y)
 {
-    vector2_init_safe(&rigid_body->position, x, y);
+    vector2_set(&rigid_body->position, x, y);
     rigid_body->bounding_box.position = rigid_body->position;
 }
 

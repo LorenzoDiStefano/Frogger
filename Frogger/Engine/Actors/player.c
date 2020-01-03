@@ -78,7 +78,7 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
 
     player->last_frame_input = 0;
     player->is_on_log = 0;
-    vector2_init_safe(&player->spawn_point, (WINDOW_WIDTH-TILE_SIZE)/2, (WINDOW_HEIGHT-TILE_SIZE));
+    vector2_set(&player->spawn_point, (WINDOW_WIDTH-TILE_SIZE)/2, (WINDOW_HEIGHT-TILE_SIZE));
 
     player->game_object.on_collision = player_on_collision;
     player->game_object.update = player_update;

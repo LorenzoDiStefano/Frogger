@@ -9,10 +9,11 @@ int vector2_init(vector2_t *vector2)
     
     vector2->x = 0;
     vector2->y = 0;
+
     return 0;
 }
 
-int vector2_init_safe(vector2_t *vector2, float x, float y)
+int vector2_set(vector2_t *vector2, float x, float y)
 {
     if(vector2 == NULL)
     {
@@ -21,22 +22,27 @@ int vector2_init_safe(vector2_t *vector2, float x, float y)
     
     vector2->x = x;
     vector2->y = y;
+
     return 0;
 }
 
 vector2_t vector2_add(const vector2_t *first_value, const vector2_t *second_value)
 {
     vector2_t result;
+
     result.x = (first_value->x) + (second_value->x);
     result.y = (first_value->y) + (second_value->y);
+
     return result;
 }
 
 vector2_t vector2_sub(const vector2_t *first_value, const vector2_t *second_value)
 {
     vector2_t result;
+
     result.x = (first_value->x) - (second_value->x);
     result.y = (first_value->y) - (second_value->y);
+
     return result;
 }
 
