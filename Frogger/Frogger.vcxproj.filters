@@ -5,9 +5,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Assets">
-      <UniqueIdentifier>{7f1c55bf-2921-452f-aa41-5b8cb3e487f0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine">
       <UniqueIdentifier>{8ae22f72-7fb0-4d73-ad79-fc50216320a7}</UniqueIdentifier>
     </Filter>
@@ -19,6 +16,9 @@
     </Filter>
     <Filter Include="Engine\Physics">
       <UniqueIdentifier>{c655fe36-7648-41ad-935d-eeb4bc4cb483}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="File di risorse\Assets">
+      <UniqueIdentifier>{7f1c55bf-2921-452f-aa41-5b8cb3e487f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -79,9 +79,6 @@
     <ClInclude Include="Engine\Physics\rect.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Physics\rigid_body.h">
-      <Filter>Engine\Physics</Filter>
-    </ClInclude>
     <ClInclude Include="Engine\Physics\vector2.h">
       <Filter>Engine\Physics</Filter>
     </ClInclude>
@@ -109,10 +106,13 @@
     <ClInclude Include="Engine\update_manager.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Engine\Physics\rigid_body.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Assets\frog_original.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -120,40 +120,40 @@
       <Filter>File di risorse</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\test.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_water_bg.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_wall.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_victory_bg.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_spawn_bg.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_road_bg.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_log.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\ph_car.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\log.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\frog.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\car_flip.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Assets\car.png">
-      <Filter>Assets</Filter>
+      <Filter>File di risorse\Assets</Filter>
     </CopyFileToFolders>
   </ItemGroup>
 </Project>

@@ -9,9 +9,11 @@ int rigid_body_init(rigid_body_t *rigid_body)
     vector2_init(&rigid_body->position);
     vector2_init(&rigid_body->velocity);
     vector2_init(&rigid_body->direction);
+
     rigid_body->update = rigid_body_update;
     rigid_body->on_collision = rigid_body_on_collision;
     rigid_body->is_active = 0;
+    rigid_body->owner = NULL;
 
     return 0;
 }
@@ -46,4 +48,12 @@ void rigid_body_on_collision(rigid_body_t *rigid_body, collision_info_t *collisi
     {
 
     }
+}
+
+int rigid_body_set_owner(rigid_body_t* rigid_body, game_object_t* owner)
+{
+    if (owner == NULL)
+        return 1;
+
+    rigid_body->owner = owner;
 }

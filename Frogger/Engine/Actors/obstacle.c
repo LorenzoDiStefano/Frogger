@@ -15,7 +15,6 @@ void obstacle_update(game_object_t *game_object, const double delta_time)
 
 void obstacle_init(obstacle_t *obstacle, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
 {
-    //initializing game_object
     game_object_init(&obstacle->game_object);
 
     obstacle->game_object.is_active = 1;
@@ -37,5 +36,5 @@ void obstacle_init(obstacle_t *obstacle, draw_manager_t *draw_manager, physics_m
     game_object_set_position(&obstacle->game_object, 0, WINDOW_HEIGHT);
 
     draw_manager_add_sprite(draw_manager, obstacle->game_object.sprite);
-    physics_manager_add_rect(physics_manager, &obstacle->game_object.rigid_body->bounding_box);
+    physics_manager_add_rigid_body(physics_manager, obstacle->game_object.rigid_body);
 }

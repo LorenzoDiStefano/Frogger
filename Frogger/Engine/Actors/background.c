@@ -19,10 +19,10 @@ void background_init(background_t *background, draw_manager_t *draw_manager, phy
     rigid_body_t *rigid_body = (rigid_body_t*)malloc(sizeof(rigid_body_t));
     rigid_body_init(rigid_body);
     background->game_object.rigid_body = rigid_body;
+    rigid_body_set_owner(rigid_body, &background->game_object);
 
     background->game_object.rigid_body->bounding_box.owner = &background->game_object;
     rect_set_size(&background->game_object.rigid_body->bounding_box, sprite->sprite_rect.w, sprite->sprite_rect.h);
 
     draw_manager_add_sprite_bg(draw_manager, background->game_object.sprite);
-    physics_manager_add_rect(physics_manager, &background->game_object.rigid_body->bounding_box);
 }

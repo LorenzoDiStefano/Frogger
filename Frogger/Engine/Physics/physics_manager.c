@@ -1,64 +1,49 @@
 #include "physics_manager.h"
 
-void physics_manager_init(physics_manager_t *physics_manager)
+int physics_manager_init(physics_manager_t *physics_manager)
 {
-    physics_manager->max_rects = 100;
-    physics_manager->player = NULL;
-    physics_manager->rects_to_draw = 0;
+    if (physics_manager == NULL)
+        return 1;
+
+    physics_manager->max_rb = 100;
+    physics_manager->player_rb = NULL;
+    physics_manager->rb_count = 0;
+    return 0;
 }
 
 void physics_manager_update_rb(physics_manager_t *physics_manager, const double delta_time)
 {
-    if(physics_manager->player == NULL)
+    rigid_body_t *play_rb = physics_manager->player_rb;
+    play_rb->update(play_rb, delta_time);
+
+    for (int i = 0; i < physics_manager->rb_count; i++)
     {
-        printf("missing player\n");
-        return;
-    }
-
-    //update player
-    game_object_t *player_game_object = physics_manager->player->owner;
-    player_game_object->update(player_game_object, delta_time);
-
-    for (int i = 0; i < physics_manager->rects_to_draw; i++)
-    {
-        game_object_t *game_object_address = physics_manager->rects[i]->owner;
-
-        if (game_object_address->rigid_body->update == NULL)
-        {
-            printf("null update");
-        }
-        else
-        {
-            game_object_address->rigid_body->update(game_object_address->rigid_body, delta_time);
-        }
+        rigid_body_t *rb = physics_manager->rigid_bodies[i];
+        rb->update(rb, delta_time);
     } 
 }
 
-void physics_manager_add_rect(physics_manager_t *physics_manager, rect_t *rect)
+void physics_manager_add_rigid_body(physics_manager_t *physics_manager, rigid_body_t *rect)
 {
-    physics_manager->rects[physics_manager->rects_to_draw] = rect;
-    physics_manager->rects_to_draw++;
+    physics_manager->rigid_bodies[physics_manager->rb_count] = rect;
+    physics_manager->rb_count++;
 }
 
-void physics_manager_add_player(physics_manager_t *physics_manager, rect_t *rect)
+void physics_manager_add_player(physics_manager_t *physics_manager, rigid_body_t *player)
 {
-    physics_manager->player = rect;
+    physics_manager->player_rb = player;
 }
 
 void physics_manager_check_collisions(physics_manager_t *physics_manager)
 {
-    if(physics_manager->player == NULL)
-    {
-        return;
-    }
-
-    for (int i = 0; i < physics_manager->rects_to_draw; i++)
+    for (int i = 0; i < physics_manager->rb_count; i++)
     {
         collision_info_t collision;
         collision_info_init(&collision);
-        if(rect_check_collision(physics_manager->player, physics_manager->rects[i], &collision) == 1)
+        if(rect_check_collision(&physics_manager->player_rb->bounding_box, 
+            &physics_manager->rigid_bodies[i]->bounding_box, &collision) == 1)
         {
-            game_object_t *player_game_object = physics_manager->player->owner;
+            game_object_t *player_game_object = physics_manager->player_rb->owner;
             player_game_object->on_collision(player_game_object, &collision);
         }     
     } 

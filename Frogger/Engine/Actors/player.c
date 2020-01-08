@@ -4,22 +4,22 @@ void player_update(game_object_t *game_object,const double delta_time)
 {
     game_object_update(game_object, delta_time);
 
-    if(game_object->position.x > WINDOW_WIDTH - game_object->rigid_body->bounding_box.width)
+    if(game_object->rigid_body->position.x >= WINDOW_WIDTH - game_object->rigid_body->bounding_box.width)
     {
-        game_object->position.x = WINDOW_WIDTH - game_object->rigid_body->bounding_box.width;
+        game_object->rigid_body->position.x = WINDOW_WIDTH - game_object->rigid_body->bounding_box.width;
     }
-    else if(game_object->position.x < 0)
+    else if(game_object->rigid_body->position.x <= 0)
     {
-        game_object->position.x = 0;
+        game_object->rigid_body->position.x = 0;
     }
 
-    if(game_object->position.y < 0)
+    if(game_object->rigid_body->position.y < 0)
     {
-        game_object->position.y = 0;
+        game_object->rigid_body->position.y = 0;
     }
-    else if (game_object->position.y > WINDOW_HEIGHT - game_object->rigid_body->bounding_box.height)
+    else if (game_object->rigid_body->position.y > WINDOW_HEIGHT - game_object->rigid_body->bounding_box.height)
     {
-        game_object->position.y = WINDOW_HEIGHT - game_object->rigid_body->bounding_box.height;
+        game_object->rigid_body->position.y = WINDOW_HEIGHT - game_object->rigid_body->bounding_box.height;
     }
 
     if(game_object->sprite != NULL)
@@ -28,7 +28,6 @@ void player_update(game_object_t *game_object,const double delta_time)
     }
 
     ((player_t *)game_object)->is_on_log = 0;
-
 }
 
 void player_on_collision(struct game_object *game_object, collision_info_t *collision)
@@ -69,10 +68,9 @@ void player_die(player_t *player)
     printf("Player died\n");
     game_object_set_position_with_vector(&player->game_object, player->spawn_point);
     game_object_update_sprite(&player->game_object);
-
 }
 
-void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager_t *physics_manager, image_info_t *img_info)
+void player_init(player_t *player, draw_manager_t *draw_manager, image_info_t *img_info)
 {
     game_object_init(&player->game_object);
 
@@ -96,13 +94,14 @@ void player_init(player_t *player, draw_manager_t *draw_manager, physics_manager
     rigid_body_init(rigid_body);
     player->game_object.rigid_body = rigid_body;
 
-    rect_set_size(&player->game_object.rigid_body->bounding_box, player->game_object.sprite->sprite_rect.w, player->game_object.sprite->sprite_rect.h);
-    player->game_object.rigid_body->bounding_box.owner = &player->game_object;
+    rigid_body_set_owner(rigid_body, &player->game_object);
+
+    rect_set_size(&player->game_object.rigid_body->bounding_box, player->game_object.
+        sprite->sprite_rect.w, player->game_object.sprite->sprite_rect.h);
 
     player_die(player);
 
     draw_manager_add_sprite(draw_manager, sprite);
-    physics_manager_add_player(physics_manager, &player->game_object.rigid_body->bounding_box);
 }
 
 void player_read_input(player_t *player)

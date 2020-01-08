@@ -58,6 +58,8 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
         {
             background_init(&backgrounds[i], draw_manager, physics_manager, &texture_info[TEXTURE_WIN]);
             backgrounds[i].game_object.collider_type = COLLIDER_TYPE_END;
+            rigid_body_set_owner(backgrounds[i].game_object.rigid_body, &backgrounds[i].game_object);
+            physics_manager_add_rigid_body(physics_manager, backgrounds[i].game_object.rigid_body);
         }
         else if(i == 10)
         {
@@ -84,6 +86,9 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
 
                 rect_set_size(&obstacles[used_obstacles].game_object.rigid_body->bounding_box, 
                 obstacles[used_obstacles].game_object.sprite->sprite_rect.w, obstacles[used_obstacles].game_object.sprite->sprite_rect.h);
+
+                rigid_body_set_owner(backgrounds[i].game_object.rigid_body, &backgrounds[i].game_object);
+                physics_manager_add_rigid_body(physics_manager, backgrounds[i].game_object.rigid_body);
 
                 used_obstacles++;
 
@@ -185,8 +190,9 @@ int game()
     generate_map(backrounds,&draw_manager,&physics_manager,textures_info, obstacles);
 
     player_t player;
-    player_init(&player,&draw_manager, &physics_manager, &textures_info[TEXTURE_FROG]);
+    player_init(&player,&draw_manager, &textures_info[TEXTURE_FROG]);
     update_manager_add_game_object(&update_manager, &player.game_object);
+    physics_manager_add_player(&physics_manager, player.game_object.rigid_body);
 
     while(game_state)
     {

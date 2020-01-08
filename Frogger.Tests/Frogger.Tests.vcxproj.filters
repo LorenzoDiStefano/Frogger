@@ -24,6 +24,9 @@
     <ClCompile Include="Engine.Tests\test_update_manager.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="test_physics_manager.cpp">
+      <Filter>Engine\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
