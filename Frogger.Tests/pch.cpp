@@ -18,3 +18,4 @@
 #include "Engine/Actors/obstacle.c"
 #include "Engine/update_manager.c"
 #include "Engine/game_clock.c"
+#include "texture_manager.c"

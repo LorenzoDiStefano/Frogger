@@ -27,6 +27,9 @@
     <ClCompile Include="test_physics_manager.cpp">
       <Filter>Engine\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="test_texture_manager.cpp">
+      <Filter>Engine\Gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

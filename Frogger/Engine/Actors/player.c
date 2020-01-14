@@ -91,6 +91,13 @@ void player_init(player_t *player, draw_manager_t *draw_manager, image_info_t *i
     game_object_set_sprite(&player->game_object, sprite);
 
     rigid_body_t *rigid_body = (rigid_body_t*)malloc(sizeof(rigid_body_t));
+
+    if (rigid_body == NULL)
+    {
+        printf("failed malloc rigid_body\n func: background_init\n");
+        exit(-1);
+    }
+
     rigid_body_init(rigid_body);
     player->game_object.rigid_body = rigid_body;
 

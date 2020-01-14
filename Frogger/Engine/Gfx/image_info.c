@@ -33,7 +33,8 @@ void load_texture(image_info_t *img_info, SDL_Renderer *renderer)
     {
         printf("Unable to map texture into address space");
     }
-    memcpy(pixels, (void *)img_info->image, img_info->height * 4 * img_info->width);
+
+    memcpy(pixels, (void *)img_info->image, (size_t)img_info->height * 4 * img_info->width);
 
     SDL_UnlockTexture(texture);
 

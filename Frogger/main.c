@@ -14,6 +14,7 @@ static int game_state = 1;
 #include "engine/gfx/draw_manager.h"
 #include "engine/physics/physics_manager.h"
 #include "engine/update_manager.h"
+#include "texture_manager.h"
 
 #define TEXTURE_FROG        0
 #define TEXTURE_ROAD        1
@@ -25,9 +26,9 @@ static int game_state = 1;
 #define TEXTURE_CAR_FLIP    7
 #define TEXTURE_MAX         8
 
-void load_textures(image_info_t texture[], SDL_Renderer *renderer)
+void load_textures(texture_manager_t *tm)
 {
-    const char *paths[TEXTURE_MAX];
+    const char* paths[TEXTURE_MAX];
     paths[TEXTURE_FROG] = "assets/frog.png";
     paths[TEXTURE_ROAD] = "assets/ph_road_bg.png";
     paths[TEXTURE_WATER] = "assets/ph_water_bg.png";
@@ -39,10 +40,7 @@ void load_textures(image_info_t texture[], SDL_Renderer *renderer)
 
     for (size_t i = 0; i < TEXTURE_MAX; i++)
     {
-        image_info_t texture_inf;
-        load_image(&texture_inf, paths[i]);
-        load_texture(&texture_inf, renderer);
-        texture[i] = texture_inf;
+        texture_manager_load_texture(tm, paths[i]);
     }
 }
 
@@ -175,22 +173,24 @@ int game()
     physics_manager_t physics_manager;
     physics_manager_init(&physics_manager);
 
-    image_info_t textures_info[TEXTURE_MAX];
-    load_textures(textures_info, draw_manager.renderer);
+    texture_manager_t tm;
+    texture_manager_init(&tm);
+    texture_manager_set_renderer(&tm, draw_manager.renderer);
+    load_textures(&tm);
 
     obstacle_t obstacles[20];
 
     for (size_t i = 0; i < 20; i++)
     {
-        obstacle_init(&obstacles[i], &draw_manager, &physics_manager, &textures_info[TEXTURE_CAR]);
+        obstacle_init(&obstacles[i], &draw_manager, &physics_manager, &tm.textures[TEXTURE_CAR]);
         update_manager_add_game_object(&update_manager, &obstacles[i].game_object);
     }
 
     background_t backrounds[11];
-    generate_map(backrounds,&draw_manager,&physics_manager,textures_info, obstacles);
+    generate_map(backrounds, &draw_manager, &physics_manager, &tm.textures, obstacles);
 
     player_t player;
-    player_init(&player,&draw_manager, &textures_info[TEXTURE_FROG]);
+    player_init(&player,&draw_manager, &tm.textures[TEXTURE_FROG]);
     update_manager_add_game_object(&update_manager, &player.game_object);
     physics_manager_add_player(&physics_manager, player.game_object.rigid_body);
 

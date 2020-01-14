@@ -26,6 +26,13 @@ void obstacle_init(obstacle_t *obstacle, draw_manager_t *draw_manager, physics_m
     game_object_set_sprite(&obstacle->game_object, sprite);
 
     rigid_body_t *rigid_body = (rigid_body_t*)malloc(sizeof(rigid_body_t));
+    
+    if (rigid_body == NULL)
+    {
+        printf("failed malloc rigid_body\n func: background_init\n");
+        exit(-1);
+    }
+
     rigid_body_init(rigid_body);
     obstacle->game_object.rigid_body = rigid_body;
 

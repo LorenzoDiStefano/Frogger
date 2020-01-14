@@ -65,6 +65,9 @@
     <ClCompile Include="Engine\update_manager.c">
       <Filter>Engine</Filter>
     </ClCompile>
+    <ClCompile Include="texture_manager.c">
+      <Filter>Engine\Gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\game_clock.h">
@@ -108,6 +111,9 @@
     </ClInclude>
     <ClInclude Include="Engine\Physics\rigid_body.h">
       <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="texture_manager.h">
+      <Filter>Engine\Gfx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

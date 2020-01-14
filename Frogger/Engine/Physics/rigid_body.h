@@ -1,6 +1,4 @@
-#ifndef FROGGER_RIGID_BODY_HEADER
-#define FROGGER_RIGID_BODY_HEADER
-
+#pragma once
 #include "rect.h"
 #include "collision_info.h"
 
@@ -25,5 +23,3 @@ void rigid_body_set_position(rigid_body_t *rigid_body, const float x, const floa
 void rigid_body_set_position_with_vectors(rigid_body_t *rigid_body, const vector2_t new_value);
 void rigid_body_update(rigid_body_t* rigid_body, const double delta_time);
 void rigid_body_on_collision(rigid_body_t* rigid_body, collision_info_t *collision);
-
-#endif

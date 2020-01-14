@@ -38,6 +38,7 @@ void game_object_update(game_object_t *game_object, const double delta_time)
 void game_object_init(game_object_t *game_object)
 {
     vector2_init(&(game_object->position));
+
     game_object->is_active = 0;
     game_object->collider_type = 0;
     game_object->sprite = NULL;

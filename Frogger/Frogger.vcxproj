@@ -144,6 +144,7 @@
     <ClCompile Include="Engine\Physics\vector2.c" />
     <ClCompile Include="Engine\update_manager.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="texture_manager.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\Actors\background.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Engine\Physics\rigid_body.h" />
     <ClInclude Include="Engine\Physics\vector2.h" />
     <ClInclude Include="Engine\update_manager.h" />
+    <ClInclude Include="texture_manager.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Assets\car.png">

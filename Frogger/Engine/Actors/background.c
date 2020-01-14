@@ -12,11 +12,24 @@ void background_init(background_t *background, draw_manager_t *draw_manager, phy
     init_sprite(sprite, img_info, draw_manager->renderer, 1);  
     game_object_set_sprite(&background->game_object, sprite);
 
+    if (sprite == NULL)
+    {
+        printf("failed malloc sprite\n func: background_init\n");
+        exit(-1);
+    }
+
     //temporary, waiting for art
     sprite->sprite_rect.h = TILE_SIZE;
     sprite->sprite_rect.w = WINDOW_WIDTH;
 
     rigid_body_t *rigid_body = (rigid_body_t*)malloc(sizeof(rigid_body_t));
+
+    if (rigid_body == NULL)
+    {
+        printf("failed malloc rigid_body\n func: background_init\n");
+        exit(-1);
+    }
+
     rigid_body_init(rigid_body);
     background->game_object.rigid_body = rigid_body;
     rigid_body_set_owner(rigid_body, &background->game_object);
