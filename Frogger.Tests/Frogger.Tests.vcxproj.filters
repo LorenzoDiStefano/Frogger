@@ -30,6 +30,9 @@
     <ClCompile Include="test_texture_manager.cpp">
       <Filter>Engine\Gfx</Filter>
     </ClCompile>
+    <ClCompile Include="test_sprite.cpp">
+      <Filter>Engine\Gfx</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

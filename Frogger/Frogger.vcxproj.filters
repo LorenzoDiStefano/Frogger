@@ -109,11 +109,11 @@
     <ClInclude Include="Engine\update_manager.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Engine\Physics\rigid_body.h">
-      <Filter>Engine</Filter>
-    </ClInclude>
     <ClInclude Include="texture_manager.h">
       <Filter>Engine\Gfx</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine\Physics\rigid_body.h">
+      <Filter>Engine\Physics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

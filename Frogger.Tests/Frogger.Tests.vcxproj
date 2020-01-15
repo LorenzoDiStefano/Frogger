@@ -60,6 +60,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="test_physics_manager.cpp" />
+    <ClCompile Include="test_sprite.cpp" />
     <ClCompile Include="test_texture_manager.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -9,7 +9,7 @@ void background_init(background_t *background, draw_manager_t *draw_manager, phy
     background->game_object.collider_type = COLLIDER_TYPE_OBASTACLE;
     
     sprite_t *sprite = (sprite_t*)malloc(sizeof(sprite_t));
-    init_sprite(sprite, img_info, draw_manager->renderer, 1);  
+    sprite_init(sprite, img_info, draw_manager->renderer, 1);
     game_object_set_sprite(&background->game_object, sprite);
 
     if (sprite == NULL)
