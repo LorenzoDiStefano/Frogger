@@ -71,8 +71,8 @@ TEST(game_object_tests, update_moving)
     rigid_body_update(&rigid_body, 1);
     game_object_update(&game_object, 1);
 
-    EXPECT_TRUE(game_object.position.y == 0);
-    EXPECT_TRUE(game_object.position.x == 5);
+    EXPECT_TRUE(game_object.position.y == 0 * game_object.rigid_body->direction.y);
+    EXPECT_TRUE(game_object.position.x == 5 * game_object.rigid_body->direction.x);
 }
 
 TEST(game_object_tests, set_velocity_x)

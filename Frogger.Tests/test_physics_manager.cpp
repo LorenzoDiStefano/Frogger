@@ -90,9 +90,9 @@ TEST(physics_manager_test, update_rb)
         physics_manager.max_rb == 100 &&
         physics_manager.player_rb == &player_rigid_body &&
         physics_manager.rb_count == 1 &&
-        player_rigid_body.position.x == 5 &&
-        player_rigid_body.position.y == 0 &&
-        obstacle_rigid_body.position.x == -5 &&
-        obstacle_rigid_body.position.y == 10
+        player_rigid_body.position.x == 5 * player_rigid_body.direction.x &&
+        player_rigid_body.position.y == 0 * player_rigid_body.direction.y &&
+        obstacle_rigid_body.position.x == -5 * obstacle_rigid_body.direction.x &&
+        obstacle_rigid_body.position.y == 10 * obstacle_rigid_body.direction.y
     );
 }

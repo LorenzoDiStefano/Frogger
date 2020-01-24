@@ -17,7 +17,8 @@ int vector2_set(vector2_t *vector2, float x, float y)
 {
     if(vector2 == NULL)
     {
-        return 1;
+        printf("function: %s\n null argument vector2",__func__);
+        exit(1);
     }
     
     vector2->x = x;
@@ -66,17 +67,19 @@ vector2_t vector2_mul_vec2(const vector2_t *first_value, const vector2_t *second
     return result;    
 }
 
-vector2_t vector2_get_deep_copy(const vector2_t *vector2)
-{
-    vector2_t result;
-
-    result.x = vector2->x;
-    result.y = vector2->y;
-
-    return result;
-}
-
 int vector2_equals(const vector2_t *first_value, const vector2_t *second_value)
 {
     return first_value->x == second_value->x && first_value->y == second_value->y;
+}
+
+double vector2_length(vector2_t* p)
+{
+    return sqrt(p->x * p->x + p->y * p->y);
+}
+
+void vector2_normalize(vector2_t* p)
+{
+    double w = vector2_length(p);
+    p->x /= w;
+    p->y /= w;
 }

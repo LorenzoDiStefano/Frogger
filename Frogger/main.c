@@ -88,6 +88,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
                 rigid_body_set_owner(backgrounds[i].game_object.rigid_body, &backgrounds[i].game_object);
                 physics_manager_add_rigid_body(physics_manager, backgrounds[i].game_object.rigid_body);
 
+                rigid_body_set_direction(obstacles[used_obstacles].game_object.rigid_body, lane_direction, 0);;
                 used_obstacles++;
 
                 if((rand()%2))
@@ -103,6 +104,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
                     rect_set_size(&obstacles[used_obstacles].game_object.rigid_body->bounding_box, 
                     obstacles[used_obstacles].game_object.sprite->sprite_rect.w, obstacles[used_obstacles].game_object.sprite->sprite_rect.h);
 
+                    rigid_body_set_direction(obstacles[used_obstacles].game_object.rigid_body, lane_direction, 0);;
                     used_obstacles++;
                 }
             }
@@ -124,6 +126,7 @@ void generate_map(background_t *backgrounds, draw_manager_t *draw_manager,physic
 
                     if(lane_direction > 0)
                         obstacles[used_obstacles].game_object.sprite->texture = texture_info[TEXTURE_CAR_FLIP].texture;
+                    rigid_body_set_direction(obstacles[used_obstacles].game_object.rigid_body, lane_direction, 0);;
                     used_obstacles++;
                 }
             }
@@ -150,7 +153,7 @@ int end()
 int game()
 {
     
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK|SDL_INIT_AUDIO))
+    if (SDL_Init(SDL_INIT_VIDEO))
     {
         SDL_Log("error %s", SDL_GetError());
         return 1;
@@ -204,6 +207,7 @@ int game()
                 return end();
             }
         }
+
         game_clock.cache_now(&game_clock);
         accumulator += game_clock.get_delta_time(&game_clock);
         

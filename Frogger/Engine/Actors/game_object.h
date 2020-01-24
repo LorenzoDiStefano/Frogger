@@ -11,7 +11,7 @@ typedef struct game_object
     int is_active;
 
     sprite_t *sprite;
-    rigid_body_t *rigid_body;
+    rigid_body_t *rigid_body;   
 
     void (*on_collision)(struct game_object *game_object, collision_info_t *collision);
     void (*update)(struct game_object *game_object, const double delta_time);

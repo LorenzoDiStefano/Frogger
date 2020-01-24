@@ -42,16 +42,6 @@ TEST(vector2_tests, sub)
     EXPECT_TRUE(second_vector2.x == 0 && second_vector2.y == 0);
 }
 
-TEST(vector2_tests, get_deep_copy)
-{
-
-    vector2_t vector2;
-    vector2_set(&vector2, 50, 70);
-    vector2_t second_vector2 = vector2_get_deep_copy(&vector2);
-    EXPECT_TRUE(second_vector2.x == 50 && second_vector2.y == 70 &&
-        &(second_vector2.y) != &(vector2.y) && &(second_vector2.x) != &(vector2.x));
-}
-
 TEST(vector2_tests, mul)
 {
     vector2_t second_vector2, vector2;
@@ -87,4 +77,28 @@ TEST(vector2_tests, not_equal)
     vector2_set(&vector2, 10, 10);
 
     EXPECT_TRUE(!vector2_equals(&second_vector2, &vector2));
+}
+
+TEST(vector2_tests, length_negative)
+{
+    vector2_t point;
+    double return_value;
+
+    vector2_set(&point, -2, 0);
+
+    return_value = vector2_length(&point);
+
+    EXPECT_TRUE(return_value == 2);
+}
+
+TEST(vector2_tests, length)
+{
+    vector2_t point;
+    double return_value;
+
+    vector2_set(&point, 0, 2);
+
+    return_value = vector2_length(&point);
+
+    EXPECT_TRUE(return_value == 2);
 }

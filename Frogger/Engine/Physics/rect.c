@@ -21,7 +21,7 @@ void rect_init_safe(rect_t* rect, const int width, const int height, const vecto
     rect->width = width;
     rect->half_height = (float)height / 2;
     rect->half_width = (float)width / 2;
-    rect->position = vector2_get_deep_copy(&position);
+    rect->position = position;
 }
 
 void rect_set_size(rect_t* rect, const int width, const int height)

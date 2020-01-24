@@ -72,7 +72,7 @@ void game_object_set_position_with_vector(game_object_t *game_object, const vect
 {
     if(game_object->rigid_body != NULL)
     {
-        rigid_body_set_position_with_vectors(game_object->rigid_body, new_position);
+        rigid_body_set_position_with_vector2(game_object->rigid_body, new_position);
     }
     else
     {
