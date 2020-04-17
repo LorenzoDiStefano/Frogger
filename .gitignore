@@ -349,5 +349,6 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-#Frogger exceptions
-!Frogger/SDL2-2.0.10/lib/x64
+#CMake Stuff
+out/build/*
+
