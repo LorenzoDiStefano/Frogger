@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.8)
 
 include(FetchContent)
 
-#getting SDL2 with mercurial
+#downloading SDL2 via mercurial
 FetchContent_Declare(
 	SDL2
 	HG_REPOSITORY	http://hg.libsdl.org/SDL
@@ -15,6 +15,7 @@ if(NOT SDL2_POPULATED)
 	add_subdirectory(${sdl2_SOURCE_DIR} ${sdl2_BINARY_DIR})
 endif()
 
+#downloading googletest via git
 FetchContent_Declare(
 	googletest
 	GIT_REPOSITORY	http://github.com/google/googletest.git

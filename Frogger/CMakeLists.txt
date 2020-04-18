@@ -1,7 +1,7 @@
 ﻿cmake_minimum_required (VERSION 3.8)
 
 set(FROGGER_HEADERS
-	#including in ordine di gerarchia
+	#including in hierarchy order
 	#dependencies
 	"dependencies/stb_image.h"
 	#actors folder
@@ -13,12 +13,12 @@ set(FROGGER_HEADERS
 	##gfx folder
 	"src/engine/gfx/image_info.h"
 	"src/engine/gfx/sprite.h"
-	##physics
+	##physics folder
 	"src/engine/physics/collision_info.h"
 	"src/engine/physics/rect.h"
 	"src/engine/physics/rigid_body.h"
 	"src/engine/physics/vector2.h"
-	##utility
+	##utility folder
 	"src/engine/utility/game_clock.h"
 	#engine folder
 	"src/engine/draw_manager.h"
@@ -30,7 +30,7 @@ set(FROGGER_HEADERS
 set(FROGGER_SOURCES
 	
 	${FROGGER_HEADERS}
-	#including in ordine di gerarchia
+	#including in hierarchy order
 	#actors folder
 	"src/actors/background.c"
 	"src/actors/game_object.c"
@@ -40,12 +40,12 @@ set(FROGGER_SOURCES
 	##gfx folder
 	"src/engine/gfx/image_info.c"
 	"src/engine/gfx/sprite.c"
-	##physics
+	##physics folder
 	"src/engine/physics/collision_info.c"
 	"src/engine/physics/rect.c"
 	"src/engine/physics/rigid_body.c"
 	"src/engine/physics/vector2.c"
-	##utility
+	##utility folder
 	"src/engine/utility/game_clock.c"
 	#engine folder
 	"src/engine/draw_manager.c"
@@ -54,9 +54,9 @@ set(FROGGER_SOURCES
 	"src/engine/update_manager.c"
 )
 
-add_executable(FroggerExecutable "src/main.c")#src/Frogger.c
+add_executable(FroggerExecutable "src/main.c")
 
-add_library(FroggerLib STATIC ${FROGGER_SOURCES})#"src/engine/physic/vector2.c"
+add_library(FroggerLib STATIC ${FROGGER_SOURCES})
 
 
 target_link_libraries(FroggerLib PUBLIC SDL2main SDL2)
@@ -70,27 +70,10 @@ add_dependencies(FroggerExecutable FroggerLib)
 add_subdirectory(dependencies)
 add_subdirectory(tests)
 
-
-
-#set(test "test")
-#target_include_directories(${CMAKE_CURRENT_LIST_DIR})
-#message(WARNING ${PROJECT_BINARY_DIR})
-#install(
-#    DIRECTORY "src"
-#    DESTINATION "include"
-#    FILES_MATCHING PATTERN "*.h"
-#    )
-
 add_custom_command(TARGET FroggerExecutable POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		${PROJECT_BINARY_DIR}/_deps/sdl2-build/SDL2d.dll #<--- copy this file
 		${PROJECT_BINARY_DIR}/Frogger/) #<--- into this path
-
-#set(testsmessage)
-#
-#message(WARNING ${CMAKE_CURRENT_SOURCE_DIR})
-#message(WARNING "cane")
-#message(WARNING "cane")
 
 add_custom_command(TARGET FroggerExecutable PRE_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory

@@ -4,14 +4,14 @@ set(SOURCEST
 	#actor folder
 	"actors/test_game_object.cpp"
 	#folders in "engine" folder
-	##gfx
+	##gfx folder
 	"engine/gfx/test_sprite.cpp"
-	##physics
+	##physics folder
 	"engine/physic/test_collision_info.cpp"
 	"engine/physic/test_rect.cpp"
 	"engine/physic/test_rigid_body.cpp"
 	"engine/physic/test_vector2.cpp"
-	#engine
+	#engine folder
 	"engine/test_draw_manager.cpp"
 	"engine/test_physics_manager.cpp"
 	"engine/test_texture_manager.cpp"
@@ -27,9 +27,6 @@ add_test(
 	NAME Frogger_Tests
 	COMMAND Frogger_Tests
 )
-
-#TODO
-#copy assets folder into frogger folder before testing texture manager and sprite
 
 add_custom_command(TARGET Frogger_Tests POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
