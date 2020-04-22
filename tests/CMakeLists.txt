@@ -31,4 +31,4 @@ add_test(
 add_custom_command(TARGET Frogger_Tests POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 		${PROJECT_BINARY_DIR}/_deps/sdl2-build/SDL2d.dll #<--- copy this file
-		${PROJECT_BINARY_DIR}/Frogger/tests/) #<--- into this path
+		${PROJECT_BINARY_DIR}/tests/) #<--- into this path
