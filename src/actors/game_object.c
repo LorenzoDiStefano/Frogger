@@ -1,4 +1,6 @@
 #include "game_object.h"
+#include "../engine/physics/rigid_body.h"
+#include <math.h>
 
 void game_object_update_sprite(game_object_t *game_object)
 {
@@ -101,7 +103,8 @@ void game_object_set_velocity(game_object_t *game_object, const vector2_t new_ve
 
 void game_object_set_velocity_x(game_object_t *game_object, const float new_velocity_x)
 {
-    game_object->rigid_body->velocity.x = new_velocity_x;
+    game_object->rigid_body->velocity.x = fabs(new_velocity_x);
+    rigid_body_set_direction(game_object->rigid_body, new_velocity_x ,0);
 }
 
 void game_object_set_velocity_y(game_object_t *game_object, const float new_velocity_y)

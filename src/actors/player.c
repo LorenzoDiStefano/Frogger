@@ -58,7 +58,10 @@ void player_on_collision(struct game_object *game_object, collision_info_t *coll
         ((player_t *)game_object)->is_on_log = 1;
         int fps = 60;
         double frame_time = (double)1000 / fps;
-        vector2_t movement = vector2_mul(&collider->rigid_body->velocity, frame_time * 0.001);
+
+        vector2_t movement = vector2_mul_vec2(&collider->rigid_body->velocity, &collider->rigid_body->direction);
+        movement = vector2_mul(&movement, frame_time * 0.001);
+
         game_object_set_position_with_vector(game_object,  vector2_add(&game_object->position, &movement));
     }
 }
