@@ -2,14 +2,9 @@
 
 project ("FroggerGame")
 
-enable_testing()
+set(gtest_force_shared_crt ON CACHE BOOL [FORCE])
 
-#//Use shared (DLL) run-time lib even when Google Test is built
-#// as static lib.
-#gtest_force_shared_crt:BOOL=ON
-#se the above option in "CMakeCache.txt" to on to make tests work
-#TODO
-#find a better way to do this
+enable_testing()
 
 set(FROGGER_HEADERS
 	#including in hierarchy order
@@ -68,7 +63,6 @@ set(FROGGER_SOURCES
 add_executable(FroggerExecutable "src/main.c")
 
 add_library(FroggerLib STATIC ${FROGGER_SOURCES})
-
 
 target_link_libraries(FroggerLib PUBLIC SDL2main SDL2)
 target_include_directories(FroggerLib PUBLIC SDL2main SDL2)
