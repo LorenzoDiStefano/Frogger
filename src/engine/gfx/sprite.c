@@ -1,4 +1,5 @@
-#include "sprite.h"
+#include <engine/gfx/sprite.h>
+#include <engine/utilities/image_info.h>
 
 void sprite_init(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, const float scale)
 {

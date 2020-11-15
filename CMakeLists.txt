@@ -7,57 +7,33 @@ set(gtest_force_shared_crt ON CACHE BOOL [FORCE])
 enable_testing()
 
 set(FROGGER_HEADERS
-	#including in hierarchy order
-	#dependencies
 	"dependencies/stb_image.h"
-	#actors folder
-	"src/actors/background.h"
-	"src/actors/game_object.h"
-	"src/actors/obstacle.h"
-	"src/actors/player.h"
-	#folders inside engine folder
-	##gfx folder
-	"src/engine/gfx/image_info.h"
-	"src/engine/gfx/sprite.h"
-	##physics folder
-	"src/engine/physics/collision_info.h"
-	"src/engine/physics/rect.h"
-	"src/engine/physics/rigid_body.h"
-	"src/engine/physics/vector2.h"
-	##utility folder
-	"src/engine/utility/game_clock.h"
-	#engine folder
-	"src/engine/draw_manager.h"
-	"src/engine/physics_manager.h"
-	"src/engine/texture_manager.h"
-	"src/engine/update_manager.h"
 )
 
 set(FROGGER_SOURCES
 	
 	${FROGGER_HEADERS}
-	#including in hierarchy order
-	#actors folder
-	"src/actors/background.c"
-	"src/actors/game_object.c"
-	"src/actors/obstacle.c"
-	"src/actors/player.c"
-	#folders inside engine folder
-	##gfx folder
+	#engine/actors folder
+	"src/engine/actors/game_object.c"
+	"src/engine/actors/update_manager.c"
+	#engine/gfx folder
 	"src/engine/gfx/image_info.c"
 	"src/engine/gfx/sprite.c"
-	##physics folder
-	"src/engine/physics/collision_info.c"
-	"src/engine/physics/rect.c"
+	"src/engine/gfx/draw_manager.c"
+	#engine/physics folder
+	"src/engine/physics/physics_manager.c"
 	"src/engine/physics/rigid_body.c"
-	"src/engine/physics/vector2.c"
-	##utility folder
-	"src/engine/utility/game_clock.c"
-	#engine folder
-	"src/engine/draw_manager.c"
-	"src/engine/physics_manager.c"
-	"src/engine/texture_manager.c"
-	"src/engine/update_manager.c"
+	#engine/utilities folder
+	"src/engine/utilities/game_clock.c"
+	"src/engine/utilities/collision_info.c"
+	"src/engine/utilities/texture_manager.c"
+	#math folder
+	"src/math/vector2.c"
+	"src/math/rect.c"
+	#frogger folder 
+	"src/frogger/background.c"
+	"src/frogger/obstacle.c"
+	"src/frogger/player.c"
 )
 
 add_executable(FroggerExecutable "src/main.c")
@@ -65,7 +41,7 @@ add_executable(FroggerExecutable "src/main.c")
 add_library(FroggerLib STATIC ${FROGGER_SOURCES})
 
 target_link_libraries(FroggerLib PUBLIC SDL2main SDL2)
-target_include_directories(FroggerLib PUBLIC SDL2main SDL2)
+target_include_directories(FroggerLib PUBLIC SDL2main SDL2 PUBLIC "$<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>")
 
 target_link_libraries(FroggerExecutable PRIVATE FroggerLib)
 target_include_directories(FroggerExecutable PRIVATE FroggerLib)

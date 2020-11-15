@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.8)
 
 include(FetchContent)
 
+find_package(Hg REQUIRED)
+
 #downloading SDL2 via mercurial
 FetchContent_Declare(
 	SDL2

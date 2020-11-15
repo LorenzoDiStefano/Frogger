@@ -5,16 +5,22 @@
 #include <math.h>
 #include <time.h>
 
+#ifndef SDL_MAIN_HANDLED
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
+#endif
+
 static int game_state = 1;
 
-#include "engine/utility/game_clock.h"
-#include "actors/player.h"
-#include "actors/obstacle.h"
-#include "actors/background.h"
-#include "engine/draw_manager.h"
-#include "engine/physics_manager.h"
-#include "engine/update_manager.h"
-#include "engine/texture_manager.h"
+#include <engine/utilities/game_clock.h>
+#include <engine/gfx/sprite.h>
+#include <frogger/player.h>
+#include <frogger/obstacle.h>
+#include <frogger/background.h>
+#include <engine/gfx/draw_manager.h>
+#include <engine/physics/physics_manager.h>
+#include <engine/actors/update_manager.h>
+#include <engine/utilities/texture_manager.h>
 
 #define TEXTURE_FROG        0
 #define TEXTURE_ROAD        1

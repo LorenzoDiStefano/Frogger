@@ -1,4 +1,5 @@
-#include "rigid_body.h"
+#include <engine/physics/rigid_body.h>
+#include <stdlib.h>
 
 void rigid_body_init(rigid_body_t *rigid_body)
 {

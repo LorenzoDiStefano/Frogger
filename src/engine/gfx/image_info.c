@@ -2,7 +2,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../dependencies/stb_image.h"
 #endif
-#include "image_info.h"
+#include <engine/utilities/image_info.h>
 
 int load_image(image_info_t *img, const char* path)
 {
