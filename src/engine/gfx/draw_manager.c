@@ -1,5 +1,6 @@
 #include <engine/gfx/draw_manager.h>
 #include <engine/gfx/sprite.h>
+#include <engine/gfx/interface_gpu_api.h>
 
 void draw_scene(draw_manager_t *draw_manager)
 {
@@ -35,14 +36,19 @@ void draw_manager_add_sprite_bg(draw_manager_t *draw_manager, sprite_t *sprite)
 
 int draw_manager_init(draw_manager_t* draw_manager)
 {
-    draw_manager->window = SDL_CreateWindow("Game", 100, 100 ,WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
-    if(!draw_manager->window)
+    init_interface_gpu_api(&draw_manager->gpu);
+
+    draw_manager->iwindow = draw_manager->gpu.create_window("Game", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+
+    void* window_raw_data = draw_manager->iwindow->raw_data;
+
+    if(!window_raw_data)
     {
         return -1;
     }
 
-    draw_manager->renderer = SDL_CreateRenderer(draw_manager->window, -1,SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_ACCELERATED);
+    draw_manager->renderer = SDL_CreateRenderer(window_raw_data, -1,SDL_RENDERER_PRESENTVSYNC|SDL_RENDERER_ACCELERATED);
 
     if(!draw_manager->renderer)
     {

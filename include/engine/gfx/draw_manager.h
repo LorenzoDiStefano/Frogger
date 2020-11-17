@@ -2,13 +2,16 @@
 #define FROGGER_DRAWMANAGER
 #pragma once
 
+#include <engine/gfx/interface_gpu_api.h>
 #include <SDL.h>
 
 typedef struct sprite sprite_t;
 
 typedef struct draw_manager
 {
-    SDL_Window *window;
+    interface_gpu_api_t gpu;
+    interface_window_t* iwindow;
+
     SDL_Renderer *renderer;
 
     sprite_t *sprites[100];

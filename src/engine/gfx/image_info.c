@@ -2,7 +2,9 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "../dependencies/stb_image.h"
 #endif
+
 #include <engine/utilities/image_info.h>
+#include <engine/gfx/interface_texture.h>
 
 int load_image(image_info_t *img, const char* path)
 {
@@ -25,6 +27,8 @@ void load_texture(image_info_t *img_info, SDL_Renderer *renderer)
     SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, img_info->width, img_info->height);
     if(!texture)
         printf("error");
+
+    interface_texture_t* itexture;
 
     SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     Uint8 *pixels = NULL;

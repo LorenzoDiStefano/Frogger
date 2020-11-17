@@ -34,7 +34,10 @@ set(FROGGER_SOURCES
 	"src/frogger/background.c"
 	"src/frogger/obstacle.c"
 	"src/frogger/player.c"
-)
+	"src/gfx_wrapper/interface_texture.c" 
+	"src/gfx_wrapper/interface_gpu_api.c"
+	"src/gfx_wrapper/interface_window.c"
+ )
 
 add_executable(FroggerExecutable "src/main.c")
 
@@ -60,3 +63,7 @@ add_custom_command(TARGET FroggerExecutable PRE_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 		${CMAKE_CURRENT_SOURCE_DIR}/assets #<--- copy files in this folder
 		${PROJECT_BINARY_DIR}/assets/) #<--- into this path
+
+#TODO
+#Switch default initialization to this
+#https://stackoverflow.com/questions/13716913/default-value-for-struct-member-in-c

@@ -21,6 +21,7 @@ static int game_state = 1;
 #include <engine/physics/physics_manager.h>
 #include <engine/actors/update_manager.h>
 #include <engine/utilities/texture_manager.h>
+#include <engine/utilities/collision_info.h>
 
 #define TEXTURE_FROG        0
 #define TEXTURE_ROAD        1

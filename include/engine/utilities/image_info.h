@@ -3,6 +3,9 @@
 #pragma once
 
 #include <SDL.h>
+#include <engine/gfx/interface_texture.h>
+
+//struct intefrace_texture typedef interface_texture_t;
 
 typedef struct image_info
 {
@@ -14,6 +17,9 @@ typedef struct image_info
     unsigned char *image;
     //image pointer to loaded image in gpu (shpuld not be here)
     SDL_Texture *texture;
+
+    interface_texture_t* itexture;
+
 }image_info_t;
 
 //loads tecture into the gpu (should not be here)

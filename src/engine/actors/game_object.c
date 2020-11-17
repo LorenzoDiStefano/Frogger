@@ -23,6 +23,7 @@ void game_object_on_collision(game_object_t *game_object, collision_info_t *delt
 
 }
 
+//if the gameobject is active updates it position to rigid body if present and moves sprite 
 void game_object_update(game_object_t *game_object, const double delta_time)
 {
     if(!game_object->is_active)
