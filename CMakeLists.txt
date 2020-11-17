@@ -37,7 +37,7 @@ set(FROGGER_SOURCES
 	"src/gfx_wrapper/interface_texture.c" 
 	"src/gfx_wrapper/interface_gpu_api.c"
 	"src/gfx_wrapper/interface_window.c"
- )
+  "src/gfx_wrapper/interface_renderer.c")
 
 add_executable(FroggerExecutable "src/main.c")
 

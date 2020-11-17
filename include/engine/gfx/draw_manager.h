@@ -3,7 +3,6 @@
 #pragma once
 
 #include <engine/gfx/interface_gpu_api.h>
-#include <SDL.h>
 
 typedef struct sprite sprite_t;
 
@@ -11,8 +10,7 @@ typedef struct draw_manager
 {
     interface_gpu_api_t gpu;
     interface_window_t* iwindow;
-
-    SDL_Renderer *renderer;
+    interface_renderer_t* irenderer;
 
     sprite_t *sprites[100];
     int max_sprites, sprites_to_draw;
