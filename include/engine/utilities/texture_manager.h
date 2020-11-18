@@ -3,16 +3,18 @@
 #pragma once
 
 #include <engine/utilities/image_info.h>
-#include <engine/gfx/interface_renderer.h>
 
 //temporary, should use dynamic array
 #define TM_MAX_TEXTURES 100
+
+struct interface_renderer typedef interface_renderer_t;
 
 typedef struct texture_manager
 {
 	interface_renderer_t* renderer;
 	int stored_texture;
 	image_info_t textures[TM_MAX_TEXTURES];
+
 }texture_manager_t;
 
 void texture_manager_init(texture_manager_t *tm);

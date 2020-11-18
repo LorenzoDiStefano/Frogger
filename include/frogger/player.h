@@ -16,11 +16,12 @@ typedef struct player
     int score;
     int last_frame_input;
     vector2_t input_direction;
+
 }player_t;
 
 void player_init(player_t *player, draw_manager_t *draw_manager, image_info_t *img_info);
 void player_read_input(player_t *player);
 void player_die(player_t *player);
-void player_set_position(player_t *player, float x, float y);
+//void player_set_position(player_t *player, float x, float y);
 
 #endif // !FROGGER_PLAYER

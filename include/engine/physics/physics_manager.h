@@ -2,7 +2,7 @@
 #define FROGGER_PHYSICSMANAGER
 #pragma once
 
-#include <engine/physics/rigid_body.h>
+struct rigid_body typedef rigid_body_t;
 
 typedef struct physics_manager
 {
@@ -10,6 +10,7 @@ typedef struct physics_manager
     int rb_count;
     int max_rb;
     rigid_body_t *player_rb;
+
 } physics_manager_t;
 
 int physics_manager_init(physics_manager_t *physics_manager);

@@ -1,6 +1,7 @@
 #include <engine/gfx/draw_manager.h>
+#include <engine/gfx/interface_window.h>
+#include <engine/gfx/interface_renderer.h>
 #include <engine/gfx/sprite.h>
-#include <engine/gfx/interface_gpu_api.h>
 #include <SDL.h>
 
 void draw_scene(draw_manager_t *draw_manager)
@@ -39,11 +40,8 @@ void draw_manager_add_sprite_bg(draw_manager_t *draw_manager, sprite_t *sprite)
 
 int draw_manager_init(draw_manager_t* draw_manager)
 {
-    //initializing graphics api used
-    init_interface_gpu_api(&draw_manager->gpu);
-
     //creating window
-    draw_manager->window = draw_manager->gpu.create_window("Game", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    draw_manager->window = create_interface_window("Game", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
     //if this pointer is null something went relly wrong
     if(!draw_manager->window->raw_data)
@@ -52,7 +50,7 @@ int draw_manager_init(draw_manager_t* draw_manager)
     }
 
     //creating renderer
-    draw_manager->renderer = draw_manager->gpu.create_renderer(draw_manager->window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+    draw_manager->renderer = create_interface_renderer(draw_manager->window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
     //if this pointer is null something went relly wrong
     if(!draw_manager->renderer->raw_data)

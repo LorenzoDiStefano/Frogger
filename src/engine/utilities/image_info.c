@@ -5,7 +5,7 @@
 
 #include <engine/utilities/image_info.h>
 #include <engine/gfx/interface_texture.h>
-#include <engine/gfx/interface_gpu_api.h>
+#include <SDL.h>
 
 int load_image(image_info_t *img, const char* path)
 {
@@ -23,14 +23,9 @@ int load_image(image_info_t *img, const char* path)
     return 0;
 }
 
-void load_texture(image_info_t *img_info, interface_renderer_t*renderer)
+void load_texture(image_info_t *img_info, interface_renderer_t *renderer)
 {
-    //this should not be here
-    interface_gpu_api_t gpu;
-    //initializing graphics api used
-    init_interface_gpu_api(&gpu);
-
-    interface_texture_t* itexture = interface_gpu_api_create_texture(
+    interface_texture_t* itexture = create_interface_texture(
         renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, 
         img_info->width, img_info->height);
 

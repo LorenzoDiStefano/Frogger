@@ -1,5 +1,7 @@
-#include <engine/actors/game_object.h>
 #include <engine/physics/physics_manager.h>
+#include <engine/physics/rigid_body.h>
+#include <engine/actors/game_object.h>
+#include <engine/utilities/collision_info.h>
 #include <stdlib.h>
 
 int physics_manager_init(physics_manager_t *physics_manager)

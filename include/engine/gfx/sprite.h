@@ -2,10 +2,11 @@
 #define FROGGER_SPRITE
 #pragma once
 
-#include <SDL.h>
-#include <engine/gfx/interface_renderer.h>
+#include <SDL_rect.h>
 
-typedef struct image_info image_info_t;
+struct image_info typedef image_info_t;
+struct interface_texture typedef interface_texture_t;
+struct interface_renderer typedef interface_renderer_t;
 
 typedef struct sprite
 {
@@ -13,6 +14,7 @@ typedef struct sprite
     interface_texture_t* texture;
     interface_renderer_t* renderer;
     float scale;
+
 }sprite_t;
 
 void sprite_init(sprite_t *sprite, image_info_t *img_info, interface_renderer_t* renderer, const float scale);

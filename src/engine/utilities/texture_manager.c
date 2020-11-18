@@ -1,4 +1,5 @@
 #include <engine/utilities/texture_manager.h>
+#include <stdlib.h>
 
 void texture_manager_init(texture_manager_t *tm)
 {

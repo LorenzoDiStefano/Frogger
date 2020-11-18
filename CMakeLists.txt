@@ -17,7 +17,7 @@ set(FROGGER_SOURCES
 	"src/engine/actors/game_object.c"
 	"src/engine/actors/update_manager.c"
 	#engine/gfx folder
-	"src/engine/gfx/image_info.c"
+	"src/engine/utilities/image_info.c"
 	"src/engine/gfx/sprite.c"
 	"src/engine/gfx/draw_manager.c"
 	#engine/physics folder
@@ -34,10 +34,10 @@ set(FROGGER_SOURCES
 	"src/frogger/background.c"
 	"src/frogger/obstacle.c"
 	"src/frogger/player.c"
-	"src/gfx_wrapper/interface_texture.c" 
-	"src/gfx_wrapper/interface_gpu_api.c"
-	"src/gfx_wrapper/interface_window.c"
-    "src/gfx_wrapper/interface_renderer.c"
+	#engine/gfx/sdl2_wrapper
+	"src/engine/sdl2_wrapper/interface_texture.c" 
+	"src/engine/sdl2_wrapper/interface_window.c"
+    "src/engine/sdl2_wrapper/interface_renderer.c"
   )
 
 add_executable(FroggerExecutable "src/main.c")

@@ -9,6 +9,7 @@ typedef struct update_manager
     game_object_t* go[100];
     int go_count;
     int max_go;
+
 }update_manager_t;
 
 void update_manager_update(const update_manager_t *physics_manager, const double delta_time);

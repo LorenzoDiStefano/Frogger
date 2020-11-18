@@ -1,4 +1,5 @@
 #include <math/rect.h>
+#include <engine/utilities/collision_info.h>
 #include <stdio.h>
 
 void rect_init(rect_t* rect)

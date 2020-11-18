@@ -17,6 +17,7 @@ typedef struct rigid_body
 
     void (*on_collision)(struct rigid_body *rigid_body, collision_info_t *collision);
     void (*update)(struct rigid_body *rigid_body, const double delta_time);
+
 }rigid_body_t;
 
 void rigid_body_init(rigid_body_t *rigid_body);

@@ -2,9 +2,10 @@
 #define FROGGER_RECT
 #pragma once
 
-#include <engine/utilities/collision_info.h>
+#include <math/vector2.h>
 
-typedef struct game_object game_object_t;
+struct game_object typedef game_object_t;
+struct collision_info typedef collision_info_t;
 
 typedef struct rect
 {
@@ -12,6 +13,7 @@ typedef struct rect
     game_object_t *owner;
     int width, height;
     float half_width, half_height;
+
 } rect_t;
 
 void rect_init(rect_t* rect);

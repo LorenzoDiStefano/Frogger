@@ -1,7 +1,9 @@
-#include <engine/gfx/sprite.h>
 #include <frogger/obstacle.h>
-#include <engine/physics/physics_manager.h>
+#include <engine/gfx/sprite.h>
 #include <engine/gfx/draw_manager.h>
+#include <engine/physics/rigid_body.h>
+#include <engine/physics/physics_manager.h>
+#include <engine/utilities/collision_info.h>
 
 void obstacle_update(game_object_t *game_object, const double delta_time)
 {

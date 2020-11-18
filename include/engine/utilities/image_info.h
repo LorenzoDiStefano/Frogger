@@ -2,11 +2,8 @@
 #define FROGGER_IMAGEINFO
 #pragma once
 
-#include <SDL.h>
-#include <engine/gfx/interface_texture.h>
-#include <engine/gfx/interface_renderer.h>
-
-//struct intefrace_texture typedef interface_texture_t;
+struct interface_texture typedef interface_texture_t;
+struct interface_renderer typedef interface_renderer_t;
 
 typedef struct image_info
 {

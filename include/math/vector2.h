@@ -6,6 +6,7 @@ typedef struct vector2
 {
     float x;
     float y;
+
 }vector2_t;
 
 vector2_t vector2_add(const vector2_t *first_value, const vector2_t *second_value);

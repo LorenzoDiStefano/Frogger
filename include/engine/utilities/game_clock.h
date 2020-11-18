@@ -2,6 +2,8 @@
 #define FROGGER_GAMECLOCK
 #pragma once 
 
+#include <stdint.h>
+
 typedef struct game_clock
 {
     double delta_time_cached;
