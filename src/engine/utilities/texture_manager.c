@@ -6,7 +6,7 @@ void texture_manager_init(texture_manager_t *tm)
     tm->renderer = NULL;
 }
 
-void texture_manager_set_renderer(texture_manager_t *tm, SDL_Renderer *renderer)
+void texture_manager_set_renderer(texture_manager_t *tm, interface_renderer_t*renderer)
 {
     tm->renderer = renderer;
 }

@@ -5,6 +5,7 @@
 
 #include <engine/utilities/image_info.h>
 #include <engine/gfx/interface_texture.h>
+#include <engine/gfx/interface_gpu_api.h>
 
 int load_image(image_info_t *img, const char* path)
 {
@@ -22,26 +23,35 @@ int load_image(image_info_t *img, const char* path)
     return 0;
 }
 
-void load_texture(image_info_t *img_info, SDL_Renderer *renderer)
+void load_texture(image_info_t *img_info, interface_renderer_t*renderer)
 {
-    SDL_Texture *texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, img_info->width, img_info->height);
-    if(!texture)
+    //this should not be here
+    interface_gpu_api_t gpu;
+    //initializing graphics api used
+    init_interface_gpu_api(&gpu);
+
+    interface_texture_t* itexture = interface_gpu_api_create_texture(
+        renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, 
+        img_info->width, img_info->height);
+
+    if (!itexture->raw_data)
         printf("error");
 
-    interface_texture_t* itexture;
+    itexture->set_blend_mode(itexture, SDL_BLENDMODE_BLEND);
 
-    SDL_SetTextureBlendMode(texture, SDL_BLENDMODE_BLEND);
     Uint8 *pixels = NULL;
     int pitch = 0;
-    if (SDL_LockTexture(texture, NULL, (void **)&pixels, &pitch))
+
+    if(itexture->lock(itexture, (void**)&pixels, &pitch))
     {
         printf("Unable to map texture into address space");
     }
 
     memcpy(pixels, (void *)img_info->image, (size_t)img_info->height * 4 * img_info->width);
 
-    SDL_UnlockTexture(texture);
+    itexture->unlock(itexture);
 
-    img_info->texture = texture;
+    img_info->texture = itexture;
+
     return;
 }

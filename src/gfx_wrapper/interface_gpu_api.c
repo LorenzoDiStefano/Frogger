@@ -15,9 +15,18 @@ interface_window_t* interface_gpu_api_create_window(const char* title, int x, in
 	return new_window;
 }
 
-interface_texture_t* interface_gpu_api_create_texture()
-{
-	return NULL;
+interface_texture_t* interface_gpu_api_create_texture(interface_renderer_t* renderer, uint32_t format_flags, uint32_t access_flags, int width, int height)
+{	
+	//create texrure interface object and initilize to safe state
+	interface_texture_t* new_texture = (interface_texture_t*)malloc(sizeof(interface_texture_t));
+	init_interface_texture(new_texture);
+
+	//SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, img_info->width, img_info->height);
+	//create texture with sdl
+	void* dummy = SDL_CreateTexture(renderer->raw_data, format_flags, access_flags, width, height);
+	new_texture->raw_data = dummy;
+
+	return new_texture;
 }
 
 interface_renderer_t* inteface_gpu_api_create_renderer(interface_window_t* window, int index, uint32_t flags)

@@ -185,7 +185,7 @@ int game()
 
     texture_manager_t tm;
     texture_manager_init(&tm);
-    texture_manager_set_renderer(&tm, draw_manager.irenderer->raw_data);
+    texture_manager_set_renderer(&tm, draw_manager.renderer);
     load_textures(&tm);
 
     obstacle_t obstacles[20];

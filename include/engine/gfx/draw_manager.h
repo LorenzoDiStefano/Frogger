@@ -9,8 +9,8 @@ typedef struct sprite sprite_t;
 typedef struct draw_manager
 {
     interface_gpu_api_t gpu;
-    interface_window_t* iwindow;
-    interface_renderer_t* irenderer;
+    interface_window_t* window;
+    interface_renderer_t* renderer;
 
     sprite_t *sprites[100];
     int max_sprites, sprites_to_draw;

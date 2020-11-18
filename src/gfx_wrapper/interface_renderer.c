@@ -22,9 +22,9 @@ void interface_renderer_present(interface_renderer_t* renderer)
 	SDL_RenderPresent(renderer->raw_data);
 }
 
-void interface_renderer_copy(interface_renderer_t* renderer, SDL_Texture* texture, SDL_Rect* sprite_rect)
+void interface_renderer_copy(interface_renderer_t* renderer, interface_texture_t* texture, SDL_Rect* sprite_rect)
 {
-	SDL_RenderCopy(renderer->raw_data, texture, NULL, sprite_rect);
+	SDL_RenderCopy(renderer->raw_data, texture->raw_data, NULL, sprite_rect);
 }
 
 void init_interface_renderer(interface_renderer_t* renderer)

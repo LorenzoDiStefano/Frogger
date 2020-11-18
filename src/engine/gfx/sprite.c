@@ -1,7 +1,7 @@
 #include <engine/gfx/sprite.h>
 #include <engine/utilities/image_info.h>
 
-void sprite_init(sprite_t *sprite, image_info_t *img_info, SDL_Renderer *renderer, const float scale)
+void sprite_init(sprite_t *sprite, image_info_t *img_info, interface_renderer_t *renderer, const float scale)
 {
     sprite->texture = img_info->texture;
     sprite->scale = scale;

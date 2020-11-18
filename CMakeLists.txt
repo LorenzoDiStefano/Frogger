@@ -37,7 +37,8 @@ set(FROGGER_SOURCES
 	"src/gfx_wrapper/interface_texture.c" 
 	"src/gfx_wrapper/interface_gpu_api.c"
 	"src/gfx_wrapper/interface_window.c"
-  "src/gfx_wrapper/interface_renderer.c")
+    "src/gfx_wrapper/interface_renderer.c"
+  )
 
 add_executable(FroggerExecutable "src/main.c")
 
@@ -67,3 +68,4 @@ add_custom_command(TARGET FroggerExecutable PRE_BUILD
 #TODO
 #Switch default initialization to this
 #https://stackoverflow.com/questions/13716913/default-value-for-struct-member-in-c
+#fix tests

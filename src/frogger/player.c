@@ -93,7 +93,7 @@ void player_init(player_t *player, draw_manager_t *draw_manager, image_info_t *i
     vector2_init(&player->input_direction);
 
     sprite_t *sprite = (sprite_t*)malloc(sizeof(sprite_t));
-    sprite_init(sprite, img_info, draw_manager->irenderer->raw_data, 1);
+    sprite_init(sprite, img_info, draw_manager->renderer, 1);
     game_object_set_sprite(&player->game_object, sprite);
 
     rigid_body_t *rigid_body = (rigid_body_t*)malloc(sizeof(rigid_body_t));

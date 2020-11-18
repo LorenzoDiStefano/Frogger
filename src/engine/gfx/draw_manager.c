@@ -5,7 +5,7 @@
 
 void draw_scene(draw_manager_t *draw_manager)
 {
-    interface_renderer_t* renderer = draw_manager->irenderer;
+    interface_renderer_t* renderer = draw_manager->renderer;
 
     renderer->set_draw_color(renderer, 67, 33, 33, 255);
     renderer->clear(renderer);
@@ -43,24 +43,24 @@ int draw_manager_init(draw_manager_t* draw_manager)
     init_interface_gpu_api(&draw_manager->gpu);
 
     //creating window
-    draw_manager->iwindow = draw_manager->gpu.create_window("Game", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
+    draw_manager->window = draw_manager->gpu.create_window("Game", 100, 100, WINDOW_WIDTH, WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
 
     //if this pointer is null something went relly wrong
-    if(!draw_manager->iwindow->raw_data)
+    if(!draw_manager->window->raw_data)
     {
         return -1;
     }
 
     //creating renderer
-    draw_manager->irenderer = draw_manager->gpu.create_renderer(draw_manager->iwindow, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
+    draw_manager->renderer = draw_manager->gpu.create_renderer(draw_manager->window, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED);
 
     //if this pointer is null something went relly wrong
-    if(!draw_manager->irenderer->raw_data)
+    if(!draw_manager->renderer->raw_data)
     {
         return -1;
     }
 
-    draw_manager->irenderer->set_draw_blend_mode(draw_manager->irenderer, SDL_BLENDMODE_BLEND);
+    draw_manager->renderer->set_draw_blend_mode(draw_manager->renderer, SDL_BLENDMODE_BLEND);
 
     //initializing "layers" data
     draw_manager->sprites_to_draw = 0;
